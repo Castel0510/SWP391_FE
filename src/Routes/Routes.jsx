@@ -8,6 +8,7 @@ export const routes = [
         path: '/',
         page: HomePage,
         isShowHeaderFooter:true
+        //show header and footer
     },
     {
         path: '/login',
