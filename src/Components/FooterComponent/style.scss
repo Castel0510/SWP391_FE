@@ -1,12 +1,15 @@
 .footer {
   background-color: #2d6a4f;
   padding: 70px 0;
+
   .container {
     max-width: 1024px;
     margin: auto;
+
     .row {
       display: flex;
       flex-wrap: wrap;
+
       .footer-col {
         width: 25%;
         padding: 0 40px;
