@@ -1,5 +1,6 @@
-import React from 'react'
+import React, { useState } from 'react'
 import AuthenticationComponent from '../../Components/AuthenticationComponent'
+import ForgotPasswordComponent from '../../Components/ForgotPasswordComponent'
 import { BiAt } from "react-icons/bi"
 import { RiLockPasswordFill } from "react-icons/ri"
 import { FcGoogle } from "react-icons/fc"
@@ -7,6 +8,9 @@ import './style.scss'
 import { Link } from 'react-router-dom'
 
 const LoginPage = () => {
+
+  const [showForgotPasswordModal, setShowForgotPasswordModal] = useState(false);
+
   return (
     <AuthenticationComponent>
       <div className='content'>
@@ -31,10 +35,13 @@ const LoginPage = () => {
 
           <div className='password-feature'>
             <div className='remember'>
-              <input type='checkbox'></input>
-              <p>Remember me</p>
+              <input type='checkbox' id="remember"></input>
+              <label htmlFor="remember">Remember me</label>
             </div>
-            <div className='forgot'>Forgot password?</div>
+            <div className='forgot' onClick={() => setShowForgotPasswordModal(true)}>Forgot password?</div>
+
+            {showForgotPasswordModal ? <ForgotPasswordComponent onClose={() => setShowForgotPasswordModal(false)}/> : <></>}
+            
           </div>
 
           <div className='btn-login'>Sign in</div>

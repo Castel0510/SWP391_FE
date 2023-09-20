@@ -1,0 +1,89 @@
+.otp-Form {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 20px 30px;
+  gap: 20px;
+  position: relative;
+
+  .mainHeading {
+    font-size: 1.1em;
+    color: rgb(15, 15, 15);
+    font-weight: 700;
+  }
+
+  .otpSubheading {
+    font-size: 0.7em;
+    color: black;
+    line-height: 17px;
+    text-align: center;
+  }
+
+  .inputs {
+    margin-top: 10px;
+
+    input {
+      width: 32px;
+      height: 32px;
+      text-align: center;
+      border: none;
+      border-bottom: 3px solid #d2d2d2;
+      margin: 0 10px;
+
+      &:focus {
+        border-bottom: 3px solid #106940;
+        outline: none;
+      }
+    }
+  }
+
+  .verifyButton {
+    width: 100px;
+    /* width: 100%; */
+    height: 30px;
+    border: none;
+    background-color: #07b464;
+    color: white;
+    font-weight: 600;
+    cursor: pointer;
+    border-radius: 10px;
+    transition-duration: 0.2s;
+
+    &:hover {
+      background-color: #106940;
+      transition-duration: 0.2s;
+    }
+  }
+
+  .button-none-event {
+    cursor: no-drop !important;
+
+    &:hover {
+      background-color: #106940 !important;
+    }
+  }
+
+  .resendNote {
+    font-size: 0.8em;
+    color: black;
+  }
+
+  .resendBtn {
+    background-color: transparent;
+    border: none;
+    color: #07b464;
+    cursor: pointer;
+    font-size: 0.8em;
+
+    p:hover {
+      text-decoration: underline;
+    }
+  }
+
+
+  .bottom-content {
+    width: 500px;
+    justify-content: center;
+  }
+}

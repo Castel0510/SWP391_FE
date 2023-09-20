@@ -55,8 +55,8 @@ const RegisterPage = () => {
 
           <div className='password-feature'>
             <div className='remember'>
-              <input type='checkbox'></input>
-              <p>I agree with <span className="text-swap">Terms</span> and <span className="text-swap">Privacy</span></p>
+              <input type='checkbox' id="agree"></input>
+              <label htmlFor="agree">I agree with <span className="text-swap">Terms</span> and <span className="text-swap">Privacy</span></label>
             </div>
 
           </div>
