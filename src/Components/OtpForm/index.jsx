@@ -88,7 +88,7 @@ const OtpForm = (props) => {
                 Confirm
             </button>
 
-            {error && <Message text_color={'text-danger'} children={error} style={{ marginBottom: '10px' }} />}
+            {error && <Message text_color={'text-red'} children={error} style={{ marginBottom: '10px' }} />}
 
             <div className="flex items-center gap-2">
                 <p className="resendNote">Did you not receive OTP?</p>
