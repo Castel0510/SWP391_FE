@@ -25,7 +25,7 @@ const HeaderComponent = () => {
             <div className="main__navbar">
                 <div className="container mx-auto flex items-center gap-1 justify-between">
                     <div className="logo">
-                        <Link to="/" className="flex items-center gap-2">
+                        <Link to="/" className="flex items-center">
                             <img src={logo} alt="Logo" className="w-8 h-8" />
                             <h3 className="text-xl font-bold uppercase">Bird</h3>
                         </Link>
