@@ -1,5 +1,5 @@
 .footer {
-  background-color: #2d6a4f;
+  background-color: #EBF9E7;
   padding: 70px 0;
 
   .container {
@@ -27,7 +27,7 @@
 
         h4 {
           font-size: 18px;
-          color: #f0f3bd;
+          color: #106940;
           text-transform: capitalize;
           margin-bottom: 35px;
           font-weight: 500;
@@ -38,7 +38,7 @@
             position: absolute;
             left: 0;
             bottom: -10px;
-            background-color: #d8f3dc;
+            background-color: #2f3e46;
             height: 2px;
             box-sizing: border-box;
             width: 100%;
@@ -50,21 +50,20 @@
         }
 
         p {
-          color: #bbbbbb;
+          color: black;
         }
 
         ul li a {
           font-size: 16px;
           text-transform: capitalize;
-          color: #ffffff;
           text-decoration: none;
           font-weight: 300;
-          color: #bbbbbb;
+          color: black;
           display: block;
           transition: all 0.3s ease;
 
           &:hover {
-            color: #ffffff;
+            color: #84a98c;
             padding-left: 8px;
           }
         }

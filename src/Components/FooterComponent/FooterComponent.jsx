@@ -35,8 +35,8 @@ function FooterComponent() {
             <h4>Contact Info</h4>
             <p>If you have any question please contact us at demo@example.com</p>
             <ul className='mt-4'>
-              <li className='flex justify-items-center text-gray-400'><HiOutlineLocationMarker /><Link href="#" className='pl-2'>123 Address</Link></li>
-              <li className='flex justify-items-center text-gray-400'><BsTelephone /><Link href="#" className='pl-2'> 0923456789</Link></li>
+              <li className='flex justify-items-center text-black'><HiOutlineLocationMarker /><Link href="#" className='pl-2'>123 Address</Link></li>
+              <li className='flex justify-items-center text-black'><BsTelephone /><Link href="#" className='pl-2'> 0923456789</Link></li>
             </ul>
           </div>
         </div>

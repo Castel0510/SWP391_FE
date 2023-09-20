@@ -1,0 +1,55 @@
+.header {
+  .main__navbar {
+    padding: 15px 0px;
+    background: #EBF9E7;
+
+    .container {
+      max-width: 1024px;
+      margin: 0 auto;
+
+      .logo {
+        width: 80px;
+        height: auto;
+        img {
+          width: 80px;
+          height: auto;
+        }
+        h3 {
+          color: #34A853;
+          margin: 0px;
+          font-size: 25px;
+        }
+      }
+
+      .menu {
+        display: flex;
+        align-items: center;
+        column-gap: 2.7rem;
+
+        a {
+            text-transform: uppercase;
+            color: black;
+        }
+
+        a:last-child {
+          background-color: #34A853;
+          border: 1px solid #34A853;
+          padding: 10px 20px;
+          color: white;
+          border-radius: 10px;
+          transition: all 0.5s ease-out;
+        }
+
+        a:not(:last-child):hover {
+          border-bottom: 1px solid #34A853;
+        }
+
+        a:last-child:hover {
+          background-color: #84a98c;
+          border: 1px solid #34A853;
+          color: black;
+          transition: all 0.5s ease-out;        }
+      }
+    }
+  }
+}
