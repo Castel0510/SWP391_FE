@@ -47,7 +47,6 @@
   
       .container-right {
         width: 40%;
-        padding: 50px;
         display: flex;
         flex-direction: column;
         justify-content: center;
@@ -60,13 +59,13 @@
           .navbar_item {
             padding: 5px 10px 5px 10px;
   
-            p {
+            a {
               color: #34a853;
             }
           }
   
           .navbar_active {
-            p {
+            a {
               color: #106940 !important;
               font-weight: bold;
             }

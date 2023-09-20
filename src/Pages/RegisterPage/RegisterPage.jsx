@@ -45,10 +45,18 @@ const RegisterPage = () => {
             <label htmlFor="">Confirm Password</label>
           </div>
 
+          <div className='dropdown'>
+            <select>
+              <option value="">Choose option: Customer or Provider</option>
+              <option value="customer">Customer</option>
+              <option value="provider">Provider</option>
+            </select>
+          </div>
+
           <div className='password-feature'>
             <div className='remember'>
               <input type='checkbox'></input>
-              <p>I agree with <span>Terms</span> and <span>Privacy</span></p>
+              <p>I agree with <span className="text-swap">Terms</span> and <span className="text-swap">Privacy</span></p>
             </div>
 
           </div>

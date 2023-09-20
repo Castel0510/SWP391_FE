@@ -38,7 +38,7 @@ const LoginPage = () => {
           </div>
 
           <div className='btn-login'>Sign in</div>
-          <div className='btn-login-google'>
+          <div className='btn-login btn-login-google'>
             <FcGoogle />
             <p>Sign in with Google</p>
           </div>
