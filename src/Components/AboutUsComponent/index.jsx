@@ -10,6 +10,30 @@ const AboutUsComponent = () => {
         Aos.init({ duration: 2000 })
     }, [])
 
+    const advantagesList = [
+        {
+            duration: '2500',
+            id: '01',
+            title: 'Diverse Types Of Services',
+            description: 'We provide the most essential services to serve your bird.',
+            className: 'colorOne'
+        },
+        {
+            duration: '3500',
+            id: '02',
+            title: 'The Procedure Is Simple',
+            description: 'As long as you confirm the correct address, quantity, and information, you can easily hire the service',
+            className: 'colorTwo'
+        },
+        {
+            duration: '4500',
+            id: '03',
+            title: 'Secure Payment',
+            description: ' Diverse payment methods: ATM, E-wallet',
+            className: 'colorThree'
+        },
+    ]
+
     return (
         <div className="about-us section">
             <div className="section-container">
@@ -21,32 +45,18 @@ const AboutUsComponent = () => {
 
                 <div className="info grid">
                     <div className="text grid">
-                        <div data-aos='fade-up' data-aos-duration='2500' className="singleInfo">
-                            <div className="number colorOne">01</div>
-                            <h4>Diverse Types Of Services</h4>
-                            <p>
-                                We provide the most essential services to serve your bird.
-                            </p>
-                        </div>
-
-                        <div data-aos='fade-up' data-aos-duration='3500' className="singleInfo">
-                            <div className="number colorTwo">02</div>
-                            <h4>The Procedure Is Simple</h4>
-                            <p>
-                                As long as you confirm the correct address, quantity, and information, you can easily hire the service
-                            </p>
-                        </div>
-
-                        <div data-aos='fade-up' data-aos-duration='4500' className="singleInfo">
-                            <div className="number colorThree">03</div>
-                            <h4>Secure Payment</h4>
-                            <p>
-                                Diverse payment methods: ATM, E-wallet
-                            </p>
-                        </div>
+                        {advantagesList.map((item, key) => (
+                            <div data-aos='fade-up' data-aos-duration={item.duration} className="singleInfo" key={key}>
+                                <div className={`number ${item.className}`}>{item.id}</div>
+                                <h4>{item.title}</h4>
+                                <p>
+                                    {item.description}
+                                </p>
+                            </div>
+                        ))}
                     </div>
 
-                    <div data-aos='fade-left' data-aos-duration='3500' className="img-container">
+                    <div data-aos='fade-left' data-aos-duration='2500' className="img-container">
                         <img src={gridImage} alt="About us" />
                     </div>
                 </div>
