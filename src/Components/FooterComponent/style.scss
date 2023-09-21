@@ -1,0 +1,105 @@
+.footer {
+  background-color: #EBF9E7;
+  padding: 70px 0;
+
+  .container {
+    max-width: 1024px;
+    margin: auto;
+
+    .row {
+      display: flex;
+      flex-wrap: wrap;
+
+      .footer-col {
+        width: 25%;
+        padding: 0 40px;
+        display: flex;
+        align-items: flex-start;
+        flex-direction: column;
+
+        ul {
+          list-style: none;
+          display: flex;
+          justify-content: center;
+          align-items: flex-start;
+          flex-direction: column;
+        }
+
+        h4 {
+          font-size: 18px;
+          color: #106940;
+          text-transform: capitalize;
+          margin-bottom: 35px;
+          font-weight: 500;
+          position: relative;
+
+          &::before {
+            content: "";
+            position: absolute;
+            left: 0;
+            bottom: -10px;
+            background-color: #2f3e46;
+            height: 2px;
+            box-sizing: border-box;
+            width: 100%;
+          }
+        }
+
+        ul li:not(:last-child) {
+          margin-bottom: 10px;
+        }
+
+        p {
+          color: black;
+        }
+
+        ul li a {
+          font-size: 16px;
+          text-transform: capitalize;
+          text-decoration: none;
+          font-weight: 300;
+          color: black;
+          display: block;
+          transition: all 0.3s ease;
+
+          &:hover {
+            color: #84a98c;
+            padding-left: 8px;
+          }
+        }
+
+        .social-links a {
+          display: inline-block;
+          height: 40px;
+          width: 40px;
+          background-color: rgba(255, 255, 255, 0.2);
+          margin: 0 10px 10px 0;
+          text-align: center;
+          line-height: 40px;
+          border-radius: 50%;
+          color: #ffffff;
+          transition: all 0.5s ease;
+
+          &:hover {
+            color: #24262b;
+            background-color: #ffffff;
+          }
+        }
+      }
+    }
+  }
+}
+
+/* Responsive */
+@media (max-width: 767px) {
+  .footer-col {
+    width: 50%;
+    margin-bottom: 30px;
+  }
+}
+
+@media (max-width: 574px) {
+  .footer-col {
+    width: 100%;
+  }
+}

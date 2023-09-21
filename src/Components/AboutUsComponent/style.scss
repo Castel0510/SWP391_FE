@@ -1,0 +1,104 @@
+.about-us {
+  max-width: 1024px;
+  margin: 0 auto;
+  padding: 3rem 0 3rem 0;
+
+  .section-container {
+    .title {
+      text-align: center;
+      small {
+        letter-spacing: 0.8rem;
+        text-transform: uppercase;
+        font-size: 13px;
+        color: black;
+        line-height: 1.5rem;
+      }
+    }
+
+    .info {
+      display: flex;
+      margin-top: 1rem;
+      gap: 1.5rem;
+      justify-content: space-between;
+
+      .text {
+        gap: 1.5rem;
+        width: 50%;
+        padding: 40px;
+
+        .singleInfo {
+          .number {
+            padding: 5px 12px;
+            width: 40px;
+            border-radius: 3rem;
+            text-align: center;
+            font-size: 13px;
+            font-weight: 700;
+            color: white;
+          }
+
+          .colorOne {
+            background-color: #84a98c;
+          }
+
+          .colorTwo {
+            background-color: #52796f;
+          }
+
+          .colorThree {
+            background-color: #2f3e46;
+          }
+        }
+      }
+
+      .img-container {
+        img {
+          width: 100%;
+          max-width: 420px;
+        }
+      }
+    }
+  }
+
+  .icon {
+    font-size: 1.3rem;
+    cursor: pointer;
+  }
+
+  .flex {
+    display: flex;
+    align-items: center;
+  }
+
+  .grid {
+    display: grid;
+    align-items: center;
+  }
+
+  .btn {
+    padding: 0.7rem 1.5rem;
+  }
+
+  img {
+    width: 100%;
+    height: auto;
+  }
+
+  p {
+    font-size: 13px;
+    color: gray;
+    line-height: 22px;
+  }
+
+  h4 {
+    padding: 1rem 0;
+    font-weight: 700;
+    color: black;
+  }
+
+  h2 {
+    font-size: 25px;
+    padding: 1rem 0;
+    color: black;
+  }
+}

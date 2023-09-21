@@ -1,0 +1,49 @@
+.contact-us {
+  padding: 3rem 0 3rem 0;
+
+  .container {
+    max-width: 1024px;
+    margin: 0 auto;
+
+    .title {
+      text-align: center;
+      small {
+        letter-spacing: 0.8rem;
+        text-transform: uppercase;
+        font-size: 13px;
+        color: black;
+        line-height: 1.5rem;
+      }
+
+      p {
+        font-size: 13px;
+        color: gray;
+        line-height: 22px;
+      }
+
+      h2 {
+        font-size: 25px;
+        padding: 1rem 0;
+        color: black;
+      }
+    }
+
+    .contact-us-form {
+      margin-top: 3rem;
+
+      img {
+        width: 450px;
+        height: auto;
+      }
+
+      input,
+      textarea {
+        border: 1px solid gray;
+      }
+
+      button {
+        background-color: #34a853;
+      }
+    }
+  }
+}
