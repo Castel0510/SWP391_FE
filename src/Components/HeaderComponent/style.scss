@@ -1,0 +1,68 @@
+.header {
+
+  .main__navbar {
+    background: #ebf9e7;
+    transition: background-color 0.3s ease;
+
+    .container {
+      max-width: 1024px;
+      margin: 0 auto;
+
+      .logo {
+        width: 80px;
+        height: auto;
+        img {
+          width: 80px;
+          height: auto;
+        }
+        h3 {
+          color: #34a853;
+          margin: 0px;
+          font-size: 25px;
+        }
+      }
+
+      .menu {
+        display: flex;
+        align-items: center;
+        column-gap: 2.7rem;
+
+        a {
+          text-transform: uppercase;
+          color: black;
+        }
+
+        a:last-child {
+          background-color: #34a853;
+          border: 1px solid #34a853;
+          padding: 10px 20px;
+          color: white;
+          border-radius: 10px;
+          transition: all 0.5s ease-out;
+        }
+
+        a:not(:last-child):hover {
+          border-bottom: 2px solid #34a853;
+        }
+
+        a:last-child:hover {
+          background-color: #d4a373;
+          border: 1px solid #d4a373;
+          color: black;
+          transition: all 0.5s ease-out;
+        }
+      }
+    }
+  }
+
+  .scrolled {
+    transition: background-color 0.3s ease;
+    background-color: white;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 999;
+  }
+}
