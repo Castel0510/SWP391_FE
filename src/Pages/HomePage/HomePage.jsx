@@ -4,6 +4,7 @@ import AboutUsComponent from '../../Components/AboutUsComponent'
 import CategoryComponent from '../../Components/CategoryComponent'
 import TopBookingServicesComponent from '../../Components/TopBookingServicesComponent'
 import Testimonial from '../../Components/Testimonial'
+import ContactUsComponent from '../../Components/ContactUsComponent'
 
 const HomePage = () => {
   return (
@@ -13,6 +14,7 @@ const HomePage = () => {
       <CategoryComponent/>
       <TopBookingServicesComponent/>
       <Testimonial/>
+      <ContactUsComponent/>
     </>
   )
 }
