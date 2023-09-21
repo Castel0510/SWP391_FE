@@ -36,7 +36,7 @@ const CategoryComponent = () => {
             duration: '5500',
             icon: <IoHomeOutline className='icon' />,
             name: 'Bird Case',
-            description: 'Where you find everything you need to care for your pet bird.'
+            description: 'Wehere you find everything you need to care for your pet bird.'
         }
     ]
 
