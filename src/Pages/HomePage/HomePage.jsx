@@ -2,6 +2,8 @@ import React from 'react'
 import HeroComponent from '../../Components/HeroComponent'
 import AboutUsComponent from '../../Components/AboutUsComponent'
 import CategoryComponent from '../../Components/CategoryComponent'
+import TopBookingServicesComponent from '../../Components/TopBookingServicesComponent'
+import Testimonial from '../../Components/Testimonial'
 
 const HomePage = () => {
   return (
@@ -9,6 +11,8 @@ const HomePage = () => {
       <HeroComponent />
       <AboutUsComponent/>
       <CategoryComponent/>
+      <TopBookingServicesComponent/>
+      <Testimonial/>
     </>
   )
 }
