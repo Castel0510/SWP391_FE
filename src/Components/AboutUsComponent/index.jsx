@@ -8,7 +8,7 @@ const AboutUsComponent = () => {
             <div className="section-container">
                 <div className="title">
                     <small>about us</small>
-                    <h2>Welcome to our services</h2>
+                    <h2>Welcome to our advantages</h2>
                     <p>Find help with booking and see what to expect along the services</p>
                 </div>
 
@@ -16,31 +16,31 @@ const AboutUsComponent = () => {
                     <div className="text grid">
                         <div className="singleInfo">
                             <div className="number colorOne">01</div>
-                            <h4>Fast and convenient</h4>
+                            <h4>Diverse Types Of Services</h4>
                             <p>
-                                Lorem ipsum dolor sit amet consectetur adipisicing elit. Soluta minima iure, eligendi sint sequi aspernatur perferendis harum repudiandae ullam ea? Consequuntur id perspiciatis odio veritatis? Delectus cumque laudantium saepe fugiat.
+                                We provide the most essential services to serve your bird.
                             </p>
                         </div>
 
                         <div className="singleInfo">
                             <div className="number colorTwo">02</div>
-                            <h4>Reasonable affordable price</h4>
+                            <h4>The Procedure Is Simple</h4>
                             <p>
-                                Lorem ipsum dolor sit amet consectetur adipisicing elit. Soluta minima iure, eligendi sint sequi aspernatur perferendis harum repudiandae ullam ea? Consequuntur id perspiciatis odio veritatis? Delectus cumque laudantium saepe fugiat.
+                                As long as you confirm the correct address, quantity, and information, you can easily hire the service
                             </p>
                         </div>
 
                         <div className="singleInfo">
                             <div className="number colorThree">03</div>
-                            <h4>Hmmmmm</h4>
+                            <h4>Secure Payment</h4>
                             <p>
-                                Lorem ipsum dolor sit amet consectetur adipisicing elit. Soluta minima iure, eligendi sint sequi aspernatur perferendis harum repudiandae ullam ea? Consequuntur id perspiciatis odio veritatis? Delectus cumque laudantium saepe fugiat.
+                                Diverse payment methods: ATM, E-wallet
                             </p>
                         </div>
                     </div>
 
                     <div className="img-container">
-                        <img src={gridImage} alt="About us"/>
+                        <img src={gridImage} alt="About us" />
                     </div>
                 </div>
             </div>
