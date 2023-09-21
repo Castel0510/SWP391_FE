@@ -1,10 +1,26 @@
-import React from 'react'
+import React, { useState, useEffect } from 'react'
 import { NavLink, Link } from 'react-router-dom';
-import { Container } from "reactstrap";
 import logo from '../../Assets/Images/logo.png';
 import './style.scss'
 
 const HeaderComponent = () => {
+    const [scrolled, setScrolled] = useState(false);
+
+    const handleScroll = () => {
+        if (window.scrollY > 0) {
+            setScrolled(true);
+        } else {
+            setScrolled(false);
+        }
+    };
+
+    useEffect(() => {
+        window.addEventListener('scroll', handleScroll);
+        return () => {
+          window.removeEventListener('scroll', handleScroll);
+        };
+      }, []);
+
     const navLinks = [
         {
             path: "/",
@@ -22,7 +38,7 @@ const HeaderComponent = () => {
 
     return (
         <header className="header">
-            <div className="main__navbar">
+            <div className={`main__navbar ${scrolled ? 'scrolled' : ''}`}>
                 <div className="container mx-auto flex items-center gap-1 justify-between">
                     <div className="logo">
                         <Link to="/" className="flex items-center">
