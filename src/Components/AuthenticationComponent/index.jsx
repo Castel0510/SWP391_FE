@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Link, useLocation } from "react-router-dom";
 import './style.scss';
-import image from '../../Assets/Images/background_sigin_signup.png';
+import image from '../../Assets/Images/background_signin_signup.png';
 import logo from '../../Assets/Images/logo.png';
 
 const AuthenticationComponent = ({ children }) => {
