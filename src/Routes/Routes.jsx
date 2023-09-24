@@ -2,7 +2,8 @@ import HomePage from "../Pages/HomePage/HomePage";
 import LoginPage from "../Pages/LoginPage/LoginPage";
 import NotFoundPage from "../Pages/NotFoundPage/NotFoundPage";
 import RegisterPage from "../Pages/RegisterPage/RegisterPage";
-import ServicePage from "../Pages/Service/Service";
+import ItemDetailPage from "../Pages/Service/ItemDetail";
+import ServicePage from "../Pages/Service/ServicePage";
 
 export const routes = [
     {
@@ -29,5 +30,12 @@ export const routes = [
         isShowHeaderFooter:true
 
     },
+    {
+        path: '/item/:itemId', 
+        page: ItemDetailPage,
+        isShowHeaderFooter:true
+
+      },
+      
 
 ]

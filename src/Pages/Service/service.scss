@@ -1,0 +1,80 @@
+.category-filter {
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+  margin-bottom: 20px;
+}
+
+.category-button {
+  background-color: #f7fafc;
+  transition: background-color 0.3s;
+  color: #000;
+  font-weight: 700;
+  padding-top: 0.5rem;
+  padding-bottom: 0.5rem;
+  padding-left: 1rem;
+  padding-right: 1rem;
+  border-radius: 1rem;
+  width: 400px;
+  height: 4rem;
+  font-family: serif;
+  margin-bottom: 0.5rem;
+  cursor: pointer;
+  transition: background-color 0.3s, color 0.3s, border-color 0.3s;
+  margin-right: 50px;
+}
+
+.category-button.active {
+  background-color: #29bb66;
+  color: #fff;
+}
+
+.category-button:hover {
+  background-color: #29bb66;
+  color: #fff;
+  border-color: #0056b3;
+}
+
+
+.item {
+  border-radius: 1rem;
+  height: 200px;
+  border: 1px solid #07B464;
+  padding: 10px;
+  margin: 30px;
+  margin-top: 30px;
+  cursor: pointer;
+  background-color: #a0e1c2;
+}
+
+.item:hover {
+  background-color: #73d7a9;
+}
+
+.item-name {
+  font-weight: bold;
+  font-size:x-large;
+}
+
+.item-description {
+  font-style: italic;
+  color: #555;
+}
+
+.item-price {
+  font-weight: bold;
+  color: #007bff;
+}
+
+
+.book-now-button {
+  background-color: #007bff;
+  color: #fff;
+  border: none;
+  padding: 8px 16px;
+  cursor: pointer;
+}
+
+.book-now-button:hover {
+  background-color: #0056b3;
+}
