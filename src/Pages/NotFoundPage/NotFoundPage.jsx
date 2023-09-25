@@ -1,6 +1,6 @@
 import React from 'react'
 import { Link } from 'react-router-dom'
-import notFoundIMG from '../../Assets/Images/notFound.png';
+// import notFoundIMG from '../../Assets/Images/notFound.png';
 
 const NotFoundPage = () => {
   return (
@@ -16,7 +16,7 @@ const NotFoundPage = () => {
             <Link to='/' className="px-5 inline py-3 text-sm font-medium leading-5 shadow-2xl text-white transition-all duration-400 border border-transparent rounded-lg focus:outline-none bg-green-600 active:bg-red-600 hover:bg-red-700 "> Back to homepage</Link>
           </div>
           <div class="w-full lg:flex lg:justify-end lg:w-1/2 mx-5 my-12">
-            <img src={notFoundIMG} class="" alt="Page not found" />
+            {/* <img src={notFoundIMG} class="" alt="Page not found" /> */}
           </div>
 
         </div>
