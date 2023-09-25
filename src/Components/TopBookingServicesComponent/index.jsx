@@ -80,8 +80,8 @@ const TopBookingServicesComponent = () => {
                 </div>
 
                 <div data-aos='zoom-in' data-aos-duration='1500' className="cards">
-                    {fakeData.map((item, key) => (
-                        <div className="w-full mx-2 max-w-sm bg-white border border-gray-200 rounded-lg dark:bg-gray-800 dark:border-gray-700 single-card">
+                    {fakeData.map((item) => (
+                        <div key={item.id} className="w-full mx-2 max-w-sm bg-white border border-gray-200 rounded-lg dark:bg-gray-800 dark:border-gray-700 single-card">
                             <a href="#">
                                 <img className="p-8 rounded-t-lg" src={item.image} alt="services image" />
                             </a>

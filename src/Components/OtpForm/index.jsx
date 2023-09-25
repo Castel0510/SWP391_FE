@@ -24,13 +24,13 @@ const OtpForm = (props) => {
             inputsRef.current[inputsRef.current.length - 1].focus();
         }
 
-
     };
 
     const handleInput = (e, index) => {
         if (setError) {
             setError()
         }
+        
         const inputLength = e.target.value.length;
         const maxLength = e.target.getAttribute('maxlength');
 
