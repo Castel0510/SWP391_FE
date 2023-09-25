@@ -18,6 +18,10 @@
       align-items: center;
       flex-direction: column;
       color: gray;
+
+      .error-input {
+        border: 2px solid rgb(220 38 38) !important;
+      }
   
       .input-box {
         padding-left: 15px;

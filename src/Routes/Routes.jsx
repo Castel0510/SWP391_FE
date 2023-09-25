@@ -2,15 +2,18 @@ import providerHomePage from "../Components/Provider/providerHomePage";
 import HomePage from "../Pages/HomePage/HomePage";
 import LoginPage from "../Pages/LoginPage/LoginPage";
 import NotFoundPage from "../Pages/NotFoundPage/NotFoundPage";
+import OrderHistoryPage from "../Pages/OrderHistoryPage/OrderHistoryPage";
+import ProfilePage from "../Pages/ProfilePage/ProfilePage";
 import RegisterPage from "../Pages/RegisterPage/RegisterPage";
 import ItemDetailPage from "../Pages/Service/ItemDetail";
 import ServicePage from "../Pages/Service/ServicePage";
+import TransactionHistoryPage from "../Pages/TransactionHistoryPage/TransactionHistoryPage";
 
 export const routes = [
     {
         path: '/',
         page: HomePage,
-        isShowHeaderFooter:true
+        isShowHeaderFooter: true
         //show header and footer
     },
     {
@@ -20,6 +23,21 @@ export const routes = [
     {
         path: '/register',
         page: RegisterPage
+    },
+    {
+        path: '/profile',
+        page: ProfilePage,
+        isShowHeaderFooter: true
+    },
+    {
+        path: '/order',
+        page: OrderHistoryPage,
+        isShowHeaderFooter: true
+    },
+    {
+        path: '/transaction',
+        page: TransactionHistoryPage,
+        isShowHeaderFooter: true
     },
     {
         path: '*',
