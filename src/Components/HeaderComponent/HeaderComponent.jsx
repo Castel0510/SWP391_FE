@@ -96,7 +96,7 @@ const HeaderComponent = () => {
                     <div className="logo">
                         <Link to="/" className="flex items-center">
                             <img src={logo} alt="Logo" className="w-8 h-8" />
-                            <h3 className="text-xl font-bold uppercase">Bird</h3>
+                            <h3 className="text-xl font-bold uppercase">BirdLive</h3>
                         </Link>
                     </div>
 

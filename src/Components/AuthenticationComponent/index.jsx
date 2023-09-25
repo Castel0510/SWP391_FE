@@ -31,7 +31,7 @@ const AuthenticationComponent = ({ children }) => {
         <div className="container-left">
           <Link className="branch" to='/'>
             <img src={logo} alt="logo" />
-            <p>Bird</p>
+            <p>BirdLive</p>
           </Link>
 
           {children}
