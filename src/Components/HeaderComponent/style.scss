@@ -27,12 +27,12 @@
         align-items: center;
         column-gap: 2.7rem;
 
-        a {
+        .menu_items {
           text-transform: uppercase;
           color: black;
         }
 
-        a:last-child {
+        .btn_login {
           background-color: #34a853;
           border: 1px solid #34a853;
           padding: 10px 20px;
@@ -41,11 +41,11 @@
           transition: all 0.5s ease-out;
         }
 
-        a:not(:last-child):hover {
+        .menu_items:hover {
           border-bottom: 2px solid #34a853;
         }
 
-        a:last-child:hover {
+        .btn_login:hover{
           background-color: #d4a373;
           border: 1px solid #d4a373;
           color: black;
