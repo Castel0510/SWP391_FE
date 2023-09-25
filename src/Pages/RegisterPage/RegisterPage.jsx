@@ -8,7 +8,7 @@ import { IoPersonCircleSharp } from "react-icons/io5"
 import { useNavigate, Link } from 'react-router-dom'
 import { useDispatch, useSelector } from 'react-redux';
 import { createUser, loginUser } from '../../Store/userSlice';
-
+import {validateEmail} from '../../Utils'
 
 const RegisterPage = () => {
   const [fullName, setFullName] = useState('');
@@ -120,7 +120,7 @@ const RegisterPage = () => {
             icon={IoPersonCircleSharp}
             type="text"
             value={fullName}
-            onChange={(e) => setPassword(e.target.value)}
+            onChange={(e) => setFullName(e.target.value)}
             label="Fullname"
             error={errors.fullName}
           />
