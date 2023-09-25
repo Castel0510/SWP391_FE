@@ -1,5 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
+import "./service.scss"
+
+
 
 const BookingPage = () => {
     const items = [
@@ -42,9 +45,9 @@ const BookingPage = () => {
   };
 
   return (
-    <div>
+    <div className='form'>
       <h2>Booking Page for: {formData.name}</h2>
-      <form onSubmit={handleSubmit}>
+      <form onSubmit={handleSubmit} className=''>
         <div>
           <label htmlFor="name">Name:</label>
           <input
@@ -90,7 +93,10 @@ const BookingPage = () => {
           />
         </div>
         <div>
-          <button type="submit">Book Now</button>
+    
+        </div>
+        <div >
+          <button type="submit" className='book-now-button'>Book Now</button>
         </div>
       </form>
     </div>

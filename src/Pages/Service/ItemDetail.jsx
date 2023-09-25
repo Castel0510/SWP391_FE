@@ -26,7 +26,7 @@ const ItemDetailPage = () => {
     <div className="item-detail">
       {selectedItem ? (
         <>
-          <div>
+          <div className='image'>
           <img src={itemImage} alt={selectedItem.name} />
           </div>
           <div>

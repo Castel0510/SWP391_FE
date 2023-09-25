@@ -111,7 +111,7 @@ min-width: 250px;
 }
 
 .item-detail button {
-  background-color: #007bff;
+  background-color: #19cf7a;
   color: #fff;
   border: none;
   border-radius: 5px;
@@ -121,7 +121,7 @@ min-width: 250px;
 }
 
 .item-detail button:hover {
-  background-color: #0056b3;
+  background-color: #16f030;
 }
 
 
@@ -135,6 +135,13 @@ min-width: 250px;
   margin: 0 auto;
 }
 
+.form{
+  min-height: fit-content;
+  margin: 200px;
+  background-color: #94ddbb;
+  padding: 30px;
+}
+
 .form-group {
   margin-bottom: 20px;
 }
@@ -142,6 +149,7 @@ min-width: 250px;
 label {
   display: block;
   font-weight: bold;
+  
 }
 
 input[type="text"],
@@ -149,14 +157,15 @@ input[type="email"],
 input[type="date"] {
   width: 100%;
   padding: 10px;
+  margin-bottom: 30px;
   border: 1px solid #ccc;
   border-radius: 5px;
   font-size: 16px;
 }
 
 .book-button {
-  background-color: #007bff;
-  color: #fff;
+  background-color:#07B464;
+  color:#101010;
   border: none;
   border-radius: 5px;
   padding: 10px 20px;
@@ -165,5 +174,5 @@ input[type="date"] {
 }
 
 .book-button:hover {
-  background-color: #0056b3;
+  background-color: #07B464;
 }
