@@ -18,25 +18,25 @@ const CategoryComponent = () => {
             duration: '2500',
             icon: <LuHotel className='icon' />,
             name: 'Bird Hotel',
-            description: 'hmmmmmmmmmm mmmmmmmmmmmmm'
+            description: 'The ideal place to stay for your pet birds. Professional team, classy amenities, and top safety.'
         },
         {
             duration: '3500',
             icon: <GiShower className='icon' />,
             name: 'Bird Spa',
-            description: 'hmmmmmmmmmm mmmmmmmmmmmmm'
+            description: 'Where to enjoy the best care for your pet birds.'
         },
         {
             duration: '4500',
             icon: <AiOutlineMedicineBox className='icon' />,
             name: 'Bird Medical',
-            description: 'hmmmmmmmmmm mmmmmmmmmmmmm'
+            description: 'Specializing in providing top medical services for pet birds.'
         },
         {
             duration: '5500',
             icon: <IoHomeOutline className='icon' />,
             name: 'Bird Case',
-            description: 'hmmmmmmmmmm mmmmmmmmmmmmm'
+            description: 'Wehere you find everything you need to care for your pet bird.'
         }
     ]
 
