@@ -27,12 +27,12 @@ export const routes = [
         isShowHeaderFooter: true
     },
     {
-        path: '/orderHistory',
+        path: '/order',
         page: OrderHistoryPage,
         isShowHeaderFooter: true
     },
     {
-        path: '/transactionHistory',
+        path: '/transaction',
         page: TransactionHistoryPage,
         isShowHeaderFooter: true
     },
