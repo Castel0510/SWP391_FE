@@ -34,7 +34,7 @@ const CategoryFilter = ({ onCategoryChange }) => {
             className={`category-button ${
               selectedCategory === 'Medical' ? 'active' : ''
             }`}
-          >
+          > 
             Medical
           </button>
           <button

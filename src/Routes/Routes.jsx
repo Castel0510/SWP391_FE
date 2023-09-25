@@ -1,3 +1,4 @@
+import providerHomePage from "../Components/Provider/providerHomePage";
 import HomePage from "../Pages/HomePage/HomePage";
 import LoginPage from "../Pages/LoginPage/LoginPage";
 import NotFoundPage from "../Pages/NotFoundPage/NotFoundPage";
@@ -36,6 +37,13 @@ export const routes = [
         isShowHeaderFooter:true
 
       },
+
+      {
+        path: '/provider', 
+        page: providerHomePage,
+        isShowHeaderFooter:true
+
+      }
       
 
 ]
