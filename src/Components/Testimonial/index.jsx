@@ -13,35 +13,35 @@ const Testimonial = () => {
     const testimonialList = [
         {
             effect: 'fade-up-right',
-            duration: '2500',
+            duration: '3500',
             avatar: ava,
-            name: 'Brother A',
+            name: 'User 1',
             role: 'Customer',
-            description: 'ok ok ok ok ok '
+            description: ' Good usable service'
         },
         {
             effect: 'fade-up-right',
             duration: '3500',
             avatar: ava,
-            name: 'Brother A',
+            name: 'Miss A',
             role: 'Customer',
-            description: 'ok ok ok ok ok '
+            description: 'Thank you this service met my expectations! '
         },
         {
             effect: 'fade-up-left',
-            duration: '4500',
+            duration: '3500',
             avatar: ava,
-            name: 'Brother A',
+            name: 'Anna',
             role: 'Customer',
-            description: 'ok ok ok ok ok '
+            description: 'I will always support and continue to use this service in the future. '
         },
         {
             effect: 'fade-up-left',
-            duration: '5500',
+            duration: '3500',
             avatar: ava,
-            name: 'Brother A',
+            name: 'An',
             role: 'Customer',
-            description: 'ok ok ok ok ok '
+            description: 'This service is truly worth every penny you spend. '
         },
     ]
 
