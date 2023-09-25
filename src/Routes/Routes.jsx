@@ -5,6 +5,7 @@ import NotFoundPage from "../Pages/NotFoundPage/NotFoundPage";
 import OrderHistoryPage from "../Pages/OrderHistoryPage/OrderHistoryPage";
 import ProfilePage from "../Pages/ProfilePage/ProfilePage";
 import RegisterPage from "../Pages/RegisterPage/RegisterPage";
+import BookingPage from "../Pages/Service/BookingPage";
 import ItemDetailPage from "../Pages/Service/ItemDetail";
 import ServicePage from "../Pages/Service/ServicePage";
 import TransactionHistoryPage from "../Pages/TransactionHistoryPage/TransactionHistoryPage";
@@ -50,7 +51,7 @@ export const routes = [
 
     },
     {
-        path: '/item/:itemId', 
+        path: '/detail/:itemId', 
         page: ItemDetailPage,
         isShowHeaderFooter:true
 
@@ -59,6 +60,12 @@ export const routes = [
       {
         path: '/provider', 
         page: providerHomePage,
+        isShowHeaderFooter:true
+
+      },
+      {
+        path: '/booking/:itemId', 
+        page: BookingPage,
         isShowHeaderFooter:true
 
       }

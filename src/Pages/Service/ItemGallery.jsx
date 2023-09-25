@@ -1,6 +1,7 @@
 import React from 'react';
 
 import "./service.scss"
+import { Link } from 'react-router-dom';
 
 
 const ItemGallery = ({ category, onItemClick }) => {
@@ -24,7 +25,13 @@ const ItemGallery = ({ category, onItemClick }) => {
     ],
   };
 
-  const categoryItems = items[category] || [];
+  let categoryItems = [];
+
+  if (category === 'All' || !category) {
+    categoryItems = Object.values(items).flat();
+  } else {
+    categoryItems = items[category] || [];
+  }
 
   return (
     <div className="item-gallery">
@@ -36,10 +43,12 @@ const ItemGallery = ({ category, onItemClick }) => {
         >
           <div className="item-name">{item.name}</div>
           <div className="item-description">{item.description}</div>
-         <div className='flex'>
-         <div className="item-price">${item.price}</div>
-          <button className="book-now-button">Booknow</button>
-         </div>
+          <div className='flex justify-between mt-5'>
+            <div className="item-price">${item.price}</div>
+            <Link to={`/detail/${item.id}`}>
+              <button className="book-now-button">BOOK NOW</button>
+            </Link>
+          </div>
         </div>
       ))}
     </div>
