@@ -20,7 +20,9 @@ const ItemDetailPage = () => {
   const { itemId } = useParams();
   const selectedItem = items.find((i) => i.id === parseInt(itemId, 10));
 
-
+console.log('====================================');
+console.log(selectedItem.id);
+console.log('====================================');
 
   return (
     <div className="item-detail">

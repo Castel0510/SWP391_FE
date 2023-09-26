@@ -152,9 +152,9 @@ label {
   
 }
 
-input[type="text"],
-input[type="email"],
-input[type="date"] {
+.form input[type="text"],
+.form input[type="email"],
+.form input[type="date"] {
   width: 100%;
   padding: 10px;
   margin-bottom: 30px;
@@ -175,4 +175,21 @@ input[type="date"] {
 
 .book-button:hover {
   background-color: #07B464;
+}
+
+.booking-form{
+
+}
+
+.search-bar{
+  // width: 1000px; 
+  // padding: 0.5rem 1rem; 
+  border: 2px solid #000;
+  border-radius: 1rem; 
+  // outline: none; 
+  // border: 2px solid #000; 
+  // margin-right: 1.75rem; 
+  &:focus {
+    border-color: #d8d7d7; 
+  }
 }
