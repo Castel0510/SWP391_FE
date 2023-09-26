@@ -8,7 +8,7 @@ const BookingPage = () => {
 
   const navigateTo = useNavigate();
 
-  const { itemId } = useParams(); 
+  const { itemId } = useParams();
   const items = [
     { id: 1, name: 'Hotel  1', description: 'Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industrys standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum', price: 100 },
     { id: 2, name: 'Hotel  2', description: 'Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industrys standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum', price: 120 },
@@ -25,10 +25,11 @@ const BookingPage = () => {
 
   const [formData, setFormData] = useState({
     username: '',
-    name: selectedItem.name, 
+    name: selectedItem.name,
     email: '',
     checkInDate: '',
     checkOutDate: '',
+    note: '',
   });
 
   const handleInputChange = (e) => {
@@ -50,18 +51,18 @@ const BookingPage = () => {
       pauseOnHover: true,
       draggable: true,
     });
-  
+
     setTimeout(() => {
       navigateTo('/service');
     }, 3000);
 
   };
-  
+
   return (
-    <div>
-      <h2>Booking Form for: {selectedItem.name}</h2>
+    <div className="form-container">
+      <h2 className="form-header">Booking Form for: {selectedItem.name}</h2>
       <form onSubmit={handleSubmit}>
-        <div>
+        <div className="form-input">
           <label>UserName:</label>
           <input
             type="text"
@@ -71,11 +72,54 @@ const BookingPage = () => {
             required
           />
         </div>
+        <div className="form-input">
+          <label>Email:</label>
+          <input
+            type="email"
+            name="email"
+            value={formData.email}
+            onChange={handleInputChange}
+            required
+          />
+        </div>
+        <div className="form-input">
+          <label>Check-In Date:</label>
+          <input
+            type="date"
+            name="checkInDate"
+            value={formData.checkInDate}
+            onChange={handleInputChange}
+            required
+          />
+        </div>
+        <div className="form-input">
+          <label>Check-Out Date:</label>
+          <input
+            type="date"
+            name="checkOutDate"
+            value={formData.checkOutDate}
+            onChange={handleInputChange}
+            required
+          />
+        </div>
+        <div className="form-input">
+          <label>Note:</label>
+          <textarea
+            name="note"
+            value={formData.note}
+            onChange={handleInputChange}
+            required
+            rows="4"
+            cols="100"
+          />
+        </div>
         <div>
-          <button type="submit">Submit</button>
+          <button type="submit" className="form-submit-button bg-green-500">
+            Submit
+          </button>
         </div>
       </form>
-      
+
       <ToastContainer />
     </div>
   );
