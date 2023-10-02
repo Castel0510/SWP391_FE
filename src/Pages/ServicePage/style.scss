@@ -1,0 +1,105 @@
+.service-page {
+  .service-content {
+    max-width: 1024px;
+    margin: 0 auto;
+    padding: 20px;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around;
+
+    .container-left {
+      width: 25%;
+
+      [type="search"] {
+        outline-offset: 0px !important;
+      }
+
+      .filter-container {
+        background-color: #f8f8f8;
+        padding: 10px 20px;
+        border: 1px solid #ccc;
+        border-radius: 8px;
+        margin: 5px 0px;
+
+        .flex {
+          p {
+            font-weight: bold;
+          }
+        }
+
+        .category-filter {
+          .title {
+            font-weight: bold;
+          }
+          
+        }
+
+        .price-filter {
+          p {
+            font-weight: bold;
+          }
+
+          .flex {
+            padding: 10px;
+          }
+
+          .range-price-container {
+            margin-bottom: 10px;
+            display: flex;
+            width: 100%;
+            justify-content: space-between;
+            align-items: center;
+          }
+        }
+
+        .rating-filter {
+          p {
+            font-weight: bold;
+          }
+
+          .list-rating {
+            padding: 10px;
+            display: flex;
+            flex-direction: row;
+            flex-wrap: wrap;
+            gap: 3px;
+
+            .rating-option {
+              display: flex;
+              gap: 2px;
+
+              label {
+                display: flex;
+                flex-wrap: wrap;
+                flex-direction: row;
+              }
+            }
+          }
+        }
+      }
+    }
+
+    .container-right {
+      width: 70%;
+
+      .cards {
+        display: flex;
+        justify-content: space-around;
+        flex-wrap: wrap;
+        gap: 2rem;
+
+        .single-card {
+          box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
+          transition: all 200ms ease-in;
+        }
+
+        .single-card:hover {
+          cursor: pointer;
+          box-shadow: rgba(100, 100, 111, 0.2) 0px 7px 29px 0px;
+          transition: all 200ms ease-in;
+          transform: scale(1.05);
+        }
+      }
+    }
+  }
+}

@@ -35,7 +35,7 @@ const HeroComponent = () => {
                         transition={{ duration: 2, type: "spring" }}
                         className="image-container"
                     >
-                        <img src={bird_hero} />
+                        <img src={bird_hero}/>
                     </motion.div>
                 </div>
             </div>

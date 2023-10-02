@@ -5,6 +5,7 @@ import OrderHistoryPage from "../Pages/OrderHistoryPage/OrderHistoryPage";
 import ProfilePage from "../Pages/ProfilePage/ProfilePage";
 import RegisterPage from "../Pages/RegisterPage/RegisterPage";
 import TransactionHistoryPage from "../Pages/TransactionHistoryPage/TransactionHistoryPage";
+import ServicePage from "../Pages/ServicePage";
 
 export const routes = [
     {
@@ -40,4 +41,9 @@ export const routes = [
         path: '*',
         page: NotFoundPage
     },
+    {
+        path: '/service/*',
+        page: ServicePage,
+        isShowHeaderFooter:true
+    }
 ]
