@@ -1,0 +1,40 @@
+.common__section {
+  background: linear-gradient(rgba(5, 7, 28, 0.6), rgba(0, 0, 0, 0.7)),
+    url("https://www.animalmedcentre.ca/wp-content/uploads/sites/111/2021/03/bird-services.jpg");
+  background-position: center;
+  background-size: cover;
+  background-repeat: no-repeat;
+  padding: 50px 0px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 2rem;
+
+  .text-title {
+    p {
+      color: white;
+      font-size: 20px;
+      letter-spacing: 0.8rem;
+      text-transform: uppercase;
+      line-height: 1.5rem;
+    }
+  }
+
+  .list-option {
+    display: flex;
+    gap: 2rem;
+
+    .btn-item {
+      border: 2px solid #34a853;
+      padding: 10px 20px;
+      color: white;
+      border-radius: 10px;
+      transition: all 0.5s ease-out;
+    }
+
+    .active {
+      background-color: #34a853;
+    }
+  }
+}

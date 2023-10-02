@@ -9,6 +9,7 @@ import BookingPage from "../Pages/Service/BookingPage";
 import ItemDetailPage from "../Pages/Service/ItemDetail";
 import ServicePage from "../Pages/Service/ServicePage";
 import TransactionHistoryPage from "../Pages/TransactionHistoryPage/TransactionHistoryPage";
+import ServicePage from "../Pages/ServicePage";
 
 export const routes = [
     {
@@ -45,30 +46,8 @@ export const routes = [
         page: NotFoundPage
     },
     {
-        path: '/service',
+        path: '/service/*',
         page: ServicePage,
         isShowHeaderFooter:true
-
-    },
-    {
-        path: '/detail/:itemId', 
-        page: ItemDetailPage,
-        isShowHeaderFooter:true
-
-      },
-
-      {
-        path: '/provider', 
-        page: providerHomePage,
-        isShowHeaderFooter:true
-
-      },
-      {
-        path: '/booking/:itemId', 
-        page: BookingPage,
-        isShowHeaderFooter:true
-
-      }
-      
-
+    }
 ]
