@@ -8,7 +8,7 @@ const OrderHistoryPage = () => {
       dateOrder: " 01/01/2023",
       dateComplete: "03/01/2023",
       detail: "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took ",
-      status: "Done"
+      status: "DONE"
     },
     {
       name: "BIRD HOTEL - ABC HOTEL",
@@ -17,29 +17,15 @@ const OrderHistoryPage = () => {
       detail: "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took ",
       status: "ONGOING"
     },
+    {
+      name: "BIRD HOTEL - ABC HOTEL",
+      dateOrder: " 01/01/2023",
+      dateComplete: null,
+      detail: "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took ",
+      status: "CANCEL"
+    },
   ]
 
-  const check = (item) => {
-    if (item === "DONE") {
-      return (
-        <button className="bg-green-400 hover:bg-green-500 text-black font-bold py-2 px-4 rounded ml-5">
-          DONE
-        </button>
-      )
-    } else if (item === "ONGOING") {
-      return (
-        <button className="bg-yellow-300 hover:bg-yellow-500 text-black font-bold py-2 px-4 rounded ml-5">
-          ON GOING
-        </button>
-      )
-    } else if (item === "CANCEL") {
-      return (
-        <button className="bg-red-400 hover:bg-red-500 text-black font-bold py-2 px-4 rounded ml-5">
-          CANCEL
-        </button>
-      )
-    }
-  }
 
 
   return (
@@ -68,7 +54,7 @@ const OrderHistoryPage = () => {
             <div className='p-3 flex'><p className='font-bold pr-1'>Date order: </p> {item.dateOrder}</div>
             <div className='p-3 flex'><p className='font-bold pr-1'>Date completed: </p> {item.dateComplete}</div>
             <div className='p-3 flex leading-normal'><p className='font-bold pr-1'>Detail: </p> {item.detail}</div>
-            <div className='p-3 pb-6 flex'><p className='font-bold pr-1'>Status: </p> {() => check(item)}</div>
+            <div className='p-3 pb-6 flex'><p className='font-bold pr-1'>Status: </p> {item.status}</div>
           </div>
         ))}
 
