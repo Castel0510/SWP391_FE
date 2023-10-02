@@ -7,7 +7,6 @@ import ProfilePage from "../Pages/ProfilePage/ProfilePage";
 import RegisterPage from "../Pages/RegisterPage/RegisterPage";
 import BookingPage from "../Pages/Service/BookingPage";
 import ItemDetailPage from "../Pages/Service/ItemDetail";
-import ServicePage from "../Pages/Service/ServicePage";
 import TransactionHistoryPage from "../Pages/TransactionHistoryPage/TransactionHistoryPage";
 import ServicePage from "../Pages/ServicePage";
 
