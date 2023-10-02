@@ -3,6 +3,9 @@ import HeroComponent from '../../Components/HeroComponent'
 import CategoryFilter from './CategoryFilter';
 import '../Service/service.scss'
 import ItemGallery from './ItemGallery';
+import itemImage from "../../Assets/Images/bird_hero.png"
+
+
 
 const ServicePage = () => {
   const [selectedCategory, setSelectedCategory] = useState(null);

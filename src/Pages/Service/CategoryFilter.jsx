@@ -20,7 +20,7 @@ const CategoryFilter = ({ onCategoryChange }) => {
                         selectedCategory === 'Hotel' ? 'active' : ''
                     }`}
                 >
-                    Hotel
+                    Boarding
                 </button>
                 <button
                     onClick={() => handleCategoryClick('Spa')}
@@ -28,7 +28,7 @@ const CategoryFilter = ({ onCategoryChange }) => {
                         selectedCategory === 'Spa' ? 'active' : ''
                     }`}
                 >
-                    Spa
+                    Grooming
                 </button>
                 <button
                     onClick={() => handleCategoryClick('Medical')}
@@ -38,14 +38,14 @@ const CategoryFilter = ({ onCategoryChange }) => {
                 >
                     Medical
                 </button>
-                <button
+                {/* <button
                     onClick={() => handleCategoryClick('Cage')}
                     className={`category-button ${
                         selectedCategory === 'Cage' ? 'active' : ''
                     }`}
                 >
                     Cage
-                </button>
+                </button> */}
             </div>
         </div>
     );
