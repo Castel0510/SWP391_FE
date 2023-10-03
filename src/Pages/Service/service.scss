@@ -254,6 +254,23 @@
   border-radius: 10px;
 
 }
+.rating {
+  font-size: 50px;
+}
+
+.star.filled::before {
+  content: '★'; 
+  color: gold; 
+}
+
+.star::before {
+  content: '★'; 
+  color: #ccc; 
+}
+
+.star:hover::before {
+  color: orange; 
+}
 
 //BOOKINGFORM
 
@@ -320,20 +337,3 @@
 }
 
 
-.rating {
-  font-size: 50px;
-}
-
-.star.filled::before {
-  content: '★'; 
-  color: gold; 
-}
-
-.star::before {
-  content: '★'; 
-  color: #ccc; 
-}
-
-.star:hover::before {
-  color: orange; 
-}

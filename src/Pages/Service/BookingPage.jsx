@@ -3,7 +3,7 @@ import { useParams } from 'react-router-dom';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { useNavigate } from 'react-router-dom';
-import { format, differenceInDays } from 'date-fns';
+import { format, differenceInDays, addDays } from 'date-fns';
 
 const BookingPage = () => {
 
@@ -22,6 +22,10 @@ const BookingPage = () => {
 
   ]
 
+  const [selectedOption, setSelectedOption] = useState('');
+  const [checkInError, setCheckInError] = useState(null);
+  const [checkOutError, setCheckOutError] = useState(null);
+  const [selectedCheckboxes, setSelectedCheckboxes] = useState([]);
 
   const selectedItem = items.find((item) => item.id === parseInt(itemId, 10));
 
@@ -34,18 +38,39 @@ const BookingPage = () => {
     checkOutDate: '',
     note: '',
     price: '',
+    size: '',
+    selectedOption: selectedOption,
+    selectedCheckboxes: [],
   });
 
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
+    if (name === 'checkInDate') {
+      const currentDate = new Date();
+      const selectedDate = new Date(value);
+      if (selectedDate < currentDate) {
+        setCheckInError('Check-in date cannot be in the past');
+      } else {
+        setCheckInError(null);
+      }
+    } else if (name === 'checkOutDate') {
+      const currentDate = new Date();
+      const selectedDate = new Date(value);
+      if (selectedDate < currentDate) {
+        setCheckOutError('Check-out date cannot be in the past');
+      } else if (selectedDate > currentDate && selectedDate <= addDays(currentDate, 30)) {
+        setCheckOutError(null);
+      } else {
+        setCheckOutError('Check-out date must be within 30 days from today');
+      }
+    }
+
     setFormData({
       ...formData,
       [name]: value,
     });
   };
-
-
 
 
   useEffect(() => {
@@ -55,7 +80,11 @@ const BookingPage = () => {
       const days = differenceInDays(checkOutDate, checkInDate);
 
       if (selectedItem) {
-        const newTotalPrice = days * selectedItem.price;
+        const selectedItemPrice = parseFloat(selectedItem.price);
+        const selectedOptionPrice = parseFloat(selectedOption);
+        const checkboxPrices = selectedCheckboxes.map((checkbox) => parseFloat(checkbox.price));
+        const checkboxTotalPrice = checkboxPrices.reduce((acc, price) => acc + price, 0);
+        const newTotalPrice = days * selectedItemPrice + selectedOptionPrice + checkboxTotalPrice;
         setTotalPrice(newTotalPrice);
       }
     };
@@ -72,7 +101,9 @@ const BookingPage = () => {
       checkInDateInput.removeEventListener('change', calculateTotalPrice);
       checkOutDateInput.removeEventListener('change', calculateTotalPrice);
     };
-  }, [formData, selectedItem]);
+  }, [formData, selectedItem, selectedOption, selectedCheckboxes]);
+
+
 
 
   const handleSubmit = (e) => {
@@ -82,11 +113,16 @@ const BookingPage = () => {
     const checkOutDate = new Date(formData.checkOutDate);
     const days = differenceInDays(checkOutDate, checkInDate);
 
-    totalPrice = days * selectedItem.price;
+    const selectedItemPrice = parseFloat(selectedItem.price);
+    const selectedOptionPrice = parseFloat(selectedOption);
+    const checkboxPrices = selectedCheckboxes.map((checkbox) => checkbox.price);
+    const checkboxTotalPrice = checkboxPrices.reduce((acc, price) => acc + price, 0);
+    const newTotalPrice = days * selectedItemPrice + selectedOptionPrice + checkboxTotalPrice;
 
     const updatedFormData = {
       ...formData,
-      price: totalPrice,
+      price: newTotalPrice,
+      selectedCheckboxes: selectedCheckboxes,
     };
 
     console.log('Form Data:', updatedFormData);
@@ -100,10 +136,48 @@ const BookingPage = () => {
     });
 
     setTimeout(() => {
-      navigateTo('/service');
+      navigateTo('/booking/1');
     }, 3000);
   };
 
+
+
+  const options = [
+    { name: 'small', label: '5-10(cm)', price: 101 },
+    { name: 'medium', label: '10-30(cm)', price: 102 },
+    { name: 'big', label: '>30(cm)', price: 103 },
+  ];
+
+
+
+  const handleDropdownChange = (e) => {
+    const selectedValue = e.target.value;
+    setSelectedOption(selectedValue);
+
+    setFormData({
+      ...formData,
+      selectedOption: selectedValue,
+    });
+  };
+
+
+  //checkbox
+  const checkboxOptions = [
+    { id: '1', label: 'Nail($201)', price: 201 },
+    { id: '2', label: 'Wings($203)', price: 203 },
+  ];
+
+
+  const handleCheckboxChange = (e) => {
+    const { id, checked } = e.target;
+    const checkbox = checkboxOptions.find((checkbox) => checkbox.id === id);
+
+    if (checked) {
+      setSelectedCheckboxes([...selectedCheckboxes, checkbox]);
+    } else {
+      setSelectedCheckboxes(selectedCheckboxes.filter((item) => item.id !== id));
+    }
+  };
   return (
     <div className="form-container">
       <button onClick={() => window.history.back()} className='button-goback'>Go Back</button>
@@ -162,6 +236,7 @@ const BookingPage = () => {
             onChange={handleInputChange}
             required
           />
+          {checkInError && <p className="error-message">{checkInError}</p>}
         </div>
         <div className="form-input">
           <label>Check-Out Date:</label>
@@ -172,6 +247,37 @@ const BookingPage = () => {
             onChange={handleInputChange}
             required
           />
+          {checkOutError && <p className="error-message">{checkOutError}</p>}
+        </div>
+        <div className="form-input">
+          <label>Select an Option of your bird size:</label>
+          <select
+            name="selectedOption"
+            value={selectedOption}
+            onChange={handleDropdownChange}
+            required
+          >
+            <option value="" disabled>Select an option</option>
+            {options.map((option) => (
+              <option key={option.name} value={option.price}>
+                {option.label}
+              </option>
+            ))}
+          </select>
+        </div>
+        <div className="form-input">
+          <label>Select Additional Services:</label>
+          {checkboxOptions.map((checkbox) => (
+            <label key={checkbox.id}>
+              <input
+                type="checkbox"
+                id={checkbox.id}
+                onChange={handleCheckboxChange}
+                checked={selectedCheckboxes.some((item) => item.id === checkbox.id)}
+              />
+              {checkbox.label}
+            </label>
+          ))}
         </div>
         <div className="item-price">
           Total Price: {isNaN(totalPrice) ? '0' : `$${totalPrice}`}
