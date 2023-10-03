@@ -22,6 +22,14 @@ const BookingPage = () => {
 
   ]
 
+
+  const options = [
+    { name: 'small', label: '5-10(cm)(100/bird)', price: 100 },
+    { name: 'medium', label: '10-30(cm)(200/bird)', price: 200 },
+    { name: 'big', label: '>30(cm)(300/bird)', price: 300 },
+  ];
+
+  const [selectedSize, setSelectedSize] = useState('');
   const [selectedOption, setSelectedOption] = useState('');
   const [checkInError, setCheckInError] = useState(null);
   const [checkOutError, setCheckOutError] = useState(null);
@@ -38,7 +46,7 @@ const BookingPage = () => {
     checkOutDate: '',
     note: '',
     price: '',
-    size: '',
+    size: selectedSize,
     selectedOption: selectedOption,
     selectedCheckboxes: [],
   });
@@ -78,32 +86,35 @@ const BookingPage = () => {
       const checkInDate = new Date(formData.checkInDate);
       const checkOutDate = new Date(formData.checkOutDate);
       const days = differenceInDays(checkOutDate, checkInDate);
-
+  
       if (selectedItem) {
         const selectedItemPrice = parseFloat(selectedItem.price);
         const selectedOptionPrice = parseFloat(selectedOption);
         const checkboxPrices = selectedCheckboxes.map((checkbox) => parseFloat(checkbox.price));
         const checkboxTotalPrice = checkboxPrices.reduce((acc, price) => acc + price, 0);
-        const newTotalPrice = days * selectedItemPrice + selectedOptionPrice + checkboxTotalPrice;
+        const newTotalPrice = days * selectedItemPrice + days * selectedOptionPrice + checkboxTotalPrice;
         setTotalPrice(newTotalPrice);
+  
+        // Find the corresponding size based on the selected option's price
+        const selectedSizeName = options.find((option) => option.price === selectedOption)?.name || '';
+        setSelectedSize(selectedSizeName);
       }
     };
-
+  
     calculateTotalPrice();
-
+  
     const checkInDateInput = document.querySelector('[name="checkInDate"]');
     const checkOutDateInput = document.querySelector('[name="checkOutDate"]');
-
+  
     checkInDateInput.addEventListener('change', calculateTotalPrice);
     checkOutDateInput.addEventListener('change', calculateTotalPrice);
-
+  
     return () => {
       checkInDateInput.removeEventListener('change', calculateTotalPrice);
       checkOutDateInput.removeEventListener('change', calculateTotalPrice);
     };
-  }, [formData, selectedItem, selectedOption, selectedCheckboxes]);
-
-
+  }, [formData, selectedItem, selectedOption, selectedCheckboxes, options]);
+  
 
 
   const handleSubmit = (e) => {
@@ -117,7 +128,7 @@ const BookingPage = () => {
     const selectedOptionPrice = parseFloat(selectedOption);
     const checkboxPrices = selectedCheckboxes.map((checkbox) => checkbox.price);
     const checkboxTotalPrice = checkboxPrices.reduce((acc, price) => acc + price, 0);
-    const newTotalPrice = days * selectedItemPrice + selectedOptionPrice + checkboxTotalPrice;
+    const newTotalPrice = days * selectedItemPrice + days * selectedOptionPrice + checkboxTotalPrice;
 
     const updatedFormData = {
       ...formData,
@@ -140,23 +151,22 @@ const BookingPage = () => {
     }, 3000);
   };
 
-
-
-  const options = [
-    { name: 'small', label: '5-10(cm)', price: 101 },
-    { name: 'medium', label: '10-30(cm)', price: 102 },
-    { name: 'big', label: '>30(cm)', price: 103 },
-  ];
+//SIZE
 
 
 
   const handleDropdownChange = (e) => {
-    const selectedValue = e.target.value;
+    const selectedValue = parseFloat(e.target.value);
     setSelectedOption(selectedValue);
-
+  
+    const selectedSizeName = options.find((option) => option.price === selectedValue)?.name || '';
+    
+    setSelectedSize(selectedSizeName);
+  
     setFormData({
       ...formData,
       selectedOption: selectedValue,
+      size: selectedSizeName,
     });
   };
 
@@ -180,117 +190,126 @@ const BookingPage = () => {
   };
   return (
     <div className="form-container">
-      <button onClick={() => window.history.back()} className='button-goback'>Go Back</button>
+  <button onClick={() => window.history.back()} className="btn-goback">Go Back</button>
 
-      <h2 className="form-header">Booking Form for: {selectedItem.name}</h2>
-      <form onSubmit={handleSubmit}>
-        <div className="form-input">
-          <label>Name</label>
-          <input
-            type="text"
-            name="username"
-            value={formData.username}
-            onChange={handleInputChange}
-            required
-          />
-        </div>
-        <div className="form-input">
-          <label>Email:</label>
-          <input
-            type="email"
-            name="email"
-            value={formData.email}
-            onChange={handleInputChange}
-            required
-          />
-        </div>
-        <div className="form-input">
-          <label>Phone</label>
-          <input
-            type="text"
-            name="phone"
-            value={formData.phone}
-            onChange={handleInputChange}
-            required
-          />
-        </div>
-
-        <div className="form-input">
-          <label>Note:</label>
-          <textarea
-            name="note"
-            value={formData.note}
-            onChange={handleInputChange}
-            required
-            rows="4"
-            cols="100"
-            style={{ resize: "none" }}
-          />
-        </div>
-        <div className="form-input">
-          <label>Check-In Date:</label>
-          <input
-            type="date"
-            name="checkInDate"
-            value={formData.checkInDate}
-            onChange={handleInputChange}
-            required
-          />
-          {checkInError && <p className="error-message">{checkInError}</p>}
-        </div>
-        <div className="form-input">
-          <label>Check-Out Date:</label>
-          <input
-            type="date"
-            name="checkOutDate"
-            value={formData.checkOutDate}
-            onChange={handleInputChange}
-            required
-          />
-          {checkOutError && <p className="error-message">{checkOutError}</p>}
-        </div>
-        <div className="form-input">
-          <label>Select an Option of your bird size:</label>
-          <select
-            name="selectedOption"
-            value={selectedOption}
-            onChange={handleDropdownChange}
-            required
-          >
-            <option value="" disabled>Select an option</option>
-            {options.map((option) => (
-              <option key={option.name} value={option.price}>
-                {option.label}
-              </option>
-            ))}
-          </select>
-        </div>
-        <div className="form-input">
-          <label>Select Additional Services:</label>
-          {checkboxOptions.map((checkbox) => (
-            <label key={checkbox.id}>
-              <input
-                type="checkbox"
-                id={checkbox.id}
-                onChange={handleCheckboxChange}
-                checked={selectedCheckboxes.some((item) => item.id === checkbox.id)}
-              />
-              {checkbox.label}
-            </label>
-          ))}
-        </div>
-        <div className="item-price">
-          Total Price: {isNaN(totalPrice) ? '0' : `$${totalPrice}`}
-        </div>
-        <div className='flex'>
-          <button type="submit" className="form-submit-button bg-green-500">
-            Submit
-          </button>
-        </div>
-      </form>
-
-      <ToastContainer />
+  <h2 className="form-header">Booking Form for: {selectedItem.name}</h2>
+  <form onSubmit={handleSubmit}>
+    <div className="form-input">
+      <label>Name</label>
+      <input
+        type="text"
+        name="username"
+        value={formData.username}
+        onChange={handleInputChange}
+        required
+        className="input-text"
+      />
     </div>
+    <div className="form-input">
+      <label>Email:</label>
+      <input
+        type="email"
+        name="email"
+        value={formData.email}
+        onChange={handleInputChange}
+        required
+        className="input-text"
+      />
+    </div>
+    <div className="form-input">
+      <label>Phone</label>
+      <input
+        type="text"
+        name="phone"
+        value={formData.phone}
+        onChange={handleInputChange}
+        required
+        className="input-text"
+      />
+    </div>
+
+    <div className="form-input">
+      <label>Note:</label>
+      <textarea
+        name="note"
+        value={formData.note}
+        onChange={handleInputChange}
+        required
+        rows="4"
+        cols="100"
+        style={{ resize: "none" }}
+        className="textarea"
+      />
+    </div>
+    <div className="form-input">
+      <label>Check-In Date:</label>
+      <input
+        type="date"
+        name="checkInDate"
+        value={formData.checkInDate}
+        onChange={handleInputChange}
+        required
+        className="input-date"
+      />
+      {checkInError && <p className="error-message">{checkInError}</p>}
+    </div>
+    <div className="form-input">
+      <label>Check-Out Date:</label>
+      <input
+        type="date"
+        name="checkOutDate"
+        value={formData.checkOutDate}
+        onChange={handleInputChange}
+        required
+        className="input-date"
+      />
+      {checkOutError && <p className="error-message">{checkOutError}</p>}
+    </div>
+    <div className="form-input">
+      <label>Select an Option of your bird size:</label>
+      <select
+        name="selectedOption"
+        value={selectedOption}
+        onChange={handleDropdownChange}
+        required
+        className="select-dropdown"
+      >
+        <option value="" disabled>Select an option</option>
+        {options.map((option) => (
+          <option key={option.name} value={option.price}>
+            {option.label}
+          </option>
+        ))}
+      </select>
+    </div>
+    <div className="form-input">
+      <label>Select Additional Services:</label>
+      {checkboxOptions.map((checkbox) => (
+        <label key={checkbox.id} className="checkbox-label">
+          <input
+            type="checkbox"
+            id={checkbox.id}
+            onChange={handleCheckboxChange}
+            checked={selectedCheckboxes.some((item) => item.id === checkbox.id)}
+            className="checkbox-input"
+          />
+          {checkbox.label}
+        </label>
+      ))}
+    </div>
+    <div className="item-price">
+      Total Price: {isNaN(totalPrice) ? '0' : `$${totalPrice}`}
+    </div>
+    <div className="flex">
+      <button type="submit" className="form-submit-button bg-green-500">
+        SUBMIT
+      </button>
+    </div>
+  </form>
+
+  <ToastContainer />
+</div>
+
   );
 };
 
