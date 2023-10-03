@@ -9,6 +9,8 @@ import BookingPage from "../Pages/Service/BookingPage";
 import ItemDetailPage from "../Pages/Service/ItemDetail";
 import TransactionHistoryPage from "../Pages/TransactionHistoryPage/TransactionHistoryPage";
 import ServicePage from "../Pages/ServicePage";
+import MyShopPage from "../Pages/MyShopPage/MyShopPage";
+import CreateServicePage from "../Pages/CreateServicePage/CreateServicePage";
 
 export const routes = [
     {
@@ -47,6 +49,16 @@ export const routes = [
     {
         path: '/service/*',
         page: ServicePage,
+        isShowHeaderFooter:true
+    },
+    {
+        path: '/myShop',
+        page: MyShopPage,
+        isShowHeaderFooter:true
+    },
+    {
+        path: '/createService',
+        page: CreateServicePage,
         isShowHeaderFooter:true
     }
 ]
