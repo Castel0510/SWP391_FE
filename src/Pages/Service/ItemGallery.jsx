@@ -4,6 +4,7 @@ import "./service.scss"
 import { Link } from 'react-router-dom';
 import itemImage from "../../Assets/Images/birdspa.jpg"
 import itemImage2 from "../../Assets/Images/bird_hero.png"
+import Rating from './Rating';
 
 
 const ItemGallery = ({ category, onItemClick }) => {
@@ -37,8 +38,11 @@ const ItemGallery = ({ category, onItemClick }) => {
           <div className="item-content">
             <div className="item-name">{item.name}</div>
             <div className="item-description">{item.description}</div>
+            <div className='item-rating'>
+              <Rating rating={item.rating}/>
+            </div>
             <div className="flex justify-between mt-5">
-              <div className="item-price">${item.price}</div>
+              <div className="item-price">${item.price}/Day</div>
               <Link to={`/detail/${item.id}`}>
                 <button className="book-now-button">BOOK NOW</button>
               </Link>
