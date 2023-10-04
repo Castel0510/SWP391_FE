@@ -22,13 +22,8 @@ const ServicePage = () => {
   return (
     <div>
       <HeroComponent />
+      
       <div className='h-fit'>
-        <div className='flex mt-10 ml-16'>
-          <input type="text" className="search-bar w-96 px-4 py-2 border-black rounded-2xl focus:outline-none focus:border-gray-500 mr-7 border-20" placeholder="" />
-          <button className="bg-green-400 hover:bg-green-700 text-white font-bold py-2 px-4 rounded-2xl w-36 h-11 font-serif">
-            Search
-          </button>
-        </div>
         <div className='flex'>
           <div className='ml-16 mt-20 flex-1'>
             <CategoryFilter onCategoryChange={handleCategoryChange} />

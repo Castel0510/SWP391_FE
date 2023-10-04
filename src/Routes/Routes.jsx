@@ -45,7 +45,7 @@ export const routes = [
         page: NotFoundPage
     },
     {
-        path: '/service',
+        path: '/service2',
         page: ServicePage,
         isShowHeaderFooter:true
 
