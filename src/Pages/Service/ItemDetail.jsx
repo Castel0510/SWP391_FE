@@ -4,6 +4,7 @@ import itemImage from "../../Assets/Images/bird_hero.png"
 
 import itemImage2 from "../../Assets/Images/birdspa.jpg"
 import Rating from './Rating';
+import { FaArrowLeft } from 'react-icons/fa';
 
 const ItemDetailPage = () => {
   const items = [
@@ -35,10 +36,16 @@ const ItemDetailPage = () => {
   return (
 
     <div className="item-detail">
+
       {selectedItem ? (
+
         <div className="detail-content">
+
           <div className='flex'>
             <div className="image">
+              <button onClick={() => window.history.back()} className="back-button">
+                <FaArrowLeft />
+              </button>
               <img src={itemImage} alt={selectedItem.name} />
               <div className='rating'>
                 <Rating rating={selectedItem.rating} onRate={(newRating) => onRate(selectedItem.id, newRating)} />

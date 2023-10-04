@@ -4,6 +4,9 @@ import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { useNavigate } from 'react-router-dom';
 import { format, differenceInDays, addDays } from 'date-fns';
+import { FaArrowLeft } from 'react-icons/fa';
+
+
 
 const BookingPage = () => {
 
@@ -86,7 +89,7 @@ const BookingPage = () => {
       const checkInDate = new Date(formData.checkInDate);
       const checkOutDate = new Date(formData.checkOutDate);
       const days = differenceInDays(checkOutDate, checkInDate);
-  
+
       if (selectedItem) {
         const selectedItemPrice = parseFloat(selectedItem.price);
         const selectedOptionPrice = parseFloat(selectedOption);
@@ -94,27 +97,37 @@ const BookingPage = () => {
         const checkboxTotalPrice = checkboxPrices.reduce((acc, price) => acc + price, 0);
         const newTotalPrice = days * selectedItemPrice + days * selectedOptionPrice + checkboxTotalPrice;
         setTotalPrice(newTotalPrice);
-  
-        // Find the corresponding size based on the selected option's price
+
         const selectedSizeName = options.find((option) => option.price === selectedOption)?.name || '';
         setSelectedSize(selectedSizeName);
       }
+      const triggerAnimation = () => {
+        const priceElement = document.querySelector('.change-number');
+        if (priceElement) {
+          priceElement.classList.add('changed');
+          setTimeout(() => {
+            priceElement.classList.remove('changed');
+          }, 3000); 
+        }
+      };
     };
+    
   
+
     calculateTotalPrice();
-  
+
     const checkInDateInput = document.querySelector('[name="checkInDate"]');
     const checkOutDateInput = document.querySelector('[name="checkOutDate"]');
-  
+
     checkInDateInput.addEventListener('change', calculateTotalPrice);
     checkOutDateInput.addEventListener('change', calculateTotalPrice);
-  
+
     return () => {
       checkInDateInput.removeEventListener('change', calculateTotalPrice);
       checkOutDateInput.removeEventListener('change', calculateTotalPrice);
     };
-  }, [formData, selectedItem, selectedOption, selectedCheckboxes, options]);
-  
+  }, [formData, selectedItem, selectedOption, selectedCheckboxes, options,totalPrice]);
+
 
 
   const handleSubmit = (e) => {
@@ -147,22 +160,22 @@ const BookingPage = () => {
     });
 
     setTimeout(() => {
-      navigateTo('/booking/1');
+      navigateTo('/service');
     }, 3000);
   };
 
-//SIZE
+  //SIZE
 
 
 
   const handleDropdownChange = (e) => {
     const selectedValue = parseFloat(e.target.value);
     setSelectedOption(selectedValue);
-  
+
     const selectedSizeName = options.find((option) => option.price === selectedValue)?.name || '';
-    
+
     setSelectedSize(selectedSizeName);
-  
+
     setFormData({
       ...formData,
       selectedOption: selectedValue,
@@ -190,125 +203,126 @@ const BookingPage = () => {
   };
   return (
     <div className="form-container">
-  <button onClick={() => window.history.back()} className="btn-goback">Go Back</button>
-
-  <h2 className="form-header">Booking Form for: {selectedItem.name}</h2>
-  <form onSubmit={handleSubmit}>
-    <div className="form-input">
-      <label>Name</label>
-      <input
-        type="text"
-        name="username"
-        value={formData.username}
-        onChange={handleInputChange}
-        required
-        className="input-text"
-      />
-    </div>
-    <div className="form-input">
-      <label>Email:</label>
-      <input
-        type="email"
-        name="email"
-        value={formData.email}
-        onChange={handleInputChange}
-        required
-        className="input-text"
-      />
-    </div>
-    <div className="form-input">
-      <label>Phone</label>
-      <input
-        type="text"
-        name="phone"
-        value={formData.phone}
-        onChange={handleInputChange}
-        required
-        className="input-text"
-      />
-    </div>
-
-    <div className="form-input">
-      <label>Note:</label>
-      <textarea
-        name="note"
-        value={formData.note}
-        onChange={handleInputChange}
-        required
-        rows="4"
-        cols="100"
-        style={{ resize: "none" }}
-        className="textarea"
-      />
-    </div>
-    <div className="form-input">
-      <label>Check-In Date:</label>
-      <input
-        type="date"
-        name="checkInDate"
-        value={formData.checkInDate}
-        onChange={handleInputChange}
-        required
-        className="input-date"
-      />
-      {checkInError && <p className="error-message">{checkInError}</p>}
-    </div>
-    <div className="form-input">
-      <label>Check-Out Date:</label>
-      <input
-        type="date"
-        name="checkOutDate"
-        value={formData.checkOutDate}
-        onChange={handleInputChange}
-        required
-        className="input-date"
-      />
-      {checkOutError && <p className="error-message">{checkOutError}</p>}
-    </div>
-    <div className="form-input">
-      <label>Select an Option of your bird size:</label>
-      <select
-        name="selectedOption"
-        value={selectedOption}
-        onChange={handleDropdownChange}
-        required
-        className="select-dropdown"
-      >
-        <option value="" disabled>Select an option</option>
-        {options.map((option) => (
-          <option key={option.name} value={option.price}>
-            {option.label}
-          </option>
-        ))}
-      </select>
-    </div>
-    <div className="form-input">
-      <label>Select Additional Services:</label>
-      {checkboxOptions.map((checkbox) => (
-        <label key={checkbox.id} className="checkbox-label">
-          <input
-            type="checkbox"
-            id={checkbox.id}
-            onChange={handleCheckboxChange}
-            checked={selectedCheckboxes.some((item) => item.id === checkbox.id)}
-            className="checkbox-input"
-          />
-          {checkbox.label}
-        </label>
-      ))}
-    </div>
-    <div className="item-price">
-      Total Price: {isNaN(totalPrice) ? '0' : `$${totalPrice}`}
-    </div>
-    <div className="flex">
-      <button type="submit" className="form-submit-button bg-green-500">
-        SUBMIT
+      <button onClick={() => window.history.back()} className="back-button">
+        <FaArrowLeft />
       </button>
-    </div>
-  </form>
+      <h2 className="form-header">Booking Form for: {selectedItem.name}</h2>
+      <form onSubmit={handleSubmit}>
+        <div className="form-input">
+          <label>Name</label>
+          <input
+            type="text"
+            name="username"
+            value={formData.username}
+            onChange={handleInputChange}
+            required
+            className="input-text"
+          />
+        </div>
+        <div className="form-input">
+          <label>Email:</label>
+          <input
+            type="email"
+            name="email"
+            value={formData.email}
+            onChange={handleInputChange}
+            required
+            className="input-text"
+          />
+        </div>
+        <div className="form-input">
+          <label>Phone</label>
+          <input
+            type="text"
+            name="phone"
+            value={formData.phone}
+            onChange={handleInputChange}
+            required
+            className="input-text"
+          />
+        </div>
 
-  <ToastContainer />
+        <div className="form-input">
+          <label>Note:</label>
+          <textarea
+            name="note"
+            value={formData.note}
+            onChange={handleInputChange}
+            required
+            rows="4"
+            cols="100"
+            style={{ resize: "none" }}
+            className="textarea"
+          />
+        </div>
+        <div className="form-input">
+          <label>Check-In Date:</label>
+          <input
+            type="date"
+            name="checkInDate"
+            value={formData.checkInDate}
+            onChange={handleInputChange}
+            required
+            className="input-date"
+          />
+          {checkInError && <p className="error-message">{checkInError}</p>}
+        </div>
+        <div className="form-input">
+          <label>Check-Out Date:</label>
+          <input
+            type="date"
+            name="checkOutDate"
+            value={formData.checkOutDate}
+            onChange={handleInputChange}
+            required
+            className="input-date"
+          />
+          {checkOutError && <p className="error-message">{checkOutError}</p>}
+        </div>
+        <div className="form-input">
+          <label>Select an Option of your bird size:</label>
+          <select
+            name="selectedOption"
+            value={selectedOption}
+            onChange={handleDropdownChange}
+            required
+            className="select-dropdown"
+          >
+            <option value="" disabled>Select an option</option>
+            {options.map((option) => (
+              <option key={option.name} value={option.price}>
+                {option.label}
+              </option>
+            ))}
+          </select>
+        </div>
+        <div className="form-input">
+          <label>Select Additional Services:</label>
+          {checkboxOptions.map((checkbox) => (
+            <label key={checkbox.id} className="checkbox-label">
+              <input
+                type="checkbox"
+                id={checkbox.id}
+                onChange={handleCheckboxChange}
+                checked={selectedCheckboxes.some((item) => item.id === checkbox.id)}
+                className="checkbox-input"
+              />
+              {checkbox.label}
+            </label>
+          ))}
+        </div>
+        <div className='item-price'>
+  Total Price: {isNaN(totalPrice) ? '0' : `$${totalPrice}`}
 </div>
+        <div className="flex">
+          <button type="submit" className="form-submit-button bg-green-500">
+            SUBMIT
+          </button>
+        </div>
+      </form>
+
+      <ToastContainer />
+    </div>
 
   );
 };
