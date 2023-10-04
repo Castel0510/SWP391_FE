@@ -1,5 +1,7 @@
 import React from 'react'
 import { renderRatingStars } from '../../../Utils'
+import './style.scss'
+import avatar_tmp from '../../../Assets/Images/bird_hero.png'
 
 const ServiceCardItem = (props) => {
 
@@ -7,10 +9,13 @@ const ServiceCardItem = (props) => {
 
     return (
         <div key={item.id} className={`${width} mx-2 max-w-sm bg-white border border-gray-200 rounded-lg dark:bg-gray-800 dark:border-gray-700 single-card`}>
-            <a href="#">
-                <img className="p-8 rounded-t-lg" src={item.image} alt="services image" />
-            </a>
-            <div className="px-5 pb-5">
+            <div className='img-div'>
+                <img className="rounded-t-lg" src={item.image} alt="services image" />
+                <div className="user-avatar-container">
+                    <img className="rounded-full" src={avatar_tmp} alt="user avatar" />
+                </div>
+            </div>
+            <div className="px-5 py-5">
                 <a href="#">
                     <h5 className="text-xl font-semibold tracking-tight text-gray-900 dark:text-white">{item.name}</h5>
                 </a>
