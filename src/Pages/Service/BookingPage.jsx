@@ -30,6 +30,18 @@ const BookingPage = () => {
     { name: 'small', label: '5-10(cm)(100/bird)', price: 100 },
     { name: 'medium', label: '10-30(cm)(200/bird)', price: 200 },
     { name: 'big', label: '>30(cm)(300/bird)', price: 300 },
+
+
+  ];
+
+
+  const checkboxOptions = [
+    { id: '1', label: 'Nail($200)', price: 200 },
+    { id: '2', label: 'Wings($300)', price: 300 },
+    { id: '3', label: 'Wings($400)', price: 400 },
+
+    { id: '4', label: 'Wings($500)', price: 500 },
+
   ];
 
   const [selectedSize, setSelectedSize] = useState('');
@@ -42,7 +54,7 @@ const BookingPage = () => {
 
   const [formData, setFormData] = useState({
     username: '',
-    name: selectedItem.name,
+    serviceName: selectedItem.name,
     email: '',
     phone: '',
     checkInDate: '',
@@ -185,10 +197,7 @@ const BookingPage = () => {
 
 
   //checkbox
-  const checkboxOptions = [
-    { id: '1', label: 'Nail($201)', price: 201 },
-    { id: '2', label: 'Wings($203)', price: 203 },
-  ];
+ 
 
 
   const handleCheckboxChange = (e) => {
@@ -209,7 +218,7 @@ const BookingPage = () => {
       <h2 className="form-header">Booking Form for: {selectedItem.name}</h2>
       <form onSubmit={handleSubmit}>
         <div className="form-input">
-          <label>Name</label>
+          <label>Full Name</label>
           <input
             type="text"
             name="username"
