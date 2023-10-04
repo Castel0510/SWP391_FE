@@ -115,7 +115,10 @@ const HeaderComponent = () => {
                             :
                             //tạm thời cho mặc định là role customer, sau có api sẽ chuyển thành user.role
                             // nếu muốn đăng nhập với role provider, thì thay customer thành provider
-                            <DropdownUser fullName={user.fullName} role="customer" resetUser={setUser}/>
+                            <>
+                                {user?.role === 'customer' && (<div className='wallet'>20,000,000 VNĐ</div>)}
+                                <DropdownUser fullName={user?.fullName} role="customer" resetUser={setUser} />
+                            </>
                         }
 
                     </div>

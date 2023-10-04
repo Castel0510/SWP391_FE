@@ -36,7 +36,8 @@
     .cards {
       margin-top: 3rem;
       display: flex;
-      gap: 2;
+      justify-content: space-around;
+      flex-wrap: wrap;
 
       .single-card {
         box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
