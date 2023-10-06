@@ -12,7 +12,7 @@ const CategoryFilter = ({ onCategoryChange }) => {
 
     return (
         <div>
-            <div className="flex flex-col">        
+            <div className="flex flex-row">        
                     
                 <button
                     onClick={() => handleCategoryClick('Hotel')}
@@ -38,14 +38,6 @@ const CategoryFilter = ({ onCategoryChange }) => {
                 >
                     Medical
                 </button>
-                {/* <button
-                    onClick={() => handleCategoryClick('Cage')}
-                    className={`category-button ${
-                        selectedCategory === 'Cage' ? 'active' : ''
-                    }`}
-                >
-                    Cage
-                </button> */}
             </div>
         </div>
     );
