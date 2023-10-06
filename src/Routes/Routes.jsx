@@ -8,7 +8,7 @@ export const routes = [
     {
         path: '/',
         page: HomePage,
-        isShowHeaderFooter:true
+        isShowHeaderFooter: true
         //show header and footer
     },
     {
@@ -26,6 +26,18 @@ export const routes = [
     {
         path: '/service/*',
         page: ServicePage,
+        isShowHeaderFooter: true
+    },
+    /*
+    {
+        path: '/my-shop',
+        page: MyShopPage,
+        isShowHeaderFooter:true
+    },
+    {
+        path: '/order',
+        page: OrderHistoryPage,
         isShowHeaderFooter:true
     }
+    */
 ]

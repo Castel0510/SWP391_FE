@@ -35,7 +35,7 @@ const HeaderComponent = () => {
         return () => {
             window.removeEventListener('scroll', handleScroll);
         };
-    }, []);
+    }, [dataUser]);
 
     const defaultMenu = [
         {
@@ -66,8 +66,8 @@ const HeaderComponent = () => {
 
     const providerMenu = [
         {
-            path: '/your-shop',
-            display: 'Your Shop',
+            path: '/my-shop',
+            display: 'My Shop',
         },
         {
             path: '/order',
@@ -81,9 +81,9 @@ const HeaderComponent = () => {
 
     let menu = [];
     //vì chưa có api nên menu sẽ auto vào defaultMenu
-    if (dataUser && dataUser?.user?.role === 'customer') {
+    if (user && user?.roleName === 'Customer') {
         menu = customerMenu;
-    } else if (dataUser && dataUser?.user?.role === 'provider') {
+    } else if (user && user?.roleName === 'Provider') {
         menu = providerMenu;
     } else {
         menu = defaultMenu
@@ -114,10 +114,10 @@ const HeaderComponent = () => {
                             </NavLink>
                             :
                             //tạm thời cho mặc định là role customer, sau có api sẽ chuyển thành user.role
-                            // nếu muốn đăng nhập với role provider, thì thay customer thành provider
+                            // nếu muốn đăng nhập với role Provider, thì thay customer thành Provider
                             <>
-                                {user?.role === 'customer' && (<div className='wallet'>20,000,000 VNĐ</div>)}
-                                <DropdownUser fullName={user?.fullName} role="customer" resetUser={setUser} />
+                                <div className='wallet'>20,000,000 VNĐ</div>
+                                <DropdownUser fullName={user?.fullName} role={user?.roleName} resetUser={setUser} />
                             </>
                         }
 

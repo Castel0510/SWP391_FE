@@ -1,6 +1,7 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import axios from "axios";
 import { LINK_API } from "../Constants";
+import jwt_decode from "jwt-decode";
 
 //xử lý ở local
 const saveUserToLocalStorage = (user) => {
@@ -15,9 +16,15 @@ export const loginUser = createAsyncThunk(
   "user/loginUser",
   async (userCredentials) => {
     //vì chưa có api nên sài tạm như thế này, sau này có thì sẽ làm kĩ hơn
-    const response = await axios.post(`${LINK_API}/users`, userCredentials);
-    saveUserToLocalStorage(response.data);
-    return response.data;
+    const response = await axios.post(
+      `${LINK_API}/api/auth/login`,
+      userCredentials
+    );
+
+    const token = response.data.accessToken;
+    const user = jwt_decode(token).user;
+    saveUserToLocalStorage(user);
+    return user;
   }
 );
 
@@ -25,12 +32,15 @@ export const createUser = createAsyncThunk(
   "user/createUser",
   async (userCredentials) => {
     try {
-      const response = await axios.post(`${LINK_API}/users`, userCredentials);
-      return response.data;
+      const response = await axios.post(
+        `${LINK_API}/api/users/register`,
+        userCredentials
+      );
+      return response;
     } catch (error) {
       throw error;
     }
-  }
+  } 
 );
 
 const userSlice = createSlice({
@@ -54,15 +64,16 @@ const userSlice = createSlice({
         state.error = null;
       })
       .addCase(loginUser.rejected, (state, action) => {
-        state.loading = true;
+        state.loading = false;
         state.user = null;
-        console.log(action.error.message);
+
         if (action.error.message === "Request failed with status code 401") {
-          state.error = "Access Denied! Invalid Credentials";
-        } else {
+          state.error = "Access Denied! Your password is not correct";
+        } else if (action.error.message === "Request failed with status code 404"){
+          state.error = "Account not found!";
+        }else {
           state.error = action.error.message;
         }
-        state.error = null;
       })
       //create user
       .addCase(createUser.pending, (state) => {
@@ -77,7 +88,11 @@ const userSlice = createSlice({
       .addCase(createUser.rejected, (state, action) => {
         state.loading = false;
         state.user = null;
-        state.error = action.error.message;
+        if (action.error.message === "Request failed with status code 400") {
+          state.error = "Access Denied! Your email is already existed";
+        } else {
+          state.error = action.error.message;
+        }
       });
   },
   reducers: {

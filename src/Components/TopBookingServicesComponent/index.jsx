@@ -1,6 +1,5 @@
 import React, { useEffect } from 'react'
 import './style.scss'
-import avatar_tmp from "../../Assets/Images/bird_hero.png"
 import Aos from 'aos'
 import 'aos/dist/aos.css'
 import ServiceCardItem from '../Shared/ServiceCardItem'
