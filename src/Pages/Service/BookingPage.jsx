@@ -455,15 +455,7 @@ const BookingPage = () => {
         const selectedSizeName = options.find((option) => option.price === selectedOption)?.name || '';
         setSelectedSize(selectedSizeName);
       }
-      const triggerAnimation = () => {
-        const priceElement = document.querySelector('.change-number');
-        if (priceElement) {
-          priceElement.classList.add('changed');
-          setTimeout(() => {
-            priceElement.classList.remove('changed');
-          }, 3000);
-        }
-      };
+
     };
 
 
@@ -482,11 +474,15 @@ const BookingPage = () => {
     };
   }, [formData, selectedItem, selectedOption, selectedCheckboxes, options, totalPrice]);
 
-
+  const isCheckOutAfterCheckIn = (checkInDate, checkOutDate) => {
+    const checkIn = new Date(checkInDate);
+    const checkOut = new Date(checkOutDate);
+    return checkOut > checkIn;
+  };
 
   const handleSubmit = (e) => {
     e.preventDefault();
-
+    
     const checkInDate = new Date(formData.checkInDate);
     const checkOutDate = new Date(formData.checkOutDate);
     const days = differenceInDays(checkOutDate, checkInDate);
@@ -502,6 +498,25 @@ const BookingPage = () => {
       price: newTotalPrice,
       selectedCheckboxes: selectedCheckboxes,
     };
+    if (
+      !formData.username ||
+      !formData.email ||
+      !formData.phone ||
+      !formData.checkInDate ||
+      !formData.checkOutDate ||
+      checkInError || 
+      checkOutError ||
+      !isCheckOutAfterCheckIn(formData.checkInDate, formData.checkOutDate)
+      
+    ) 
+    
+    if (!isCheckOutAfterCheckIn(formData.checkInDate, formData.checkOutDate)) {
+      toast.error('date error');
+      return; 
+    }
+ 
+   
+
     if (checkInError || checkOutError) {
 
       toast.error('Please check your information again');
@@ -519,7 +534,7 @@ const BookingPage = () => {
     });
 
     setTimeout(() => {
-      navigateTo('/service');
+      navigateTo('/order');
     }, 3000);
   };
 
