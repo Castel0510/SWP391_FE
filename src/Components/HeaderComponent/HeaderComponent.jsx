@@ -66,8 +66,8 @@ const HeaderComponent = () => {
 
     const providerMenu = [
         {
-            path: '/your-shop',
-            display: 'Your Shop',
+            path: '/myShop',
+            display: 'My Shop',
         },
         {
             path: '/order',
