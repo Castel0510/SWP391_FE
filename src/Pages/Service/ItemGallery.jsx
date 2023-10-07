@@ -374,21 +374,21 @@ const ItemGallery = ({ category, onItemClick }) => {
   }
 
 
-  useEffect(() => {
-    const fetchRandomImage = async () => {
-      try {
-        const response = await fetch('https://picsum.photos/200/300');
-        if (response.ok) {
-          const imageUrl = response.url;
-          setRandomImage(imageUrl);
-        }
-      } catch (error) {
-        console.error('Error fetching random image:', error);
-      }
-    };
+  // useEffect(() => {
+  //   const fetchRandomImage = async () => {
+  //     try {
+  //       const response = await fetch('https://picsum.photos/200/300');
+  //       if (response.ok) {
+  //         const imageUrl = response.url;
+  //         setRandomImage(imageUrl);
+  //       }
+  //     } catch (error) {
+  //       console.error('Error fetching random image:', error);
+  //     }
+  //   };
 
-    fetchRandomImage();
-  }, []);
+  //   fetchRandomImage();
+  // }, []);
 
   return (
     <div className="item-gallery">

@@ -369,21 +369,7 @@ const ItemDetailPage = () => {
 
   const [randomImage, setRandomImage] = useState('');
 
-  useEffect(() => {
-    const fetchRandomImage = async () => {
-      try {
-        const response = await fetch('https://picsum.photos/200/300?random=1'); 
-        if (response.ok) {
-          const imageUrl = response.url;
-          setRandomImage(imageUrl);
-        }
-      } catch (error) {
-        console.error('Error fetching random image:', error);
-      }
-    };
 
-    fetchRandomImage();
-  }, []);
 
   const onRate = (itemId, newRating) => {
     console.log(`Rated item ${itemId} with rating ${newRating}`);

@@ -46,7 +46,7 @@ export const routes = [
         page: NotFoundPage
     },
     {
-        path: '/service2',
+        path: '/service',
         page: ServicePage2,
         isShowHeaderFooter:true
 
@@ -70,11 +70,11 @@ export const routes = [
         isShowHeaderFooter:true
 
       },
-      {
+    //   {
       
 
-        path: '/service/*',
-        page: ServicePage,
-        isShowHeaderFooter:true
-    }
+    //     path: '/service/*',
+    //     page: ServicePage,
+    //     isShowHeaderFooter:true
+    // }
 ]

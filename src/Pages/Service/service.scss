@@ -594,9 +594,8 @@ form button[type="submit"]:hover {
   background-color: #2779bd;
 }
 
-/* Styles for the filter container */
 .filter-container {
-  /* Add any custom styles for the filter container here */
+  width: fit-content;
 }
 
 .filter-container .flex {
@@ -611,16 +610,15 @@ form button[type="submit"]:hover {
 .filter-container .category-filter,
 .filter-container .price-filter,
 .filter-container .rating-filter {
-  /* Add any custom styles for individual filter sections here */
 }
 
 .filter-container .title {
-  /* Add any custom styles for filter titles here */
+  align-items: flex-start;
 }
 
 .filter-container input[type="number"] {
   border: 1px solid #ccc;
-  width: 40%;
+  width: 40px;
   padding: 0.5rem;
   border-radius: 0.25rem;
 }
@@ -759,7 +757,7 @@ form button[type="submit"]:hover {
     box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
     max-width: 3000px;
     height: 500px;
-
+    margin-bottom: 30px;
     .item-image {
       img {
         width: 100%;

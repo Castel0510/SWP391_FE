@@ -35,7 +35,7 @@ const BookingPage = () => {
       provider: 'Provider B',
       description: 'Indulge in ultimate self-care at Revitalize Wellness Center. We offer an array of services designed to promote your physical and mental well-being. From soothing massages to holistic therapies, our skilled practitioners are here to enhance your health and vitality. Join us for a transformative journey to wellness.',
       price: 120
-    } ,
+    },
     {
       id: 9,
       name: "Tranquil Retreat Hotel",
@@ -368,23 +368,9 @@ const BookingPage = () => {
     }
   ];
 
-  const options = [
-    { name: 'small', label: '5-10(cm)(100/bird)', price: 100 },
-    { name: 'medium', label: '10-30(cm)(200/bird)', price: 200 },
-    { name: 'big', label: '>30(cm)(300/bird)', price: 300 },
+ 
 
 
-  ];
-
-
-  const checkboxOptions = [
-    { id: '1', label: 'Nail($200)', price: 200 },
-    { id: '2', label: 'Wings($300)', price: 300 },
-    { id: '3', label: 'Wings($400)', price: 400 },
-
-    { id: '4', label: 'Wings($500)', price: 500 },
-
-  ];
 
   const [selectedSize, setSelectedSize] = useState('');
   const [selectedOption, setSelectedOption] = useState('');
@@ -407,8 +393,22 @@ const BookingPage = () => {
     selectedOption: selectedOption,
     selectedCheckboxes: [],
   });
+  const options = [
+    { name: 'small', label: 'SMALL SIZE(5-20cm)/'+  + selectedItem.price + '$/bird', price: selectedItem.price },
+    { name: 'medium', label: 'MEDIUM SIZE (20-30cm)/(200$/bird)', price: 200 },
+    { name: 'big', label: 'BIG SIZE(>30cm)/(300$/bird)', price: 300 },
 
 
+  ];
+
+  const checkboxOptions = [
+    { id: '1', label: 'Nail', price: 200 },
+    { id: '2', label: 'Beak Trimming($300)', price: 300 },
+    { id: '3', label: 'Wing Clipping($400)', price: 400 },
+
+    // { id: '4', label: 'Wings($500)', price: 500 },
+
+  ];
   const handleInputChange = (e) => {
     const { name, value } = e.target;
     if (name === 'checkInDate') {
@@ -461,12 +461,12 @@ const BookingPage = () => {
           priceElement.classList.add('changed');
           setTimeout(() => {
             priceElement.classList.remove('changed');
-          }, 3000); 
+          }, 3000);
         }
       };
     };
-    
-  
+
+
 
     calculateTotalPrice();
 
@@ -480,7 +480,7 @@ const BookingPage = () => {
       checkInDateInput.removeEventListener('change', calculateTotalPrice);
       checkOutDateInput.removeEventListener('change', calculateTotalPrice);
     };
-  }, [formData, selectedItem, selectedOption, selectedCheckboxes, options,totalPrice]);
+  }, [formData, selectedItem, selectedOption, selectedCheckboxes, options, totalPrice]);
 
 
 
@@ -502,6 +502,11 @@ const BookingPage = () => {
       price: newTotalPrice,
       selectedCheckboxes: selectedCheckboxes,
     };
+    if (checkInError || checkOutError) {
+
+      toast.error('Please check your information again');
+      return;
+    }
 
     console.log('Form Data:', updatedFormData);
     toast.success('Booking Successful', {
@@ -539,7 +544,7 @@ const BookingPage = () => {
 
 
   //checkbox
- 
+
 
 
   const handleCheckboxChange = (e) => {
@@ -550,6 +555,20 @@ const BookingPage = () => {
       setSelectedCheckboxes([...selectedCheckboxes, checkbox]);
     } else {
       setSelectedCheckboxes(selectedCheckboxes.filter((item) => item.id !== id));
+    }
+  };
+
+  //Confirm popup
+  const handleConfirmation = (e) => {
+    e.preventDefault();
+
+    const isConfirmed = window.confirm(`Are you sure you want to book ${selectedItem.name}?`);
+
+    if (isConfirmed) {
+      handleSubmit(e);
+    } else {
+
+      console.log('Booking canceled');
     }
   };
   return (
@@ -663,10 +682,14 @@ const BookingPage = () => {
           ))}
         </div>
         <div className='item-price'>
-  Total Price: {isNaN(totalPrice) ? '0' : `$${totalPrice}`}
-</div>
+          Total Price: {isNaN(totalPrice) ? '0' : `$${totalPrice}`}
+        </div>
         <div className="flex">
-          <button type="submit" className="form-submit-button bg-green-500">
+          <button
+            type="button"
+            onClick={(e) => handleConfirmation(e)} 
+            className="form-submit-button bg-green-500"
+          >
             SUBMIT
           </button>
         </div>
