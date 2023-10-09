@@ -48,9 +48,9 @@ const DropdownUser = (props) => {
     let dropdownItems = [];
 
 
-    if (role === 'customer') {
+    if (role === 'Customer') {
         dropdownItems = customerDropdownList;
-    } else if (role === 'provider') {
+    } else if (role === 'Provider') {
         dropdownItems = providerDropdownList;
     }
 

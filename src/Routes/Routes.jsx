@@ -49,6 +49,17 @@ export const routes = [
     {
         path: '/service/*',
         page: ServicePage,
+        isShowHeaderFooter: true
+    },
+    /*
+    {
+        path: '/my-shop',
+        page: MyShopPage,
+        isShowHeaderFooter:true
+    },
+    {
+        path: '/order',
+        page: OrderHistoryPage,
         isShowHeaderFooter:true
     },
     {
@@ -61,4 +72,5 @@ export const routes = [
         page: CreateServicePage,
         isShowHeaderFooter:true
     }
+    */
 ]
