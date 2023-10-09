@@ -35,6 +35,7 @@ const OrderHistoryPage = () => {
       dateComplete: null,
       detail: 'Capture the beauty of birds in their natural habitat with avian photography services.',
       status: 'CANCEL',
+      reason: 'reason cancel'
     },
   ];
 
@@ -107,7 +108,13 @@ const OrderHistoryPage = () => {
             </div>
             <div className="p-3 pb-6 flex">
               <p className="font-bold pr-1">Status: </p> {item.status}
+              
             </div>
+            {item.status === 'CANCEL' && (
+                <div className="px-3 pb-6 flex">
+                  <p className="font-bold pr-1">Reason: </p> {item.reason}
+                </div>
+              )}
           </div>
         ))}
       </div>
