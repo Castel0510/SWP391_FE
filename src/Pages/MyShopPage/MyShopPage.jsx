@@ -46,10 +46,12 @@ const MyShopPage = () => {
             <div className='min-h-[500px] my-6 mx-auto '>
                 <div className='text-center mb-6'>
                     <div className='font-bold text-2xl mb-6'>MY SHOP</div>
-                    <button className='text-white bg-emerald-500 hover:bg-emerald-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800 '>
-                    <Link to="/createService">New Service</Link>
-                    </button>
+                    <Link className='text-white bg-emerald-500 hover:bg-emerald-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800 '
+                        to={'/createService'}>
+                        New Service
+                    </Link>
                 </div>
+                
                 <div className='max-w-[1100px] flex flex-wrap justify-center gap-10 mx-auto'>
                     {fakeData && fakeData?.map((item) => (
                         <div key={item.id} className='max-w-[250px] shadow-md rounded hover:shadow-2xl cursor-pointer p-4'>
