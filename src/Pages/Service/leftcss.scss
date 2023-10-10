@@ -1,0 +1,141 @@
+/* Styles for the search form */
+form {
+    margin-bottom: 2rem;
+    font-size: 0.875rem;
+    font-weight: 500;
+    color: #333;
+    position: relative;
+  }
+  
+  form label {
+    display: none;
+  }
+  
+  form .relative {
+    outline: none;
+  }
+  
+  form .absolute {
+    position: absolute;
+    top: 0;
+    left: 0;
+    display: flex;
+    align-items: center;
+    padding-left: 0.75rem;
+    pointer-events: none;
+  }
+  
+  form svg {
+    width: 1rem;
+    height: 1rem;
+    fill: #888;
+  }
+  
+  form input[type="search"] {
+    display: block;
+    width: 100%;
+    padding: 1rem;
+    padding-left: 2.5rem;
+    font-size: 0.875rem;
+    color: #333;
+    border: 1px solid #ccc;
+    border-radius: 0.25rem;
+    background-color: #f7f7f7;
+    outline: none;
+    transition: border-color 0.2s ease, box-shadow 0.2s ease;
+  }
+  
+  form input[type="search"]:focus {
+    border-color: #3490dc;
+    box-shadow: 0 0 0 0.125rem rgba(59, 130, 246, 0.25);
+  }
+  
+  form button[type="submit"] {
+    position: absolute;
+    right: 0.625rem;
+    bottom: 0.625rem;
+    color: #fff;
+    background-color: #3490dc;
+    padding: 0.5rem 1rem;
+    border-radius: 0.375rem;
+    font-size: 0.875rem;
+    font-weight: 500;
+    outline: none;
+    transition: background-color 0.2s ease;
+  }
+  
+  form button[type="submit"]:hover {
+    background-color: #2779bd;
+  }
+  
+  .filter-container {
+    width: fit-content;
+  }
+  
+  .filter-container .flex {
+    gap: 0.5rem;
+    margin-bottom: 1rem;
+  }
+  
+  .filter-container .text-transform {
+    text-transform: uppercase;
+  }
+  
+  .filter-container .category-filter,
+  .filter-container .price-filter,
+  .filter-container .rating-filter {
+  }
+  
+  .filter-container .title {
+    align-items: flex-start;
+  }
+  
+  .filter-container input[type="number"] {
+    border: 1px solid #ccc;
+    width: 40px;
+    padding: 0.5rem;
+    border-radius: 0.25rem;
+  }
+  
+  .filter-container .range-price-container {
+    display: flex;
+    gap: 0.5rem;
+    margin-bottom: 1rem;
+  }
+  
+  .filter-container button {
+    background-color: #3490dc;
+    color: #fff;
+    padding: 0.5rem 1rem;
+    border-radius: 0.375rem;
+    width: 100%;
+    font-size: 0.875rem;
+    font-weight: 500;
+    outline: none;
+  }
+  
+  .filter-container button:hover {
+    background-color: #2779bd;
+  }
+  
+  .filter-container .list-rating {
+    justify-content: center;
+    /* Add any custom styles for the rating options here */
+  }
+  
+  .filter-container .rating-option {
+    /* Add any custom styles for rating options here */
+  }
+  
+  .filter-container .rating-option input[type="radio"] {
+    display: none;
+  }
+  
+  .filter-container .rating-option label {
+    cursor: pointer;
+  }
+  
+  .filter-container .rating-option.active label {
+    /* Add styles for active rating option here */
+  }
+  
