@@ -876,3 +876,144 @@ form button[type="submit"]:hover {
 }
 
 
+/* FilterContainer.css */
+
+.container-left {
+  min-width: 300px;
+  max-height: 500px;
+  max-width: 300px;
+  margin-top: 80px;
+  margin-right: 50px;
+  padding: 20px;
+  background-color: #f5f5f5;
+  border-radius: 8px;
+  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.search-label {
+  font-size: 14px;
+  font-weight: bold;
+  margin-bottom: 8px;
+  color: #333;
+  max-width: 200px;
+  max-height: 10px;
+  min-width: 300px;
+
+}
+
+.search-input-container {
+  display: flex;
+  align-items: center;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+.search-icon-svg {
+  width: 24px;
+  height: 24px;
+  fill: #888;
+  margin: 01px 8px;
+}
+
+.search-input {
+  flex: 1;
+  padding: 10px;
+  border: none;
+  outline: none;
+  font-size: 14px;
+  color: #333;
+}
+
+.search-button {
+  background-color: #007bff;
+  color: #fff;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 0 8px 8px 0;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.search-button:hover {
+  background-color: #0056b3;
+}
+
+.filter-flex {
+  display: flex;
+  align-items: center;
+  margin-top: 20px;
+}
+
+.filter-label {
+  font-size: 25px;
+  font-weight: bold;
+  margin-left: 8px;
+}
+
+.filter-title {
+  font-size: 14px;
+  font-weight: bold;
+  margin-top: 20px;
+  color: #333;
+}
+
+.filter-input {
+  width: 100px;
+  padding: 8px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  margin-right: 8px;
+  font-size: 14px;
+  color: #333;
+}
+
+.filter-divider {
+  width: 1px;
+  height: 30px;
+  background-color: #ccc;
+  margin: 0 8px;
+}
+
+.filter-price-flex {
+  display: flex;
+  align-items: center;
+}
+
+.filter-apply-button {
+  background-color: #007bff;
+  color: #fff;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 14px;
+  transition: background-color 0.3s ease;
+}
+
+.filter-apply-button:hover {
+  background-color: #0056b3;
+}
+
+.filter-rating-flex {
+  display: flex;
+  justify-content: center;
+}
+
+.filter-rating-option {
+  margin-right: 10px;
+}
+
+.filter-radio {
+  display: none;
+}
+
+.filter-rating-label {
+  cursor: pointer;
+  font-size: 24px;
+  color: #888;
+}
+
+.filter-rating-label.active {
+  color: #ffc107; 
+}
