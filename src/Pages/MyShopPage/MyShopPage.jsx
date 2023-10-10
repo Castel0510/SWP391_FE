@@ -41,6 +41,7 @@ const MyShopPage = () => {
         },
     ]
 
+
     return (
         <>
             <div className='min-h-[500px] my-6 mx-auto '>
@@ -51,10 +52,16 @@ const MyShopPage = () => {
                         New Service
                     </Link>
                 </div>
-                
+
                 <div className='max-w-[1100px] flex flex-wrap justify-center gap-10 mx-auto'>
                     {fakeData && fakeData?.map((item) => (
-                        <div key={item.id} className='max-w-[250px] shadow-md rounded hover:shadow-2xl cursor-pointer p-4'>
+                        <Link
+                            key={item.id}
+                            to={{
+                                pathname: `/item-detail-page/${item.id}`,
+                                state: { selectedItem: item }
+                            }}
+                            className='max-w-[250px] shadow-md rounded hover:shadow-2xl cursor-pointer p-4'>
                             <img src={item.image} className='h-auto max-w-[200px]' />
                             <div className='my-4 font-bold'>{item.name}</div>
                             <div>{item.description}</div>
@@ -67,7 +74,8 @@ const MyShopPage = () => {
                                 <button className=' text-white bg-emerald-500 hover:bg-emerald-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800'>Edit</button>
 
                             </div>
-                        </div>
+                        </Link>
+                        
                     ))}
                 </div>
             </div>
