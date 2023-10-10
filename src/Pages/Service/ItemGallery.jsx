@@ -26,12 +26,10 @@ const ItemGallery = ({ category, onItemClick }) => {
       });
   }, []);
 
-  // Reset currentPage when the category changes
   useEffect(() => {
     setCurrentPage(1);
   }, [category]);
 
-  // Filter items by category
   let categoryItems = [];
   if (category === 'All' || !category) {
     categoryItems = items;
@@ -39,10 +37,8 @@ const ItemGallery = ({ category, onItemClick }) => {
     categoryItems = items.filter((item) => item.category === category);
   }
 
-  // Calculate total pages
   const totalPages = Math.ceil(categoryItems.length / itemsPerPage);
 
-  // Calculate start and end index for items on the current page
   const startIndex = (currentPage - 1) * itemsPerPage;
   const endIndex = startIndex + itemsPerPage;
   const displayedItems = categoryItems.slice(startIndex, endIndex);
