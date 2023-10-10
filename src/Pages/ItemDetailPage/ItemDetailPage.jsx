@@ -1,23 +1,23 @@
 import React from 'react';
-import { useLocation, useParams } from 'react-router-dom';
+import { useLocation } from 'react-router-dom';
 
-const ItemDetailPage = (props) => {
-//   const { id } = useParams();
-//   const selectedItem = props.find(item => item.id === id);
+const ItemDetailPage = () => {
+
   const location = useLocation();
-  const selectedItem = location.state?.selectedItem;
+  const item = location.state?.item;
+  console.log(location.state?.item);
 
-
-//   if (!selectedItem) {
-//     return <div>Item not foundss</div>;
-//   }
+  if (!item) {
+    return <div>Item not founds</div>;
+  }
 
   return (
     <div>
-      <h1>{selectedItem.name}</h1>
-      <p>{selectedItem.description}</p>
-      {console.log(selectedItem.name)}
-      <div>asd</div>
+      <img src={item.image} alt="" />
+      <div>{item.name}</div>
+      <div>{item.description}</div>
+      <div>{item.price}</div>
+      <div>{item.rating}</div>
     </div>
   );
 };

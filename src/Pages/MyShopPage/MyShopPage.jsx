@@ -1,6 +1,4 @@
 import React from 'react'
-import avatar_tmp from "../../Assets/Images/bird_hero.png"
-import ServiceCardItem from '../../Components/Shared/ServiceCardItem'
 import { renderRatingStars } from '../../Utils'
 import { Link } from 'react-router-dom'
 
@@ -59,8 +57,11 @@ const MyShopPage = () => {
                             key={item.id}
                             to={{
                                 pathname: `/item-detail-page/${item.id}`,
-                                state: { selectedItem: item }
+
                             }}
+
+                            state={{item}}
+
                             className='max-w-[250px] shadow-md rounded hover:shadow-2xl cursor-pointer p-4'>
                             <img src={item.image} className='h-auto max-w-[200px]' />
                             <div className='my-4 font-bold'>{item.name}</div>
@@ -75,7 +76,7 @@ const MyShopPage = () => {
 
                             </div>
                         </Link>
-                        
+
                     ))}
                 </div>
             </div>

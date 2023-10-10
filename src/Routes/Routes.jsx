@@ -6,11 +6,12 @@ import OrderHistoryPage from "../Pages/OrderHistoryPage/OrderHistoryPage";
 import ProfilePage from "../Pages/ProfilePage/ProfilePage";
 import RegisterPage from "../Pages/RegisterPage/RegisterPage";
 import BookingPage from "../Pages/Service/BookingPage";
-import ItemDetailPage from "../Pages/Service/ItemDetail";
+
 import TransactionHistoryPage from "../Pages/TransactionHistoryPage/TransactionHistoryPage";
 import ServicePage from "../Pages/ServicePage";
 import MyShopPage from "../Pages/MyShopPage/MyShopPage";
 import CreateServicePage from "../Pages/CreateServicePage/CreateServicePage";
+import ItemDetailPage from "../Pages/ItemDetailPage/ItemDetailPage";
 
 export const routes = [
     {
