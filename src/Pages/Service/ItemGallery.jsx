@@ -43,7 +43,6 @@ const ItemGallery = ({ category, onItemClick }) => {
   const endIndex = startIndex + itemsPerPage;
   const displayedItems = categoryItems.slice(startIndex, endIndex);
 
-  // Handle page change
   const handlePageChange = (newPage) => {
     if (newPage >= 1 && newPage <= totalPages) {
       setCurrentPage(newPage);
