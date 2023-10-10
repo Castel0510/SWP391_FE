@@ -26,6 +26,17 @@
         }
       }
 
+      .hero-title-provider {
+        margin: 50px;
+        margin-top: 100px;
+        p {
+          color: black;
+          // text-transform: uppercase;
+          font-size: 60px;
+          font-weight: bold;
+        }
+      }
+
       .hero-button {
         background-color: #34a853;
         border-radius: 10px;

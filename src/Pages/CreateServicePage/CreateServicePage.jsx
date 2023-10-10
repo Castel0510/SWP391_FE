@@ -1,4 +1,5 @@
 import React, { useState } from 'react'
+import { Link } from 'react-router-dom';
 
 const CreateServicePage = () => {
 
@@ -29,19 +30,19 @@ const CreateServicePage = () => {
                     <div className='text-center font-bold text-2xl'>CREATE NEW SERVICE</div>
                     <div className="rounded p-6 w-full">
                         <div className="pb-6 ">
-                            <label for="fname" className="font-semibold text-gray-700 block pb-1 w-full">SHOP NAME</label>
+                            <label htmlFor="fname" className="font-semibold text-gray-700 block pb-1 w-full">SHOP NAME</label>
                             <input id="fname" className="border border-gray-300  rounded px-4 py-2 w-full" type="text" placeholder="Shop Name" required />
                         </div>
                         <div className="pb-4">
-                            <label for="email" className="font-semibold text-gray-700 block pb-1 w-full">Email</label>
+                            <label htmlFor="email" className="font-semibold text-gray-700 block pb-1 w-full">Email</label>
                             <input id="email" className="border border-gray-300  rounded px-4 py-2 w-full" type="email" placeholder="example@example.com" required />
                         </div>
                         <div className="pb-4">
-                            <label for="tel" className="font-semibold text-gray-700 block pb-1 w-full">PHONE NUMBER</label>
+                            <label htmlFor="tel" className="font-semibold text-gray-700 block pb-1 w-full">PHONE NUMBER</label>
                             <input id="tel" className="border border-gray-300  rounded px-4 py-2 w-full" type="tel" placeholder="09xxxxxxxx" required />
                         </div>
                         <div className="pb-4">
-                            <label for="desc" className="font-semibold text-gray-700 block pb-1 w-full">DESCRIPTION</label>
+                            <label htmlFor="desc" className="font-semibold text-gray-700 block pb-1 w-full">DESCRIPTION</label>
                             <textarea id="desc" className="border border-gray-300  rounded px-4 py-2 w-full" type="tel" placeholder="Write your description here" />
                         </div>
                     </div>
@@ -51,7 +52,7 @@ const CreateServicePage = () => {
                             onClick={handleOnClick}>+</button>
 
                         {data.map((item, index) => (
-                            <div>
+                            <div key={index}>
                                 <input className='border border-gray-300  rounded px-4 py-2 mr-2'
                                     placeholder='Service'
                                     name='service'
@@ -72,7 +73,7 @@ const CreateServicePage = () => {
 
                     <div className='flex justify-end p-6'>
                         <button className="bg-white hover:bg-gray-100 text-gray-800 font-semibold py-2 px-4 border border-gray-400 rounded shadow">
-                            CANCEL
+                        <Link to="/my-shop">CANCEL</Link>
                         </button>
                         <button type='submit' className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded ml-5">
                             SAVE

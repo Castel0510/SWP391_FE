@@ -1,0 +1,40 @@
+.single-card {
+  box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
+  transition: all 200ms ease-in;
+
+  .img-div {
+    width: 100%;
+    height: 140px;
+    position: relative;
+
+    img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    .user-avatar-container {
+      position: absolute;
+      bottom: -20px;
+      left: 10px;
+      text-align: center;
+      border: 2px solid #edede9;
+      width: 40px; 
+      height: 40px; 
+      border-radius: 50%; 
+      z-index: 999;
+      background-color: #edede9;
+
+      img {
+        margin: 0 auto; 
+      }
+    }
+  }
+}
+
+.single-card:hover {
+  cursor: pointer;
+  box-shadow: rgba(100, 100, 111, 0.2) 0px 7px 29px 0px;
+  transition: all 200ms ease-in;
+  transform: scale(1.05);
+}

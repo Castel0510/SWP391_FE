@@ -1,10 +1,9 @@
 import React, { useEffect } from "react";
-import './style.scss';
 import ava from "../../Assets/Images/bird_hero.png";
 import Aos from 'aos'
 import 'aos/dist/aos.css'
 
-const Testimonial = () => {
+const TestimonialForProvider = () => {
 
     useEffect(() => {
         Aos.init({ duration: 2000 })
@@ -49,7 +48,7 @@ const Testimonial = () => {
         <div className="testimonial">
             <div data-aos='zoom-in' data-aos-duration='1000' className="title">
                 <small>testimonial</small>
-                <h2>What did customers say about BIRDLIVE?</h2>
+                <h2>What did customers say about you?</h2>
             </div>
 
             <div className="comment-container flex">
@@ -70,4 +69,4 @@ const Testimonial = () => {
     );
 };
 
-export default Testimonial;
+export default TestimonialForProvider;

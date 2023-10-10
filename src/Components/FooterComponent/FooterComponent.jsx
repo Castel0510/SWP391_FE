@@ -25,10 +25,9 @@ function FooterComponent() {
           <div className="footer-col">
             <h4>Our Services</h4>
             <ul>
-              <li><Link href="#">Bird Spa</Link></li>
-              <li><Link href="#">Bird Hotel</Link></li>
-              <li><Link href="#">Bird Medical</Link></li>
-              <li><Link href="#">Bird Case</Link></li>
+              <li><Link href="#">Boarding</Link></li>
+              <li><Link href="#">Grooming</Link></li>
+              <li><Link href="#">Medical</Link></li>
             </ul>
           </div>
           <div className="footer-col">

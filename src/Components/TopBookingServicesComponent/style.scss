@@ -6,7 +6,6 @@
     margin: 0 auto;
     display: flex;
     flex-direction: column;
-    text-align: center;
     justify-content: space-between;
 
     .title {
@@ -38,18 +37,6 @@
       display: flex;
       justify-content: space-around;
       flex-wrap: wrap;
-
-      .single-card {
-        box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
-        transition: all 200ms ease-in;
-      }
-
-      .single-card:hover {
-        cursor: pointer;
-        box-shadow: rgba(100, 100, 111, 0.2) 0px 7px 29px 0px;
-        transition: all 200ms ease-in;
-        transform: scale(1.05);
-      }
     }
   }
 }

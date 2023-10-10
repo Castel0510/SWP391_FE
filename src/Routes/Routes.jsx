@@ -83,16 +83,26 @@ export const routes = [
     {
         path: '/service/*',
         page: ServicePage,
-        isShowHeaderFooter:true
+        isShowHeaderFooter: true
     },
     {
-        path: '/myShop',
+        path: '/my-shop',
         page: MyShopPage,
-        isShowHeaderFooter:true
+        isShowHeaderFooter: true
+    },
+    {
+        path: '/order',
+        page: OrderHistoryPage,
+        isShowHeaderFooter: true
     },
     {
         path: '/createService',
         page: CreateServicePage,
-        isShowHeaderFooter:true
-    }
+        isShowHeaderFooter: true
+    },
+    {
+        path: '/item-detail-page/:id',
+        page: ItemDetailPage,
+        isShowHeaderFooter: true
+    },
 ]

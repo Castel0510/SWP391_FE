@@ -8,21 +8,21 @@ import { IoPersonCircleSharp } from "react-icons/io5"
 import { useNavigate, Link } from 'react-router-dom'
 import { useDispatch, useSelector } from 'react-redux';
 import { createUser, loginUser } from '../../Store/userSlice';
-import {validateEmail} from '../../Utils'
+import { validateEmail } from '../../Utils'
 
 const RegisterPage = () => {
   const [fullName, setFullName] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [confirmPwd, setConfirmPwd] = useState('');
-  const [role, setRole] = useState('');
+  const [roleName, setRoleName] = useState('');
 
   const [errors, setErrors] = useState({
     fullName: '',
     email: '',
     password: '',
     confirmPwd: '',
-    role: ''
+    roleName: ''
   });
 
   const dispatch = useDispatch();
@@ -38,7 +38,7 @@ const RegisterPage = () => {
       email: '',
       password: '',
       confirmPwd: '',
-      role: ''
+      roleName: ''
     });
 
     let hasErrors = false;
@@ -81,10 +81,10 @@ const RegisterPage = () => {
       hasErrors = true;
     }
 
-    if (!role) {
+    if (!roleName) {
       setErrors((prevErrors) => ({
         ...prevErrors,
-        role: 'Please choose a role!'
+        roleName: 'Please choose a roleName!'
       }));
       hasErrors = true;
     }
@@ -97,16 +97,18 @@ const RegisterPage = () => {
       fullName,
       email,
       password,
-      role
+      roleName
     };
 
-    dispatch(createUser(userCredentials));
-
-    dispatch(loginUser(userCredentials)).then((result) => {
-      if (result.payload) {
-        navigate('/')
-      }
-    })
+    dispatch(createUser(userCredentials))
+      .unwrap()
+      .then((result) => {
+        if (result.status === 200 || result.status === 201) {
+          dispatch(loginUser(userCredentials)).then(() => {
+            navigate('/');
+          });
+        }
+      });
 
   };
 
@@ -154,14 +156,14 @@ const RegisterPage = () => {
           />
 
           <div className='dropdown'>
-            <select value={role} onChange={(e) => setRole(e.target.value)}>
+            <select value={roleName} onChange={(e) => setRoleName(e.target.value)}>
               <option value="">Choose option: Customer or Provider</option>
-              <option value="customer">Customer</option>
-              <option value="provider">Provider</option>
+              <option value="Customer">Customer</option>
+              <option value="Provider">Provider</option>
             </select>
           </div>
 
-          {errors.role && <span className="text-red-600">{errors.role}</span>}
+          {errors.roleName && <span className="text-red-600">{errors.roleName}</span>}
 
           <div className='password-feature'>
             <div className='remember'>
@@ -172,12 +174,12 @@ const RegisterPage = () => {
           </div>
 
           {error && (
-            <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 w-full mt-1 rounded relative" role="alert">
+            <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 w-full mt-1 rounded relative" roleName="alert">
               <span className="block sm:inline">{error}</span>
             </div>
           )}
 
-          <button type="submit" className='btn-login'>Sign up</button>
+          <button type="submit" className='btn-login'>{loading ? 'Loading ...' : 'Sign up'}</button>
 
           <p className='text'>Already have an account?
             <Link to='/login' className="text-swap" > Log in</Link>
