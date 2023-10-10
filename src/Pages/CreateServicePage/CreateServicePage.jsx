@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
+import { BsTrash, BsPlusCircle } from "react-icons/bs";
 
 const CreateServicePage = () => {
     const [data, setData] = useState([{ service: "", size: "", price: "" }]);
@@ -35,13 +36,13 @@ const CreateServicePage = () => {
     let serviceTypeOptions = [];
     if (selectedService === "boarding") {
         serviceTypeOptions = [
-            { value: "birdsitting", label: "Bird Sitting" }
+            { value: "birdsitting", label: "BIRD SITTING" }
         ];
     } else if (selectedService === "grooming") {
         serviceTypeOptions = [
-            { value: "nailclipping", label: "Nail Clipping" },
-            { value: "breaktrimming", label: "Break Trimming" },
-            { value: "wingclipping", label: "Wing Clipping" }
+            { value: "nailclipping", label: "NAIL CLIPPING" },
+            { value: "breaktrimming", label: "BREAK TRIMMING" },
+            { value: "wingclipping", label: "WING CLIPPING" }
         ];
     } else if (selectedService === "medical") {
         serviceTypeOptions = [
@@ -53,14 +54,14 @@ const CreateServicePage = () => {
         <>
             <form>
                 <div className="w-fit min-w-[800px]  p-8 bg-white shadow-md rounded my-10 mx-auto">
-                    <div className="text-center font-bold text-2xl">CREATE NEW SERVICE</div>
+                    <div className="text-center font-bold text-2xl">ADD NEW SERVICE</div>
                     <div className="rounded p-6 w-full">
                         <div className="pb-6">
                             <label
                                 htmlFor="fname"
                                 className="font-semibold text-gray-700 block pb-1 w-full"
                             >
-                                SERVICE NAME
+                                SERVICE TITLE
                             </label>
                             <input
                                 id="fname"
@@ -105,7 +106,7 @@ const CreateServicePage = () => {
                                 htmlFor="email"
                                 className="font-semibold text-gray-700 block pb-1 w-full"
                             >
-                                Email
+                                EMAIL
                             </label>
                             <input
                                 id="email"
@@ -153,11 +154,11 @@ const CreateServicePage = () => {
                             onChange={handleServiceChange}
                         >
                             <option value="" disabled>
-                                Select Service
+                                SELECT SERVICE
                             </option>
-                            <option value="boarding">Boarding</option>
-                            <option value="grooming">Grooming</option>
-                            <option value="medical">Medical</option>
+                            <option value="boarding">BOARDING</option>
+                            <option value="grooming">GROOMING</option>
+                            <option value="medical">MEDICAL</option>
                         </select>
 
                         <select
@@ -175,13 +176,14 @@ const CreateServicePage = () => {
 
                     <div className="p-6">
                         <button
-                            className="text-white bg-emerald-500 hover:bg-emerald-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800 mb-6"
+                            className="text-white bg-emerald-500 hover:bg-emerald-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-bold rounded-lg px-5 py-2.5 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800 mb-6 text-2xl"
                             onClick={handleOnClick}
                         >
-                            +
+                            <BsPlusCircle />
                         </button>
                         {data.map((item, index) => (
-                            <div key={index}>
+                            <div key={index}
+                                className="flex mb-2">
                                 <input
                                     className="border border-gray-300 rounded px-4 py-2 mr-2"
                                     placeholder="Service"
@@ -198,11 +200,11 @@ const CreateServicePage = () => {
                                     required
                                 >
                                     <option value="" disabled>
-                                        Select Size
+                                        SELECT SIZE
                                     </option>
-                                    <option value="small">Small(10-25cm)</option>
-                                    <option value="medium">Medium(25-50cm)</option>
-                                    <option value="large">Large(&gt;50cm)</option>
+                                    <option value="small">SMALL(10-25CM)</option>
+                                    <option value="medium">MEDIUM(25-50CM)</option>
+                                    <option value="large">LARGE(&gt;50CM)</option>
                                 </select>
                                 <input
                                     className="border border-gray-300 rounded px-4 py-2 mr-2"
@@ -216,7 +218,7 @@ const CreateServicePage = () => {
                                     className="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded"
                                     onClick={() => handleDelete(index)}
                                 >
-                                    Delete
+                                    <BsTrash />
                                 </button>
                             </div>
                         ))}
