@@ -5,35 +5,11 @@ import itemImage from '../../Assets/Images/birdspa.jpg';
 import Rating from './Rating';
 import LoadingSpinner from './LoadingSpinner';
 
-
 const ItemGallery = ({ category, onItemClick }) => {
-
   const [items, setItems] = useState([]);
   const [loading, setLoading] = useState(true);
-
-
-
-  let categoryItems = [];
-
-  if (category === 'All' || !category) {
-    categoryItems = items;
-  } else {
-    categoryItems = items.filter((item) => item.category === category);
-  }
-  const itemsPerPage = 8;
   const [currentPage, setCurrentPage] = useState(1);
-
-  const totalPages = Math.ceil(categoryItems.length / itemsPerPage);
-
-  const handlePageChange = (page) => {
-    setCurrentPage(page);
-  };
-  const startIndex = (currentPage - 1) * itemsPerPage;
-  const endIndex = startIndex + itemsPerPage;
-  const displayedItems = categoryItems.slice(startIndex, endIndex);
-
-
-
+  const itemsPerPage = 4;
 
   useEffect(() => {
     const apiUrl = 'https://64b1e204062767bc4826ae59.mockapi.io/da/Product';
@@ -50,16 +26,42 @@ const ItemGallery = ({ category, onItemClick }) => {
       });
   }, []);
 
+  // Reset currentPage when the category changes
+  useEffect(() => {
+    setCurrentPage(1);
+  }, [category]);
+
+  // Filter items by category
+  let categoryItems = [];
+  if (category === 'All' || !category) {
+    categoryItems = items;
+  } else {
+    categoryItems = items.filter((item) => item.category === category);
+  }
+
+  // Calculate total pages
+  const totalPages = Math.ceil(categoryItems.length / itemsPerPage);
+
+  // Calculate start and end index for items on the current page
+  const startIndex = (currentPage - 1) * itemsPerPage;
+  const endIndex = startIndex + itemsPerPage;
+  const displayedItems = categoryItems.slice(startIndex, endIndex);
+
+  // Handle page change
+  const handlePageChange = (newPage) => {
+    if (newPage >= 1 && newPage <= totalPages) {
+      setCurrentPage(newPage);
+    }
+  };
+
   if (loading) {
     return <LoadingSpinner />;
   }
-
 
   return (
     <div>
       <div className="item-gallery">
         {displayedItems.map((item) => (
-
           <div key={item.id} className="item" onClick={() => onItemClick(item)}>
             <div className="item-content">
               <div className="item-image">
@@ -67,9 +69,7 @@ const ItemGallery = ({ category, onItemClick }) => {
               </div>
               <div className="item-name">{item.name}</div>
               <div className="item-description">
-                {item.description.length > 100
-                  ? item.description.slice(0, 100) + '...'
-                  : item.description}
+                {item.description.length > 100 ? item.description.slice(0, 100) + '...' : item.description}
               </div>
               <div className="item-rating">
                 <Rating rating={item.rating} />
@@ -79,12 +79,9 @@ const ItemGallery = ({ category, onItemClick }) => {
                 <Link to={`/detail/${item.id}`}>
                   <button className="book-now-button">BOOK NOW</button>
                 </Link>
-              </div>
-            </div>
+              </div>            </div>
           </div>
-
         ))}
-
       </div>
       <div className="pagination-container">
         <button
@@ -94,7 +91,9 @@ const ItemGallery = ({ category, onItemClick }) => {
         >
           Previous
         </button>
-        <span>{currentPage} / {totalPages}</span>
+        <span>
+          {currentPage} / {totalPages}
+        </span>
         <button
           onClick={() => handlePageChange(currentPage + 1)}
           disabled={currentPage === totalPages}
