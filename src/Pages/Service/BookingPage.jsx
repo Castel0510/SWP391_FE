@@ -536,7 +536,6 @@ const BookingPage = () => {
       throw new Error('Network response was not ok.');
     })
     .then(() => {
-      // Handle a successful response from the API
       toast.success('Booking Successful', {
         position: 'top-right',
         autoClose: 3000,
@@ -551,11 +550,10 @@ const BookingPage = () => {
       }, 3000);
     })
     .catch((error) => {
-      // Handle errors from the API or network issues
       console.error('Error:', error);
       toast.error('Failed to submit the booking. Please try again later.');
     });
-    console.log(Response);
+    console.log("dataToSend", dataToSend);
   };
 
   //SIZE
