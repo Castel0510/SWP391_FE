@@ -63,9 +63,11 @@ const ItemGallery = ({ category, onItemClick }) => {
                 <img src={item.image} alt={item.name} />
               </div>
               <div className="item-name">{item.name}</div>
+
               <div className="item-description">
                 {item.description.length > 100 ? item.description.slice(0, 100) + '...' : item.description}
               </div>
+
               <div className="item-rating">
                 <Rating rating={item.rating} />
               </div>
@@ -74,7 +76,12 @@ const ItemGallery = ({ category, onItemClick }) => {
                 <Link to={`/detail/${item.id}`}>
                   <button className="book-now-button">BOOK NOW</button>
                 </Link>
-              </div>            </div>
+
+              </div>
+              <div className="item-name">{item.address}</div>
+
+            </div>
+
           </div>
         ))}
       </div>

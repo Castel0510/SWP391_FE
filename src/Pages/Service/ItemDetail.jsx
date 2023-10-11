@@ -1,10 +1,12 @@
 import React, { useEffect, useState } from 'react';
 import { Link, useLocation, useParams } from 'react-router-dom';
 import itemImage from "../../Assets/Images/bird_hero.png"
+import YouTube from 'react-youtube';
 
 import itemImage2 from "../../Assets/Images/birdspa.jpg"
 import Rating from './Rating';
 import { FaArrowLeft } from 'react-icons/fa';
+import video3 from "../../Assets/videos/1.mp4";
 
 const ItemDetailPage = () => {
   const items = [
@@ -368,6 +370,7 @@ const ItemDetailPage = () => {
   const selectedItem = items.find((i) => i.id === parseInt(itemId, 10));
 
   const [randomImage, setRandomImage] = useState('');
+  const [videoSrc , seVideoSrc] = useState("");
 
 
 
@@ -406,14 +409,20 @@ const ItemDetailPage = () => {
               <p className="item-detail-text">{selectedItem.address}</p>
               <p className="item-label">Provider:</p>
               <p className="item-detail-text">{selectedItem.provider}</p>
+
               <p className="item-label">Price:</p>
               <p className="item-detail-text">${selectedItem.price}</p>
+              <YouTube videoId="vMjIv0B2K4E"/>
+
             </div>
           </div>
           <div className="bottom-button">
             <Link to={`/booking/${selectedItem.id}`}>
               <button className="book-now-button">BOOK NOW</button>
             </Link>
+          </div>
+          <div>
+
           </div>
         </div>
       ) : (
