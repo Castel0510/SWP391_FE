@@ -9,7 +9,7 @@ const ItemGallery = ({ category, onItemClick }) => {
   const [items, setItems] = useState([]);
   const [loading, setLoading] = useState(true);
   const [currentPage, setCurrentPage] = useState(1);
-  const itemsPerPage = 4;
+  const itemsPerPage = 8;
 
   useEffect(() => {
     const apiUrl = 'https://64b1e204062767bc4826ae59.mockapi.io/da/Product';
@@ -60,7 +60,7 @@ const ItemGallery = ({ category, onItemClick }) => {
           <div key={item.id} className="item" onClick={() => onItemClick(item)}>
             <div className="item-content">
               <div className="item-image">
-                <img src={itemImage} alt={item.name} />
+                <img src={item.image} alt={item.name} />
               </div>
               <div className="item-name">{item.name}</div>
               <div className="item-description">
