@@ -53,7 +53,6 @@
   align-items: center;
   transition: all 0.5s ease-out;
   border: 2px solid #34a853;
-
 }
 
 .category-button.active {
@@ -67,7 +66,6 @@
   border-color: rgb(0, 0, 0);
 }
 
-
 .item {
   border-radius: 1rem;
   height: fit-content;
@@ -80,7 +78,6 @@
   flex-direction: row;
   border: 1px solid #ccc;
   box-sizing: border-box;
-
 }
 
 .item:hover {
@@ -113,11 +110,7 @@
   color: #000000;
   padding: 30px;
   box-shadow: 0px 6px 12px rgba(0, 0, 0, 0.4);
-
 }
-
-
-
 
 .book-now-button:hover {
   background-color: #0dd424;
@@ -130,13 +123,12 @@
   align-items: center;
   justify-content: center;
   min-height: 100vh;
-  background-color: #EBF9E7;
-  border-radius: 8px;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  // background-color: #EBF9E7;
+  // border-radius: 8px;
+  // box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
   max-width: 80%;
   margin: 30px auto;
   padding: 20px;
-
 }
 
 .detail-content {
@@ -147,7 +139,7 @@
   align-items: center;
   // text-align: center;
   padding: 20px;
-  background-color: #EBF9E7;
+  background-color: #ebf9e7;
   // border-radius: 8px;
   // box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
   // max-width: 60%;
@@ -157,13 +149,14 @@
   margin-top: 20px;
 }
 
-.item-description-label p{
-  display: inline; 
-  margin-right: 10px; 
+.item-description-label p {
+  display: inline;
+  margin-right: 10px;
 }
 .item-detail img {
   max-width: 500px;
   height: 500px;
+  min-width: 500px;
   border-radius: 8px;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
   margin-right: 50px;
@@ -171,7 +164,6 @@
 }
 
 .item-detail h2 {
-
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -179,7 +171,7 @@
   text-align: center;
   font-size: 50px;
   font-weight: 900;
-  color: #333;
+  color: rgb(17, 68, 38);
   margin-top: 20px;
   margin-bottom: 20px;
 }
@@ -188,13 +180,13 @@
   font-weight: bold;
   display: inline-block;
   font-weight: bold;
-  width: 100px;
+  width: 120px;
 }
 
 .item-detail-text {
   font-weight: normal;
   color: #555;
-
+  width: 200px;
   .item-detail-text {
     display: inline-block;
     width: calc(100% - 100px);
@@ -219,11 +211,25 @@
 }
 
 .item-detail p {
-  font-size: 25px;
+  font-size: 20px;
   margin-bottom: 10px;
 }
 
-.item-detail button {
+.item-detail book-now-button {
+  height: 100px;
+  width: 200px;
+  padding: 12px 24px;
+  font-size: 16px;
+  background-color: #19cf7a;
+  color: #fff;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  margin-right: 10px;
+  transition: background-color 0.3s ease;
+  margin-top: 30px;
+}
+.book-now-button-2 {
   height: 100px;
   width: 200px;
   padding: 12px 24px;
@@ -239,24 +245,36 @@
 }
 
 .item-detail button:hover {
-  background-color: #16f030;
+  // background-color: #16f030;
 }
+// .book-now-button{
+//   height: 100px;
+//   width: 200px;
+//   padding: 12px 24px;
+//   font-size: 16px;
+//   background-color: #19cf7a;
+//   color: #fff;
+//   border: none;
+//   border-radius: 4px;
+//   cursor: pointer;
+//   margin-right: 10px;
+//   transition: background-color 0.3s ease;
+//   margin-top: 30px;
+// }
 
 .search-bar {
-  // width: 1000px; 
-  // padding: 0.5rem 1rem; 
+  // width: 1000px;
+  // padding: 0.5rem 1rem;
   border: 2px solid #000;
   border-radius: 1rem;
 
-  // outline: none; 
-  // border: 2px solid #000; 
-  // margin-right: 1.75rem; 
+  // outline: none;
+  // border: 2px solid #000;
+  // margin-right: 1.75rem;
   &:focus {
     border-color: #d8d7d7;
   }
 }
-
-
 
 .rating {
   font-size: 20px;
@@ -264,12 +282,12 @@
 }
 
 .star.filled::before {
-  content: '★';
+  content: "★";
   color: gold;
 }
 
 .star::before {
-  content: '★';
+  content: "★";
   color: #ccc;
 }
 
@@ -280,7 +298,6 @@
 //BOOKINGFORM
 
 .form-container {
-
   max-width: 1000px;
   margin: 50px auto;
   padding: 20px;
@@ -308,7 +325,6 @@
     font-size: larger;
     color: #444;
     margin-bottom: 5px;
-
   }
 
   input[type="text"],
@@ -321,17 +337,14 @@
     border-radius: 19px;
     font-size: 16px;
     box-shadow: 0px 1px 6px rgba(0, 0, 0, 0.4);
-
   }
 
   textarea {
     resize: vertical;
-
   }
 }
 
 .flex {
-
   display: flex;
   justify-content: center;
 
@@ -352,14 +365,12 @@
   }
 }
 
-
-
 //dropdown
 .select-dropdown {
   position: relative;
   display: inline-block;
   width: 100%;
-  // max-width: 300px; 
+  // max-width: 300px;
   height: 60px;
   margin-bottom: 20px;
   border: 1px solid #ccc;
@@ -369,7 +380,6 @@
   justify-content: center;
   align-items: center;
   box-shadow: 0px 6px 12px rgba(0, 0, 0, 0.4);
-
 }
 
 .select-dropdown select {
@@ -385,9 +395,7 @@
   align-items: center;
   justify-content: center;
   box-shadow: 0px 6px 12px rgba(0, 0, 0, 0.4);
-
 }
-
 
 .select-dropdown select:focus {
   outline: none;
@@ -395,9 +403,6 @@
   border-radius: 50px;
   justify-content: center;
   box-shadow: 0px 6px 12px rgba(0, 0, 0, 0.4);
-
-
-
 }
 
 .checkbox-group {
@@ -406,8 +411,6 @@
   align-items: center;
   justify-content: center;
   box-shadow: 0px 6px 12px rgba(0, 0, 0, 0.4);
-
-
 }
 
 .checkbox {
@@ -421,7 +424,6 @@
   // margin-top: 300px;
   align-items: center;
   box-shadow: 0px 6px 12px rgba(0, 0, 0, 0.4);
-
 }
 
 .checkbox-label {
@@ -437,7 +439,6 @@
   justify-content: center;
   background-color: #ffffff;
   box-shadow: 0px 6px 12px rgba(0, 0, 0, 0.4);
-
 
   appearance: none;
   -webkit-appearance: none;
@@ -459,7 +460,7 @@
 }
 
 .checkbox-input:checked::before {
-  content: '\2713';
+  content: "\2713";
   color: #fff;
   font-size: 14px;
   position: absolute;
@@ -472,9 +473,7 @@
   text-decoration: underline;
 }
 
-
 .back-button {
-
   background-color: transparent;
   border: none;
   color: #000000;
@@ -490,16 +489,12 @@
 
 .back-button svg {
   margin-right: 8px;
-
 }
-
-
 
 .total-price {
   font-size: 18px;
   transition: color 0.3s ease, font-size 0.3s ease;
 }
-
 
 .total-price.changed {
   color: green;
@@ -515,9 +510,8 @@
 
 .changed {
   color: #ff5733;
-  transform: scale(3.0);
+  transform: scale(3);
 }
-
 
 /* Styles for the search form */
 form {
@@ -660,8 +654,6 @@ form button[type="submit"]:hover {
   /* Add styles for active rating option here */
 }
 
-
-
 .item-gallery {
   justify-content: flex-start;
   align-items: center;
@@ -677,7 +669,7 @@ form button[type="submit"]:hover {
     overflow: hidden;
     box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
     max-width: 270px;
-    min-height: 450px;
+    min-height: 520px;
     max-height: 520px;
     margin-bottom: 0;
     .item-image {
@@ -695,16 +687,18 @@ form button[type="submit"]:hover {
       .item-name {
         font-size: 18px;
         font-weight: bold;
-        margin-top: 20px;
-        padding: 0 10px;
+        margin-top: 10px;
+        padding: 0 5px;
+        max-height: 30px;
+        min-height: 30px;
       }
 
       .item-description {
         font-size: 14px;
         color: #666;
-        margin-top: 20px;
+        margin-top: 0;
         padding: 0 10px;
-
+        height: 40px;
       }
 
       .item-rating {
@@ -712,7 +706,6 @@ form button[type="submit"]:hover {
         font-weight: bold;
         color: #ff9900;
         padding: 0 10px;
-
       }
 
       .item-details {
@@ -720,7 +713,6 @@ form button[type="submit"]:hover {
         justify-content: center;
         align-items: center;
         padding: 0 10px;
-
       }
 
       .item-price {
@@ -729,21 +721,20 @@ form button[type="submit"]:hover {
 
         font-weight: 900;
       }
-      .item-address{
-        font-size: 20px;
+      .item-address {
+        font-size: 15px;
         padding: 0 10px;
         margin-bottom: 20px;
+        margin-top: 20px;
       }
-      .item-price-detail{
+      .item-price-detail {
         margin-top: 5px;
         font-size: 18px;
         font-weight: 600;
         padding: 0 10px;
-
       }
-      .bottom-button{
+      .bottom-button {
         padding: 0 10px;
-
       }
 
       .book-now-button {
@@ -776,11 +767,13 @@ form button[type="submit"]:hover {
 }
 
 @keyframes spin {
-  0% { transform: rotate(0deg); }
-  100% { transform: rotate(360deg); }
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
 }
-
-
 
 .pagination-container {
   display: flex;
@@ -793,7 +786,7 @@ form button[type="submit"]:hover {
 .pagination-button {
   width: 200px;
   height: 50px;
-  background-color: #07B464;
+  background-color: #07b464;
   color: #fff;
   border: none;
   border-radius: 4px;
@@ -810,7 +803,6 @@ form button[type="submit"]:hover {
   background-color: #ccc;
   cursor: not-allowed;
 }
-
 
 /* FilterContainer.css */
 
@@ -834,7 +826,6 @@ form button[type="submit"]:hover {
   max-width: 200px;
   max-height: 10px;
   min-width: 300px;
-
 }
 
 .search-input-container {
@@ -951,14 +942,14 @@ form button[type="submit"]:hover {
 }
 
 .filter-rating-label.active {
-  color: #ffc107; 
+  color: #ffc107;
 }
 
-
-.item-description-label{
-  flex-direction: row;
+.item-description-label {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 10px;
 }
-
 
 .item-info {
   background-color: #f5f5f5;
@@ -974,33 +965,31 @@ form button[type="submit"]:hover {
 
 .item-label {
   font-weight: bold;
-  margin-right: 10px;
 }
 
 .item-detail-text {
-  margin: 0;
+  flex-grow: 1;
 }
 
 .youtube-container {
   position: relative;
-  padding-bottom: 56.25%; 
-  overflow: hidden; 
-  border: 2px solid #333; 
-  border-radius: 10px; 
-  box-shadow: 0 0 10px rgba(0, 0, 0, 0.2); 
+  padding-bottom: 56.25%;
+  overflow: hidden;
+  border: 2px solid #333;
+  border-radius: 10px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
 }
 
 .youtube-container iframe {
-  position: absolute; 
+  position: absolute;
   top: 0;
   left: 0;
   width: 100%;
   height: 100%;
-  border: none; 
+  border: none;
 }
 
-
-//FILTER 
+//FILTER
 
 .filter-container {
   border: 1px solid #ccc;
@@ -1037,3 +1026,26 @@ form button[type="submit"]:hover {
   margin-right: 8px;
 }
 
+//Search Box
+.searchBox {
+  text-align: center;
+  // margin: 20px 0;
+}
+
+.search {
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  width: 500px;
+  font-size: 16px;
+}
+
+.search:focus {
+  border-color: #007bff;
+  box-shadow: 0 0 5px #007bff;
+  outline: none;
+}
+
+.search::placeholder {
+  color: #888;
+}

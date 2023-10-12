@@ -3,34 +3,34 @@ import { Link, useLocation, useParams } from "react-router-dom";
 import Rating from "./Rating";
 import { FaArrowLeft } from "react-icons/fa";
 import YouTube from "react-youtube";
+import LoadingSpinner from "./LoadingSpinner";
+import { useNavigate } from "react-router-dom";
 
 const ItemDetailPage = () => {
   const [items, setItems] = useState([]);
   const [selectedItem, setSelectedItem] = useState(null);
-  const location = useLocation();
   const { itemId } = useParams();
-  const [randomImage, setRandomImage] = useState("");
-  const [videoSrc, setVideoSrc] = useState("");
-
-  const fetchData = async () => {
-    try {
-      const response = await fetch(
-        "https://64b1e204062767bc4826ae59.mockapi.io/da/Product"
-      );
-      if (!response.ok) {
-        throw new Error("Failed to fetch data");
-      }
-      const data = await response.json();
-      setItems(data);
-    } catch (error) {
-      console.error("Error fetching data:", error);
-    }
-  };
+  const navigate = useNavigate();
 
   useEffect(() => {
-    fetchData();
-  }, []);
+    const fetchData = async () => {
+      try {
+        const response = await fetch(
+          "https://64b1e204062767bc4826ae59.mockapi.io/da/Product"
+        );
+        if (!response.ok) {
+          throw new Error("Failed to fetch data");
+        }
+        const data = await response.json();
+        const item = data.find((item) => item.id === parseInt(itemId, 10));
+        setSelectedItem(item);
+      } catch (error) {
+        console.error("Error fetching data:", error);
+      }
+    };
 
+    fetchData();
+  }, [itemId]);
   useEffect(() => {
     if (items.length > 0 && itemId) {
       const selectedItem = items.find(
@@ -57,46 +57,53 @@ const ItemDetailPage = () => {
                 <FaArrowLeft />
               </button>
               <img src={selectedItem.image} alt={selectedItem.name} />
-              <div className="rating">
+
+              {/* <div className="rating">
                 <Rating
                   rating={selectedItem.rating}
                   onRate={(newRating) => onRate(selectedItem.id, newRating)}
                 />
-              </div>
+              </div> */}
             </div>
             <div className="item-info">
               <h2>{selectedItem.name}</h2>
-              <div className="item-description-label">
-                <p className="item-label">Description:</p>
-                <p className="item-detail-text">{selectedItem.description}</p>
-              </div>
-              <div className="item-description-label">
-                <p className="item-label">Phone:</p>
-                <p className="item-detail-text">{selectedItem.phone}</p>
-              </div>
-              <div className="item-description-label">
-                <p className="item-label">Address:</p>
-                <p className="item-detail-text">{selectedItem.address}</p>
-              </div>
-              <div className="item-description-label">
-                <p className="item-label">Provider:</p>
-                <p className="item-detail-text">{selectedItem.provider}</p>
-              </div>
-              <div className="item-description-label">
-                <p className="item-label">Price:</p>
-                <p className="item-detail-text">${selectedItem.price}</p>
-              </div>
-              <YouTube videoId={selectedItem.videoId} className="youtube-container"/>
+              {selectedItem ? (
+                <>
+                  {[
+                    { label: "Description", value: selectedItem.description },
+                    { label: "Phone", value: selectedItem.phone },
+                    { label: "Address", value: selectedItem.address },
+                    { label: "Provider", value: selectedItem.provider },
+                    { label: "Price", value: `$${selectedItem.price}` },
+                  ].map((item, index) => (
+                    <div key={index} className="item-description-label">
+                      <p className="item-label">{item.label}:</p>
+                      <p className="item-detail-text">{item.value}</p>
+                    </div>
+                  ))}
+                  <YouTube
+                    videoId={selectedItem.videoId}
+                    className="youtube-container"
+                  />
+                </>
+              ) : (
+                <div>Item not found</div>
+              )}
             </div>
           </div>
           <div className="bottom-button">
-            <Link to={`/booking/${selectedItem.id}`}>
-              <button className="book-now-button">BOOK NOW</button>
-            </Link>
+            <button
+              className="book-now-button-2"
+              onClick={() => navigate(`/booking/${selectedItem.id}`)}
+            >
+              BOOK NOW
+            </button>
           </div>
         </div>
       ) : (
-        <div>Item not found</div>
+        <div>
+          <LoadingSpinner />
+        </div>
       )}
     </div>
   );

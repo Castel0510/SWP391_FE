@@ -8,7 +8,8 @@ const ItemGallery = ({ category, address, onItemClick, filters }) => {
   const [items, setItems] = useState([]);
   const [loading, setLoading] = useState(true);
   const [currentPage, setCurrentPage] = useState(1);
-  const itemsPerPage = 8;
+  const [searchQuery, setSearchQuery] = useState("");
+  const itemsPerPage = 10;
 
   useEffect(() => {
     const apiUrl = "https://64b1e204062767bc4826ae59.mockapi.io/da/Product";
@@ -24,6 +25,7 @@ const ItemGallery = ({ category, address, onItemClick, filters }) => {
         setLoading(false);
       });
   }, []);
+  console.log("aaa", items );
 
   useEffect(() => {
     setCurrentPage(1);
@@ -47,6 +49,11 @@ const ItemGallery = ({ category, address, onItemClick, filters }) => {
     if (filters.rating > 0) {
       filteredItems = filteredItems.filter(
         (item) => item.rating === filters.rating
+      );
+    }
+    if (searchQuery) {
+      filteredItems = filteredItems.filter((item) =>
+        item.name.toLowerCase().includes(searchQuery.toLowerCase())
       );
     }
 
@@ -75,9 +82,19 @@ const ItemGallery = ({ category, address, onItemClick, filters }) => {
 
   return (
     <div>
+      <div className="searchBox">
+        <input
+          className="search"
+          type="text"
+          placeholder="Search by item name"
+          value={searchQuery}
+          onChange={(e) => setSearchQuery(e.target.value)}
+        />
+      </div>
+
       <div className="item-gallery">
         {displayedItems.map((item) => (
-          <div key={item.id} className="item" onClick={() => onItemClick(item)}>
+          <div key={item.id} className={`item ${currentPage === 1 ? "show" : ""}`} onClick={() => onItemClick(item)}>
             <div className="item-content">
               <div className="item-image">
                 <img src={item.image} alt={item.name} />
@@ -86,7 +103,7 @@ const ItemGallery = ({ category, address, onItemClick, filters }) => {
 
               <div className="item-description">
                 {item.description.length > 100
-                  ? item.description.slice(0, 100) + "..."
+                  ? item.description.slice(0, 90) + "..."
                   : item.description}
               </div>
 
@@ -95,9 +112,10 @@ const ItemGallery = ({ category, address, onItemClick, filters }) => {
               </div>
               <div className="flex justify-between">
                 <div className="item-price-detail">${item.price}/Day</div>
-                <Link to={`/detail/${item.id}`}>
+                <Link to={`/detail/${item.id}`} state={{ selectedItem: item }}>
                   <button className="book-now-button">BOOK NOW</button>
                 </Link>
+
               </div>
               <div className="item-address">{item.address}</div>
             </div>

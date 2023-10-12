@@ -15,94 +15,94 @@ import MyShopPage from "../Pages/MyShopPage/MyShopPage";
 import CreateServicePage from "../Pages/CreateServicePage/CreateServicePage";
 
 export const routes = [
-    {
-        path: '/',
-        page: HomePage,
-        isShowHeaderFooter: true
-        //show header and footer
-    },
-    {
-        path: '/login',
-        page: LoginPage
-    },
-    {
-        path: '/register',
-        page: RegisterPage
-    },
-    {
-        path: '/profile',
-        page: ProfilePage,
-        isShowHeaderFooter: true
-    },
-    {
-        path: '/order',
-        page: OrderHistoryPage,
-        isShowHeaderFooter: true
-    },
-    {
-        path: '/transaction',
-        page: TransactionHistoryPage,
-        isShowHeaderFooter: true
-    },
-    {
-        path: '*',
-        page: NotFoundPage
-    },
-    {
-        path: '/service',
-        page: ServicePage2,
-        isShowHeaderFooter:true
+  {
+    path: "/",
+    page: HomePage,
+    isShowHeaderFooter: true,
+    //show header and footer
+  },
+  {
+    path: "/login",
+    page: LoginPage,
+  },
+  {
+    path: "/register",
+    page: RegisterPage,
+  },
+  {
+    path: "/profile",
+    page: ProfilePage,
+    isShowHeaderFooter: true,
+  },
+  {
+    path: "/order",
+    page: OrderHistoryPage,
+    isShowHeaderFooter: true,
+  },
+  {
+    path: "/transaction",
+    page: TransactionHistoryPage,
+    isShowHeaderFooter: true,
+  },
+  {
+    path: "*",
+    page: NotFoundPage,
+  },
+  {
+    path: "/service",
+    page: ServicePage2,
+    isShowHeaderFooter: true,
+  },
+  {
+    path: "/detail/:itemId",
+    page: ItemDetailPage,
+    isShowHeaderFooter: true,
+  },
+  {
+    path: "/detail/:id",
+    page: BookingPage,
+    isShowHeaderFooter: true,
+  },
 
-    },
-    {
-        path: '/detail/:itemId', 
-        page: ItemDetailPage,
-        isShowHeaderFooter:true
+  {
+    path: "/provider",
+    page: providerHomePage,
+    isShowHeaderFooter: true,
+  },
+  {
+    path: "/booking/:itemId",
+    page: BookingPage,
+    isShowHeaderFooter: true,
+  },
+  //   {
 
-      },
-
-      {
-        path: '/provider', 
-        page: providerHomePage,
-        isShowHeaderFooter:true
-
-      },
-      {
-        path: '/booking/:itemId', 
-        page: BookingPage,
-        isShowHeaderFooter:true
-
-      },
-    //   {
-      
-
-    //     path: '/service/*',
-    //     page: ServicePage,
-    //     isShowHeaderFooter:true
-    // }
-    {
-        path: '/service/*',
-        page: ServicePage,
-        isShowHeaderFooter: true
-    },
-    {
-        path: '/my-shop',
-        page: MyShopPage,
-        isShowHeaderFooter: true
-    },
-    {
-        path: '/order',
-        page: OrderHistoryPage,
-        isShowHeaderFooter: true
-    },
-    {
-        path: '/createService',
-        page: CreateServicePage,
-        isShowHeaderFooter: true
-    },
-    {
-        path: '/item-detail-page/:id',
-        page: ItemDetailPage,
-        isShowHeaderFooter: true
-    },
-]
+  //     path: '/service/*',
+  //     page: ServicePage,
+  //     isShowHeaderFooter:true
+  // }
+  {
+    path: "/service/*",
+    page: ServicePage,
+    isShowHeaderFooter: true,
+  },
+  {
+    path: "/my-shop",
+    page: MyShopPage,
+    isShowHeaderFooter: true,
+  },
+  {
+    path: "/order",
+    page: OrderHistoryPage,
+    isShowHeaderFooter: true,
+  },
+  {
+    path: "/createService",
+    page: CreateServicePage,
+    isShowHeaderFooter: true,
+  },
+  {
+    path: "/item-detail-page/:id",
+    page: ItemDetailPage,
+    isShowHeaderFooter: true,
+  },
+];
