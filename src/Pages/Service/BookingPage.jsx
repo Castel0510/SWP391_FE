@@ -5,17 +5,17 @@ import 'react-toastify/dist/ReactToastify.css';
 import { useNavigate } from 'react-router-dom';
 import { format, differenceInDays, addDays } from 'date-fns';
 import { FaArrowLeft } from 'react-icons/fa';
+import { useSelector } from 'react-redux';
 
 
 
 const BookingPage = () => {
   const [items1, setItems1] = useState([]);
-
+const user = useSelector((state) => state.user.user); 
   const navigateTo = useNavigate();
   let [totalPrice, setTotalPrice] = useState(0);
   const { itemId } = useParams();
-
-
+  const userID = user.id;
   useEffect(() => {
     const apiUrl = "https://64b1e204062767bc4826ae59.mockapi.io/da/Product";
 
@@ -47,17 +47,17 @@ const BookingPage = () => {
   // console.log("selectedItem",selectedItem);
 
   console.log("selectedItem2", selectedItem2);
-
   // if (selectedItem2) {
   //   console.log("selectedItem2 name", selectedItem2.name);
   // } else {
   //   console.log("selectedItem2 is not defined or does not have a name property");
   // }
-
+console.log(userID);
   const [formData, setFormData] = useState({
-    username: '',
+    userID: userID,
+    username: user.name,
     serviceName: selectedItem2 ? selectedItem2.name : '',
-    email: '',
+    email: user.email,
     phone: '',
     checkInDate: '',
     checkOutDate: '',
@@ -69,7 +69,7 @@ const BookingPage = () => {
   });
 
   const options = [];
-
+  
   if (selectedItem2) {
     options.push({ name: 'small', label: `SMALL SIZE(5-20cm)/${selectedItem2.price}$/bird`, price: selectedItem2.price });
   } else {
@@ -89,6 +89,15 @@ const BookingPage = () => {
     // { id: '4', label: 'Wings($500)', price: 500 },
 
   ];
+  useEffect(() => {
+    if (user && user.id) { 
+      setFormData((prevData) => ({
+        ...prevData,
+        userID: user.id,
+      }));
+    }
+  }, [user]);
+  console.log("formdata", formData);
   const handleInputChange = (e) => {
     const { name, value } = e.target;
     if (name === 'checkInDate') {
@@ -287,6 +296,17 @@ const BookingPage = () => {
   };
   return (
     <div className="form-container">
+       <div className="user-info">
+        <h3>User Information:</h3>
+        {user ? (
+          <div>
+            <p>Name: {user.fullName}</p>
+            <p>Email: {user.email}</p>
+          </div>
+        ) : (
+          <p>User information not available</p>
+        )}
+      </div>
       <button onClick={() => window.history.back()} className="back-button">
         <FaArrowLeft />
       </button>
