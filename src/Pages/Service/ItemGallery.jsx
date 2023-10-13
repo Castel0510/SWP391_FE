@@ -25,7 +25,6 @@ const ItemGallery = ({ category, address, onItemClick, filters }) => {
         setLoading(false);
       });
   }, []);
-  console.log("aaa", items );
 
   useEffect(() => {
     setCurrentPage(1);
@@ -51,6 +50,7 @@ const ItemGallery = ({ category, address, onItemClick, filters }) => {
         (item) => item.rating === filters.rating
       );
     }
+
     if (searchQuery) {
       filteredItems = filteredItems.filter((item) =>
         item.name.toLowerCase().includes(searchQuery.toLowerCase())
@@ -65,10 +65,8 @@ const ItemGallery = ({ category, address, onItemClick, filters }) => {
   );
 
   const totalPages = Math.ceil(filteredItems.length / itemsPerPage);
-
   const startIndex = (currentPage - 1) * itemsPerPage;
   const endIndex = startIndex + itemsPerPage;
-  const displayedItems = filteredItems.slice(startIndex, endIndex);
 
   const handlePageChange = (newPage) => {
     if (newPage >= 1 && newPage <= totalPages) {
@@ -79,6 +77,8 @@ const ItemGallery = ({ category, address, onItemClick, filters }) => {
   if (loading) {
     return <LoadingSpinner />;
   }
+
+  const displayedItems = filteredItems.slice(startIndex, endIndex);
 
   return (
     <div>
@@ -94,7 +94,11 @@ const ItemGallery = ({ category, address, onItemClick, filters }) => {
 
       <div className="item-gallery">
         {displayedItems.map((item) => (
-          <div key={item.id} className={`item ${currentPage === 1 ? "show" : ""}`} onClick={() => onItemClick(item)}>
+          <div
+            key={item.id}
+            className={`item ${currentPage === 1 ? "show" : ""}`}
+            onClick={() => onItemClick(item)}
+          >
             <div className="item-content">
               <div className="item-image">
                 <img src={item.image} alt={item.name} />
@@ -115,13 +119,13 @@ const ItemGallery = ({ category, address, onItemClick, filters }) => {
                 <Link to={`/detail/${item.id}`} state={{ selectedItem: item }}>
                   <button className="book-now-button">BOOK NOW</button>
                 </Link>
-
               </div>
               <div className="item-address">{item.address}</div>
             </div>
           </div>
         ))}
       </div>
+
       <div className="pagination-container">
         <button
           onClick={() => handlePageChange(currentPage - 1)}
