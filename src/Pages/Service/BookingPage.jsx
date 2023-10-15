@@ -11,7 +11,7 @@ import { useSelector } from 'react-redux';
 
 const BookingPage = () => {
   const [items1, setItems1] = useState([]);
-const user = useSelector((state) => state.user.user); 
+  const user = useSelector((state) => state.user.user);
   const navigateTo = useNavigate();
   let [totalPrice, setTotalPrice] = useState(0);
   const { itemId } = useParams();
@@ -44,18 +44,16 @@ const user = useSelector((state) => state.user.user);
 
   const selectedItem2 = items1.find((item) => item.id === parseInt(itemId, 10));
 
-  // console.log("selectedItem",selectedItem);
+  // console.log("selectedItem",selectedItem2);
 
-  console.log("selectedItem2", selectedItem2);
   // if (selectedItem2) {
   //   console.log("selectedItem2 name", selectedItem2.name);
   // } else {
   //   console.log("selectedItem2 is not defined or does not have a name property");
   // }
-console.log(userID);
   const [formData, setFormData] = useState({
     userID: userID,
-    username: user.name,
+    username: '',
     serviceName: selectedItem2 ? selectedItem2.name : '',
     email: user.email,
     phone: '',
@@ -66,10 +64,11 @@ console.log(userID);
     size: selectedSize,
     selectedOption: selectedOption,
     selectedCheckboxes: [],
+    category: selectedItem2 ? selectedItem2.category : '',
   });
 
   const options = [];
-  
+
   if (selectedItem2) {
     options.push({ name: 'small', label: `SMALL SIZE(5-20cm)/${selectedItem2.price}$/bird`, price: selectedItem2.price });
   } else {
@@ -90,16 +89,21 @@ console.log(userID);
 
   ];
   useEffect(() => {
-    if (user && user.id) { 
+    if (user && user.id) {
       setFormData((prevData) => ({
         ...prevData,
         userID: user.id,
       }));
     }
   }, [user]);
-  console.log("formdata", formData);
+
+
+
+
   const handleInputChange = (e) => {
     const { name, value } = e.target;
+    console.log(`Input name: ${name}, Value: ${value}`);
+
     if (name === 'checkInDate') {
       const currentDate = new Date();
       const selectedDate = new Date(value);
@@ -115,16 +119,18 @@ console.log(userID);
         setCheckOutError('Check-out date cannot be in the past');
       } else if (selectedDate > currentDate && selectedDate <= addDays(currentDate, 30)) {
         setCheckOutError(null);
-      } else {
+      }else {
         setCheckOutError('Check-out date must be within 30 days from today');
       }
-    }
+    } 
 
     setFormData({
       ...formData,
       [name]: value,
     });
+    console.log('inputchangedata', formData);
   };
+
 
 
   useEffect(() => {
@@ -181,11 +187,14 @@ console.log(userID);
     const checkboxPrices = selectedCheckboxes.map((checkbox) => checkbox.price);
     const checkboxTotalPrice = checkboxPrices.reduce((acc, price) => acc + price, 0);
     const newTotalPrice = days * selectedItemPrice + days * selectedOptionPrice + checkboxTotalPrice;
-
+    const newServiceName = selectedItem2.name;
+    const categoryData = selectedItem2.category;
     const updatedFormData = {
       ...formData,
       price: newTotalPrice,
       selectedCheckboxes: selectedCheckboxes,
+      serviceName: newServiceName,
+      category: categoryData,
     };
     if (
       !formData.username ||
@@ -200,17 +209,19 @@ console.log(userID);
     )
 
       if (!isCheckOutAfterCheckIn(formData.checkInDate, formData.checkOutDate)) {
-        toast.error('date error');
+        toast.error('check your booking date again, must be in 30 day from checkindate');
         return;
       }
-
     const dataToSend = updatedFormData;
 
     if (checkInError || checkOutError) {
-
+      
       toast.error('Please check your information again');
       return;
     }
+    console.log(categoryData);
+
+    
 
     fetch('https://64b1e204062767bc4826ae59.mockapi.io/da/Nhasx', {
       method: 'POST',
@@ -294,9 +305,15 @@ console.log(userID);
       console.log('Booking canceled');
     }
   };
+
+
+  // console.log("formdata", formData);
+  // console.log(userID);
+  // console.log("selectedItem2", selectedItem2.category);
+
   return (
     <div className="form-container">
-       <div className="user-info">
+      <div className="user-info">
         <h3>User Information:</h3>
         {user ? (
           <div>

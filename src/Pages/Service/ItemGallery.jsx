@@ -3,6 +3,7 @@ import "./service.scss";
 import { Link } from "react-router-dom";
 import Rating from "./Rating";
 import LoadingSpinner from "./LoadingSpinner";
+import { useSelector } from "react-redux";
 
 const ItemGallery = ({ category, address, onItemClick, filters }) => {
   const [items, setItems] = useState([]);

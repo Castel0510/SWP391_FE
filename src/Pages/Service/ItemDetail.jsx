@@ -5,14 +5,22 @@ import { FaArrowLeft } from "react-icons/fa";
 import YouTube from "react-youtube";
 import LoadingSpinner from "./LoadingSpinner";
 import { useNavigate } from "react-router-dom";
+import { useSelector } from "react-redux";
 
 const ItemDetailPage = () => {
   const [items, setItems] = useState([]);
   const [selectedItem, setSelectedItem] = useState(null);
   const { itemId } = useParams();
   const navigate = useNavigate();
+  const user = useSelector((state) => state.user.user);
+  const userID = user ? user.id : null;  console.log(userID);
 
   useEffect(() => {
+    if (!user) {
+      navigate("/login");
+      return;
+    }
+
     const fetchData = async () => {
       try {
         const response = await fetch(
@@ -30,7 +38,8 @@ const ItemDetailPage = () => {
     };
 
     fetchData();
-  }, [itemId]);
+  }, [itemId, user, navigate]);
+
   useEffect(() => {
     if (items.length > 0 && itemId) {
       const selectedItem = items.find(
@@ -43,6 +52,7 @@ const ItemDetailPage = () => {
   const onRate = (itemId, newRating) => {
     console.log(`Rated item ${itemId} with rating ${newRating}`);
   };
+
 
   return (
     <div className="item-detail">
