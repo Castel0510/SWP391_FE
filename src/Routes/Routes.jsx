@@ -43,11 +43,6 @@ export const routes = [
         isShowHeaderFooter: true
     },
     {
-        path: '/order',
-        page: OrderHistoryPage,
-        isShowHeaderFooter: true
-    },
-    {
         path: '/transaction',
         page: TransactionHistoryPage,
         isShowHeaderFooter: true
@@ -59,26 +54,6 @@ export const routes = [
     {
         path: '/service/*',
         page: ServicePage,
-        isShowHeaderFooter: true
-    },
-    {
-        path: '/my-shop',
-        page: MyShopPage,
-        isShowHeaderFooter: true
-    },
-    {
-        path: '/order',
-        page: OrderHistoryPage,
-        isShowHeaderFooter: true
-    },
-    {
-        path: '/createService',
-        page: CreateServicePage,
-        isShowHeaderFooter: true
-    },
-    {
-        path: '/item-detail-page/:id',
-        page: ItemDetailPage,
         isShowHeaderFooter: true
     },
     {
@@ -95,6 +70,26 @@ export const routes = [
     {
         path: '/provider-dashboard',
         page: ProviderPage,
+        isShowSidebarProvider: true
+    },
+    {
+        path: '/my-shop',
+        page: MyShopPage,
+        isShowSidebarProvider: true
+    },
+    {
+        path: '/item-detail-page/:id',
+        page: ItemDetailPage,
+        isShowSidebarProvider: true
+    },
+    {
+        path: '/createService',
+        page: CreateServicePage,
+        isShowSidebarProvider: true
+    },
+    {
+        path: '/order',
+        page: OrderHistoryPage,
         isShowSidebarProvider: true
     },
     {
