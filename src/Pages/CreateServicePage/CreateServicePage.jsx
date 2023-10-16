@@ -18,7 +18,7 @@ const CreateServicePage = () => {
                         phone: "",
                         description: "",
                         category: "",
-                        sizeData: [{ size: "", sizePrice: "" }],
+                        sizeData: [],
                         serviceData: [{ service: "", price: "" }],
                     }}
                     onSubmit={async (values) => {
@@ -67,53 +67,64 @@ const CreateServicePage = () => {
                             <FieldArray name="sizeData">
                                 {({ push, remove }) => (
                                     <div>
+                                        <div>
+                                            <label htmlFor="size">Size</label>
+                                            <br />
+                                            <Field as="select" name="size">
+                                                <option value="">Select a size</option>
+                                                <option value="Small" disabled={values.sizeData.some((data) => data.size === "Small")}>
+                                                    Small
+                                                </option>
+                                                <option value="Medium" disabled={values.sizeData.some((data) => data.size === "Medium")}>
+                                                    Medium
+                                                </option>
+                                                <option value="Large" disabled={values.sizeData.some((data) => data.size === "Large")}>
+                                                    Large
+                                                </option>
+                                            </Field>
+                                        </div>
+
+                                        <div>
+                                            <label htmlFor="sizePrice">Size Price</label>
+                                            <br />
+                                            <Field name="sizePrice" placeholder="Enter price for selected size" />
+                                            <button
+                                                type="button"
+                                                onClick={() => {
+                                                    const exists = values.sizeData.some((data) => data.size === values.size);
+                                                    if (!exists) {
+                                                        push({ size: values.size, sizePrice: values.sizePrice });
+                                                        setFieldValue("size", "");
+                                                        setFieldValue("sizePrice", "");
+                                                    }
+                                                }}
+                                                disabled={values.size === "" || values.sizePrice === ""}
+                                            >
+                                                Add
+                                            </button>
+                                        </div>
+
                                         {values.sizeData.map((data, index) => (
                                             <div key={index}>
                                                 <div>
                                                     <label htmlFor={`sizeData.${index}.size`}>Size</label>
                                                     <br />
-                                                    <Field
-                                                        component="select"
-                                                        name={`sizeData.${index}.size`}
-                                                        placeholder="Size"
-                                                        disabled={data.size !== ""}
-                                                    >
-                                                        <option value="" disabled={!data.size}>Select Size</option>
-                                                        <option value="S" disabled={values.sizeData.some(item => item.size === "S")}>Small</option>
-                                                        <option value="M" disabled={values.sizeData.some(item => item.size === "M")}>Medium</option>
-                                                        <option value="L" disabled={values.sizeData.some(item => item.size === "L")}>Large</option>
-                                                    </Field>
+                                                    <Field name={`sizeData.${index}.size`} value={data.size} readOnly />
                                                 </div>
                                                 <div>
-                                                    <label htmlFor={`sizeData.${index}.sizePrice`}>Size Price</label>
+                                                    <label htmlFor={`sizeData.${index}.price`}>Price</label>
                                                     <br />
-                                                    <Field
-                                                        name={`sizeData.${index}.sizePrice`}
-                                                        placeholder="Size Price"
-                                                        readOnly
-                                                    />
+                                                    <Field name={`sizeData.${index}.price`} value={data.sizePrice} readOnly />
                                                 </div>
-                                                <button
-                                                    type="button"
-                                                    onClick={() => remove(index)}
-                                                    disabled={values.sizeData.length === 1}
-                                                >
-                                                    Delete size
+                                                <button type="button" onClick={() => remove(index)}>
+                                                    Delete
                                                 </button>
                                             </div>
                                         ))}
-                                        <button
-                                            type="button"
-                                            onClick={() => {
-                                                push({ size: "", sizePrice: "" });
-                                            }}
-                                            disabled={values.sizeData.some(item => item.size === "S") && values.sizeData.some(item => item.size === "M") && values.sizeData.some(item => item.size === "L")}
-                                        >
-                                            Add size
-                                        </button>
                                     </div>
                                 )}
                             </FieldArray>
+
 
                             <FieldArray name="serviceData">
                                 {({ push, remove }) => (
