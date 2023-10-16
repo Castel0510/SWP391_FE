@@ -25,6 +25,10 @@ const DropdownUser = (props) => {
             display: 'View profile',
         },
         {
+            path: '/change-password-customer',
+            display: 'Change password',
+        },
+        {
             path: '/order',
             display: 'Order history',
         },
@@ -46,7 +50,6 @@ const DropdownUser = (props) => {
     ]
 
     let dropdownItems = [];
-
 
     if (role === 'Customer') {
         dropdownItems = customerDropdownList;
@@ -104,6 +107,7 @@ const DropdownUser = (props) => {
                                 role="menuitem"
                                 tabIndex="-1"
                                 id="menu-item-0"
+                                onClick={toggleDropdown}
                             >
                                 {item.display}
                             </NavLink>
