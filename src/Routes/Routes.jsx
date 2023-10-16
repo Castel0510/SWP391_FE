@@ -14,6 +14,13 @@ import ServicePage from "../Pages/ServicePage";
 import MyShopPage from "../Pages/MyShopPage/MyShopPage";
 import CreateServicePage from "../Pages/CreateServicePage/CreateServicePage";
 
+import BookingPageSpa from "../Pages/Service/BookingSpa";
+import BookingPageHotel from "../Pages/Service/BookingHotel";
+import BookingPageMedical from "../Pages/Service/BookingMedical";
+
+
+
+
 export const routes = [
   {
     path: "/",
@@ -70,8 +77,18 @@ export const routes = [
     isShowHeaderFooter: true,
   },
   {
-    path: "/booking/:itemId",
-    page: BookingPage,
+    path: "/booking/hotel/:itemId",
+    page: BookingPageHotel,
+    isShowHeaderFooter: true,
+  },
+  {
+    path: "/booking/spa/:itemId",
+    page: BookingPageSpa,
+    isShowHeaderFooter: true,
+  },
+  {
+    path: "/booking/medical/:itemId",
+    page: BookingPageMedical,
     isShowHeaderFooter: true,
   },
   //   {

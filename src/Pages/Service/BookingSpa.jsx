@@ -330,6 +330,7 @@ const BookingPage = () => {
       <h2 className="form-header">Booking Form for: {selectedItem2 ? selectedItem2.name : 'No item selected'}</h2>
       <form onSubmit={handleSubmit}>
         <div className="form-input">
+        
           <label>Full Name</label>
           <input
             type="text"

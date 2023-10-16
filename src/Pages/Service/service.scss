@@ -296,6 +296,7 @@
 }
 
 //BOOKINGFORM
+/* BookingForm.scss */
 
 .form-container {
   max-width: 1000px;
@@ -316,7 +317,6 @@
 
 .form-input {
   border-radius: 10px;
-
   margin-bottom: 20px;
 
   label {
@@ -350,9 +350,9 @@
 
   .form-submit-button {
     margin: 20px auto;
-
     padding: 25px 60px;
     color: #fff;
+    background-color: #29bb66;
     border: none;
     border-radius: 50px;
     font-size: 25px;
@@ -360,10 +360,11 @@
     transition: background-color 0.3s ease;
 
     &:hover {
-      background-color: #0056b3;
+      background-color: #0a7242;
     }
   }
 }
+
 
 //dropdown
 .select-dropdown {
@@ -566,7 +567,7 @@ form input[type="search"]:focus {
 }
 
 form button[type="submit"] {
-  position: absolute;
+  // position: absolute;
   right: 0.625rem;
   bottom: 0.625rem;
   color: #fff;

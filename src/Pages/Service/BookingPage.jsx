@@ -313,7 +313,7 @@ const BookingPage = () => {
 
   return (
     <div className="form-container">
-      <div className="user-info">
+      {/* <div className="user-info">
         <h3>User Information:</h3>
         {user ? (
           <div>
@@ -323,7 +323,7 @@ const BookingPage = () => {
         ) : (
           <p>User information not available</p>
         )}
-      </div>
+      </div> */}
       <button onClick={() => window.history.back()} className="back-button">
         <FaArrowLeft />
       </button>

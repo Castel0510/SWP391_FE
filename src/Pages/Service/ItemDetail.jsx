@@ -13,13 +13,20 @@ const ItemDetailPage = () => {
   const { itemId } = useParams();
   const navigate = useNavigate();
   const user = useSelector((state) => state.user.user);
-  const userID = user ? user.id : null;  console.log(userID);
+  const userID = user ? user.id : null;
+  console.log(userID);
 
+
+
+  // useEffect(() => {
+  //   if (!user) {
+
+  //     navigate("/login");
+  //     return;
+  //   }
+
+  // })
   useEffect(() => {
-    if (!user) {
-      navigate("/login");
-      return;
-    }
 
     const fetchData = async () => {
       try {
@@ -52,8 +59,21 @@ const ItemDetailPage = () => {
   const onRate = (itemId, newRating) => {
     console.log(`Rated item ${itemId} with rating ${newRating}`);
   };
-
-
+  const handleBookNow = () => {
+    if (!userID) {
+      navigate("/login");
+    } else {
+      if (selectedItem.category === "Hotel") {
+        navigate(`/booking/hotel/${selectedItem.id}`);
+      } else if (selectedItem.category === "Spa") {
+        navigate(`/booking/spa/${selectedItem.id}`);
+      } else if (selectedItem.category === "Medical") {
+        navigate(`/booking/medical/${selectedItem.id}`);
+      }
+    }
+  };
+  
+   
   return (
     <div className="item-detail">
       {selectedItem ? (
@@ -104,7 +124,9 @@ const ItemDetailPage = () => {
           <div className="bottom-button">
             <button
               className="book-now-button-2"
-              onClick={() => navigate(`/booking/${selectedItem.id}`)}
+              onClick={handleBookNow}
+
+            // onClick={() => navigate(`/booking/${selectedItem.id}`)}
             >
               BOOK NOW
             </button>
