@@ -25,7 +25,7 @@ const ServiceCardItem = (props) => {
     const { item, width } = props
 
     return (
-        <div key={item.id} className={`${width} mx-2 max-w-sm bg-white border border-gray-200 rounded-lg dark:bg-gray-800 dark:border-gray-700 single-card`}>
+        <div key={item.id} className={`${width} mx-2 max-w-sm bg-white border border-gray-200 rounded-lg single-card`}>
             <div className='img-div'>
                 <img className="rounded-t-lg" src={item.image} alt="services image" />
                 <div className="user-avatar-container">
@@ -34,7 +34,7 @@ const ServiceCardItem = (props) => {
             </div>
             <div className="px-5 py-5">
                 <a href="#">
-                    <h5 className="text-xl font-semibold tracking-tight text-gray-900 dark:text-white">{item.name}</h5>
+                    <h5 className="text-xl font-semibold tracking-tight text-gray-900">{item.name}</h5>
                 </a>
 
                 <p className="text-gray-500 text-sm">Địa chỉ: Hồ Chí Minh</p>

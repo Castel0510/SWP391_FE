@@ -9,6 +9,8 @@
 
   .title {
     text-align: center;
+    display: flex;
+    flex-direction: column;
     small {
       letter-spacing: 0.8rem;
       text-transform: uppercase;
