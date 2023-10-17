@@ -41,17 +41,7 @@ const BookingPage = () => {
   const [checkOutError, setCheckOutError] = useState(null);
   
   const [selectedCheckboxes, setSelectedCheckboxes] = useState([]);
-  // const selectedItem = items.find((item) => item.id === parseInt(itemId, 10));
-
   const selectedItem2 = items1.find((item) => item.id === parseInt(itemId, 10));
-
-  // console.log("selectedItem",selectedItem2);
-
-  // if (selectedItem2) {
-  //   console.log("selectedItem2 name", selectedItem2.name);
-  // } else {
-  //   console.log("selectedItem2 is not defined or does not have a name property");
-  // }
   const [formData, setFormData] = useState({
     userID: userID,
     username: '',
