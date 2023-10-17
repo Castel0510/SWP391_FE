@@ -65,6 +65,7 @@ const BookingPage = () => {
     selectedOption: selectedOption,
     selectedCheckboxes: [],
     category: selectedItem2 ? selectedItem2.category : '',
+    status: 'ONGOING', 
   });
 
   const options = [];

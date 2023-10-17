@@ -38,6 +38,8 @@ const BookingPage = () => {
     note: '',
     price: '',
     category: selectedItem2 ? selectedItem2.category : '',
+ status: 'ONGOING', 
+
   });
 
   useEffect(() => {

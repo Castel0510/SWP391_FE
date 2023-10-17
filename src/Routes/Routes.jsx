@@ -19,6 +19,7 @@ import BookingPageHotel from "../Pages/Service/BookingHotel";
 import BookingPageMedical from "../Pages/Service/BookingMedical";
 
 
+import OrderDetailPage from "../Pages/OrderHistoryPage/OrderDetailPage";
 
 
 export const routes = [
@@ -110,6 +111,11 @@ export const routes = [
   {
     path: "/order",
     page: OrderHistoryPage,
+    isShowHeaderFooter: true,
+  },
+  {
+    path: "/order-detail/:orderId",
+    page: OrderDetailPage,
     isShowHeaderFooter: true,
   },
   {

@@ -39,6 +39,7 @@ const BookingPage = () => {
   const [selectedOption, setSelectedOption] = useState('');
   const [checkInError, setCheckInError] = useState(null);
   const [checkOutError, setCheckOutError] = useState(null);
+  
   const [selectedCheckboxes, setSelectedCheckboxes] = useState([]);
   // const selectedItem = items.find((item) => item.id === parseInt(itemId, 10));
 
@@ -65,8 +66,9 @@ const BookingPage = () => {
     selectedOption: selectedOption,
     selectedCheckboxes: [],
     category: selectedItem2 ? selectedItem2.category : '',
+    status: 'ONGOING', 
   });
-
+  
   const options = [];
 
   if (selectedItem2) {
@@ -119,10 +121,10 @@ const BookingPage = () => {
         setCheckOutError('Check-out date cannot be in the past');
       } else if (selectedDate > currentDate && selectedDate <= addDays(currentDate, 30)) {
         setCheckOutError(null);
-      }else {
+      } else {
         setCheckOutError('Check-out date must be within 30 days from today');
       }
-    } 
+    }
 
     setFormData({
       ...formData,
@@ -215,13 +217,13 @@ const BookingPage = () => {
     const dataToSend = updatedFormData;
 
     if (checkInError || checkOutError) {
-      
+
       toast.error('Please check your information again');
       return;
     }
     console.log(categoryData);
 
-    
+
 
     fetch('https://64b1e204062767bc4826ae59.mockapi.io/da/Nhasx', {
       method: 'POST',
@@ -417,21 +419,8 @@ const BookingPage = () => {
             ))}
           </select>
         </div>
-        <div className="form-input">
-          <label>Select Additional Services:</label>
-          {checkboxOptions.map((checkbox) => (
-            <label key={checkbox.id} className="checkbox-label">
-              <input
-                type="checkbox"
-                id={checkbox.id}
-                onChange={handleCheckboxChange}
-                checked={selectedCheckboxes.some((item) => item.id === checkbox.id)}
-                className="checkbox-input"
-              />
-              {checkbox.label}
-            </label>
-          ))}
-        </div>
+
+
         <div className='item-price'>
           Total Price: {isNaN(totalPrice) ? '0' : `$${totalPrice}`}
         </div>
