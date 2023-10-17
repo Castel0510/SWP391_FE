@@ -56,9 +56,24 @@ const LoginPage = () => {
       if (result.payload) {
         setEmail('');
         setPassword('');
-        navigate('/');
+
+        switch (result.payload.roleName) {
+          case 'Customer':
+            navigate('/');
+            break;
+          case 'Provider':
+            navigate('/provider');
+            break;
+          case 'Admin':
+            navigate('/admin-dashboard');
+            break;
+          default:
+            navigate('/');
+            break;
+        }
       }
     });
+
   };
 
   return (

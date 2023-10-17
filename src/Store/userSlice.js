@@ -12,6 +12,16 @@ const removeUserFromLocalStorage = () => {
   localStorage.removeItem("user");
 };
 
+export const getUser = () => {
+  let user = localStorage.getItem('user');
+  if (user) {
+    user = JSON.parse(user);
+  } else {
+    user = null;
+  }
+  return user;
+}
+
 export const loginUser = createAsyncThunk(
   "user/loginUser",
   async (userCredentials) => {
