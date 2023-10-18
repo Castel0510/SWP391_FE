@@ -343,24 +343,25 @@
   }
 }
 
-.flex {
+.flex-filter  {
   display: flex;
   justify-content: center;
 
-  .form-submit-button {
-    margin: 20px auto;
-    padding: 25px 60px;
-    color: #fff;
-    background-color: #29bb66;
-    border: none;
-    border-radius: 50px;
-    font-size: 25px;
-    cursor: pointer;
-    transition: background-color 0.3s ease;
+  
+}
+.form-submit-button {
+  margin: 20px auto;
+  padding: 25px 60px;
+  color: #fff;
+  background-color: #29bb66;
+  border: none;
+  border-radius: 50px;
+  font-size: 25px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
 
-    &:hover {
-      background-color: #0a7242;
-    }
+  &:hover {
+    background-color: #0a7242;
   }
 }
 
@@ -807,7 +808,7 @@ form button[type="submit"]:hover {
 /* FilterContainer.css */
 
 .container-left {
-  min-width: 300px;
+  min-width: 500px;
   max-height: 500px;
   max-width: 300px;
   margin-top: 80px;

@@ -70,7 +70,7 @@ const HeaderComponent = () => {
             display: 'My Shop',
         },
         {
-            path: '/order',
+            path: '/order-provider',
             display: 'Order',
         },
         {

@@ -60,7 +60,7 @@ const MyShopPage = () => {
                         <Link
                             key={item.id}
                             to={{
-                                pathname: `/item-detail-page/${item.id}`,
+                                pathname: `/item-detail-page-provider/${item.id}`,
 
                             }}
 

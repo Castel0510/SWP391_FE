@@ -3,6 +3,7 @@ import { useEffect } from 'react';
 import { useSelector } from 'react-redux';
 import OrderDetailPage from './OrderDetailPage';
 import { Navigate, useNavigate , } from 'react-router-dom';
+import { FaArrowLeft } from 'react-icons/fa';
 
 const OrderHistoryPage = () => {
   const user = useSelector((state) => state.user.user);
@@ -55,6 +56,9 @@ const OrderHistoryPage = () => {
   }
   return (
     <>
+       <button onClick={() => window.history.back()} className="back-button">
+        <FaArrowLeft />
+      </button>
       <div className="min-h-[320px] p-8 bg-white shadow-md rounded my-10 mx-auto">
         <div className="text-center font-bold">ORDER HISTORY</div>
 

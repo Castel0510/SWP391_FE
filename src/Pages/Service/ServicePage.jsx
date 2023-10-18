@@ -29,10 +29,10 @@ const ServicePage = () => {
     <div>
       <HeroComponent />
       <div className='h-fit'>
-        <div className='flex-1 category'>
+        <div className='flex-filter  category'>
           <CategoryFilter onCategoryChange={handleCategoryChange} />
         </div>
-        <div className='flex '>
+        <div className='flex-filter '>
           <FilterContainer onFilterChange={handleFilterChange} selectedFilters={selectedFilters} />
           <div className='w-9/12 mt-20 border-black rounded-2xl'>
             <ItemGallery
