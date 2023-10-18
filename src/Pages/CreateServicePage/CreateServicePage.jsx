@@ -199,103 +199,103 @@ const CreateServicePage = () => {
                                 </div>
 
                                 <FieldArray name="sizeData">
-  {({ push, remove }) => (
-    <div>
-      <div className="flex mt-10">
-        <div className="flex flex-col mb-4">
-          <label htmlFor="size" className="font-bold mb-2">
-            Size
-          </label>
-          <Field
-            as="select"
-            name="size"
-            className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
-          >
-            <option value="">Select a size</option>
-            <option
-              value="Small"
-              disabled={values.sizeData.some((data) => data.size === "Small")}
-            >
-              Small
-            </option>
-            <option
-              value="Medium"
-              disabled={values.sizeData.some((data) => data.size === "Medium")}
-            >
-              Medium
-            </option>
-            <option
-              value="Large"
-              disabled={values.sizeData.some((data) => data.size === "Large")}
-            >
-              Large
-            </option>
-          </Field>
-        </div>
+                                    {({ push, remove }) => (
+                                        <div>
+                                            <div className="flex mt-10">
+                                                <div className="flex flex-col mb-4">
+                                                    <label htmlFor="size" className="font-bold mb-2">
+                                                        Size
+                                                    </label>
+                                                    <Field
+                                                        as="select"
+                                                        name="size"
+                                                        className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
+                                                    >
+                                                        <option value="">Select a size</option>
+                                                        <option
+                                                            value="Small"
+                                                            disabled={values.sizeData.some((data) => data.size === "Small")}
+                                                        >
+                                                            Small
+                                                        </option>
+                                                        <option
+                                                            value="Medium"
+                                                            disabled={values.sizeData.some((data) => data.size === "Medium")}
+                                                        >
+                                                            Medium
+                                                        </option>
+                                                        <option
+                                                            value="Large"
+                                                            disabled={values.sizeData.some((data) => data.size === "Large")}
+                                                        >
+                                                            Large
+                                                        </option>
+                                                    </Field>
+                                                </div>
 
-        <div className="overflow-hidden mx-5">
-          <div className="flex flex-col mb-4">
-            <label htmlFor="sizePrice" className="font-bold mb-2">
-              Size Price
-            </label>
-            <Field
-              name="sizePrice"
-              placeholder="Enter price for selected size"
-              className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
-            />
-            <ErrorMessage
-              name="sizePrice"
-              component="div"
-              className="text-red-500"
-            />
-          </div>
-        </div>
-        <button
-          type="button"
-          className="float-right cursor-pointer focus:outline-none text-white bg-green-700 hover:bg-green-800 focus:ring-4 focus:ring-green-300 font-medium rounded-lg text-base px-5 py-2.5 mr-2 mb-2 dark:bg-green-600 dark:hover:bg-green-700 dark:focus:ring-green-800 max-h-11 mt-[25px]"
-          onClick={() => {
-            const exists = values.sizeData.some((data) => data.size === values.size);
-            if (!exists) {
-              push({ size: values.size, sizePrice: values.sizePrice });
-              setFieldValue("size", "");
-              setFieldValue("sizePrice", "");
-            }
-          }}
-          disabled={values.size === "" || values.sizePrice === ""}
-        >
-          <BsPlusCircle />
-        </button>
-      </div>
-      {values.sizeData.map((data, index) => (
-        <div key={index} className="overflow-hidden flex my-7">
-          <div className="flex flex-col mb-4">
-            <Field
-              name={`sizeData.${index}.size`}
-              value={data.size}
-              className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
-              readOnly
-            />
-          </div>
-          <div className="flex flex-col mb-4 mx-6">
-            <Field
-              name={`sizeData.${index}.sizePrice`}
-              value={data.sizePrice }
-              className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
-              readOnly
-            />
-          </div>
-          <button
-            type="button"
-            className="float-right cursor-pointer focus:outline-none text-white bg-red-700 hover:bg-red-800 focus:ring-4 focus:ring-red-300 font-medium rounded-lg text-base px-5 mr-2 mb-2 dark:bg-red-600 dark:hover:bg-red-700 dark:focus:ring-red-900"
-            onClick={() => remove(index)}
-          >
-            <BsTrash />
-          </button>
-        </div>
-      ))}
-    </div>
-  )}
-</FieldArray>
+                                                <div className="overflow-hidden mx-5">
+                                                    <div className="flex flex-col mb-4">
+                                                        <label htmlFor="sizePrice" className="font-bold mb-2">
+                                                            Size Price
+                                                        </label>
+                                                        <Field
+                                                            name="sizePrice"
+                                                            placeholder="Enter price for selected size"
+                                                            className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
+                                                        />
+                                                        <ErrorMessage
+                                                            name="sizePrice"
+                                                            component="div"
+                                                            className="text-red-500"
+                                                        />
+                                                    </div>
+                                                </div>
+                                                <button
+                                                    type="button"
+                                                    className="float-right cursor-pointer focus:outline-none text-white bg-green-700 hover:bg-green-800 focus:ring-4 focus:ring-green-300 font-medium rounded-lg text-base px-5 py-2.5 mr-2 mb-2 dark:bg-green-600 dark:hover:bg-green-700 dark:focus:ring-green-800 max-h-11 mt-[25px]"
+                                                    onClick={() => {
+                                                        const exists = values.sizeData.some((data) => data.size === values.size);
+                                                        if (!exists) {
+                                                            push({ size: values.size, sizePrice: values.sizePrice });
+                                                            setFieldValue("size", "");
+                                                            setFieldValue("sizePrice", "");
+                                                        }
+                                                    }}
+                                                    disabled={values.size === "" || values.sizePrice === ""}
+                                                >
+                                                    <BsPlusCircle />
+                                                </button>
+                                            </div>
+                                            {values.sizeData.map((data, index) => (
+                                                <div key={index} className="overflow-hidden flex my-7">
+                                                    <div className="flex flex-col mb-4">
+                                                        <Field
+                                                            name={`sizeData.${index}.size`}
+                                                            value={data.size}
+                                                            className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
+                                                            readOnly
+                                                        />
+                                                    </div>
+                                                    <div className="flex flex-col mb-4 mx-6">
+                                                        <Field
+                                                            name={`sizeData.${index}.sizePrice`}
+                                                            value={data.sizePrice}
+                                                            className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
+                                                            readOnly
+                                                        />
+                                                    </div>
+                                                    <button
+                                                        type="button"
+                                                        className="float-right cursor-pointer focus:outline-none text-white bg-red-700 hover:bg-red-800 focus:ring-4 focus:ring-red-300 font-medium rounded-lg text-base px-5 mr-2 mb-2 dark:bg-red-600 dark:hover:bg-red-700 dark:focus:ring-red-900"
+                                                        onClick={() => remove(index)}
+                                                    >
+                                                        <BsTrash />
+                                                    </button>
+                                                </div>
+                                            ))}
+                                        </div>
+                                    )}
+                                </FieldArray>
                                 <ErrorMessage
                                     name="sizeData"
                                     component="div"
