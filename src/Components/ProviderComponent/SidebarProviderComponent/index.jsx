@@ -20,7 +20,7 @@ const SidebarProviderComponent = () => {
     },
     {
       icon: <AiOutlineFileDone className='w-5 h-5' />,
-      path: '/order',
+      path: '/order-status',
       display: 'Order',
     },
     {
@@ -49,7 +49,7 @@ const SidebarProviderComponent = () => {
             <li key={index}>
               <NavLink
                 to={item.path}
-                className={`flex items-center p-2 text-gray-900 rounded-lg group ${activeLink === item.path ? 'bg-emerald-500' : ''
+                className={`flex items-center p-2 text-gray-900 rounded-lg group ${activeLink === item.path ? 'bg-green-700' : ''
                   }`}
                 onClick={() => setActiveLink(item.path)}
               >

@@ -24,6 +24,7 @@ import DashboardPage from '../Pages/AdminPage/DashboardPage'
 import AccountManagementPage from '../Pages/AdminPage/AccountManagementPage'
 import ProviderManagementPage from '../Pages/AdminPage/ProviderManagementPage'
 import ReportPage from '../Pages/AdminPage/ReportPage'
+import ProviderOrderStatus from "../Pages/Provider/ProviderOrderStatus/ProviderOrderStatus";
 
 import BookingPageSpa from "../Pages/Service/BookingSpa";
 import BookingPageHotel from "../Pages/Service/BookingHotel";
@@ -146,6 +147,8 @@ export const routes = [
     {
         path: '/order-provider',
         page: OrderHistoryPage,
+        path: '/order-status',
+        page: ProviderOrderStatus,
         isShowSidebarProvider: true
     },
     {
