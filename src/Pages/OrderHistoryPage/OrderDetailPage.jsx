@@ -41,7 +41,7 @@ const OrderDetailPage = () => {
       <p><strong>Detail:</strong> {order.note}</p>
       <p><strong>Email:</strong> {order.email}</p>
       <p><strong>Phone:</strong> {order.phone}</p>
-      {/* <p><strong>Reason:</strong> {order.reason}</p> */}
+      <p><strong>Reason:</strong> {order.reason}</p>
       <p><strong>Bird Size:</strong> {order.size.toUpperCase()}</p>
       <p><strong>Price:</strong> {order.price}</p>
       <p><strong>Status:</strong> {order.status}</p>
