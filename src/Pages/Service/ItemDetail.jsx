@@ -1,6 +1,5 @@
-import React, { useEffect, useState, useMemo } from "react";
-import { Link, useLocation, useParams } from "react-router-dom";
-import Rating from "./Rating";
+import React, { useEffect, useState } from "react";
+import { useParams } from "react-router-dom";
 import { FaArrowLeft } from "react-icons/fa";
 import YouTube from "react-youtube";
 import LoadingSpinner from "./LoadingSpinner";
@@ -9,38 +8,43 @@ import { useSelector } from "react-redux";
 
 const ItemDetailPage = () => {
   const [items, setItems] = useState([]);
-  const [selectedItem, setSelectedItem] = useState(null);
+  const [loading, setLoading] = useState(true);
+
   const { itemId } = useParams();
   const navigate = useNavigate();
   const user = useSelector((state) => state.user.user);
   const userID = user ? user.id : null;
-  console.log(userID);
-
-
-
-  // useEffect(() => {
-  //   if (!user) {
-
-  //     navigate("/login");
-  //     return;
-  //   }
-
-  // })
+  const [providerData, setProviderData] = useState(null);
+  const [selectedItem, setSelectedItem] = useState(null);
   useEffect(() => {
+    const apiUrl = "https://63692ab028cd16bba716cff0.mockapi.io/login";
 
+    fetch(apiUrl)
+      .then((response) => response.json())
+      .then((data) => {
+        setItems(data);
+        setLoading(false);
+      })
+      .catch((error) => {
+        console.error("Error fetching data:", error);
+        setLoading(false);
+      });
+  }, []);
+
+  useEffect(() => {
     const fetchData = async () => {
       try {
         const response = await fetch(
-          "https://64b1e204062767bc4826ae59.mockapi.io/da/Product"
+          "https://63692ab028cd16bba716cff0.mockapi.io/login"
         );
         if (!response.ok) {
-          throw new Error("Failed to fetch data");
+          throw new Error("Failed to fetch item data");
         }
         const data = await response.json();
         const item = data.find((item) => item.id === parseInt(itemId, 10));
         setSelectedItem(item);
       } catch (error) {
-        console.error("Error fetching data:", error);
+        console.error("Error fetching item data:", error);
       }
     };
 
@@ -48,52 +52,103 @@ const ItemDetailPage = () => {
   }, [itemId, user, navigate]);
 
   useEffect(() => {
-    if (items.length > 0 && itemId) {
-      const selectedItem = items.find(
-        (item) => item.id === parseInt(itemId, 10)
-      );
-      setSelectedItem(selectedItem);
-    }
-  }, [items, itemId]);
+    const fetchData = async () => {
+      try {
+        const response = await fetch("https://63692ab028cd16bba716cff0.mockapi.io/news");
+        if (!response.ok) {
+          throw new Error("Failed to fetch provider data");
+        }
+        const data = await response.json();
+        setProviderData(data);
+      } catch (error) {
+        console.error("Error fetching provider data:", error);
+      }
+    };
 
-  const onRate = (itemId, newRating) => {
-    console.log(`Rated item ${itemId} with rating ${newRating}`);
-  };
+    fetchData();
+  }, []);
+  useEffect(() => {
+    if (providerData) {
+      const itemsWithSameProviderID = providerData.filter(
+        (item) => item.providerID === selectedItem?.providerID
+      );
+
+      console.log("Items with the same provider ID:", itemsWithSameProviderID);
+    }
+  }, [providerData, selectedItem]);
+
+  useEffect(() => {
+    if (providerData && selectedItem && selectedItem.providerID) {
+      const itemsWithSameProviderID = providerData.filter(
+        (item) => item.id === selectedItem.providerID
+      );
+  
+      console.log("Items with the same provider ID:", itemsWithSameProviderID);
+    }
+  }, [providerData, selectedItem]);
+  
   const handleBookNow = () => {
     if (!userID) {
       navigate("/login");
     } else {
-      if (selectedItem.category === "Hotel") {
-        navigate(`/booking/hotel/${selectedItem.id}`);
-      } else if (selectedItem.category === "Spa") {
-        navigate(`/booking/spa/${selectedItem.id}`);
-      } else if (selectedItem.category === "Medical") {
-        navigate(`/booking/medical/${selectedItem.id}`);
-      }
+      const { category, id } = selectedItem;
+      const routeMap = {
+        Hotel: `/booking/hotel/${id}`,
+        Spa: `/booking/spa/${id}`,
+        Medical: `/booking/medical/${id}`,
+      };
+      navigate(routeMap[category]);
     }
   };
+  const renderProviderData = () => {
+    if (selectedItem && providerData) {
+      const provider = providerData.find((item) => item.id === selectedItem.providerID);
   
-   
+      if (provider) {
+        const itemsWithSameProvider = providerData.filter((item) => item.providerID === selectedItem.providerID);
+  
+        return (
+          <div>
+            <div className="provider-data">
+              <h2>{provider.provider}</h2>
+              <div className="provider-info">
+                <img src={provider.image} alt={provider.name} className="provider-info-image" />
+                <p>Name: {provider.name}</p>
+                <p>Phone: {provider.phone}</p>
+                <p>Email: {provider.email}</p>
+                <p>Address: {provider.address}</p>
+                <p>Rating: {provider.rating}</p>
+                <p>Number of Services: {provider.numbOfService}</p>
+                <p>Day Join: {provider.dayJoin}</p>
+                <p>Follower: {provider.follower}</p>
+              </div>
+            </div>
+            <div>
+              <h3>Items from the same provider:</h3>
+              {itemsWithSameProvider.map((item) => (
+                <div key={item.id}>
+                  <p>Name: {item.name}</p>
+                </div>
+              ))}
+            </div>
+          </div>
+        );
+      }
+    }
+    return <p>Provider data not found</p>;
+  };
+  
+
   return (
     <div className="item-detail">
       {selectedItem ? (
         <div className="detail-content">
           <div className="flex">
             <div className="image">
-              <button
-                onClick={() => window.history.back()}
-                className="back-button"
-              >
+              <button onClick={() => window.history.back()} className="back-button">
                 <FaArrowLeft />
               </button>
-              <img src={selectedItem.image} alt={selectedItem.name} />
-
-              {/* <div className="rating">
-                <Rating
-                  rating={selectedItem.rating}
-                  onRate={(newRating) => onRate(selectedItem.id, newRating)}
-                />
-              </div> */}
+              <img src={selectedItem.image} alt={selectedItem.name} className="image-img" />
             </div>
             <div className="item-info">
               <h2>{selectedItem.name}</h2>
@@ -111,10 +166,7 @@ const ItemDetailPage = () => {
                       <p className="item-detail-text">{item.value}</p>
                     </div>
                   ))}
-                  <YouTube
-                    videoId={selectedItem.videoId}
-                    className="youtube-container"
-                  />
+                  <YouTube videoId={selectedItem.videoId} className="youtube-container" />
                 </>
               ) : (
                 <div>Item not found</div>
@@ -122,12 +174,7 @@ const ItemDetailPage = () => {
             </div>
           </div>
           <div className="bottom-button">
-            <button
-              className="book-now-button-2"
-              onClick={handleBookNow}
-
-            // onClick={() => navigate(`/booking/${selectedItem.id}`)}
-            >
+            <button className="book-now-button-2" onClick={handleBookNow}>
               BOOK NOW
             </button>
           </div>
@@ -135,6 +182,21 @@ const ItemDetailPage = () => {
       ) : (
         <div>
           <LoadingSpinner />
+        </div>
+      )}
+      {selectedItem && (
+        <div className="shop-detail">
+          {providerData ? (
+            <div>
+              {selectedItem.providerID !== null ? (
+                renderProviderData()
+              ) : (
+                <p>Provider data not found</p>
+              )}
+            </div>
+          ) : (
+            <p>Loading provider data...</p>
+          )}
         </div>
       )}
     </div>

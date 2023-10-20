@@ -1,11 +1,10 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState } from 'react';
 import "./service.scss";
 import { Link } from "react-router-dom";
 import Rating from "./Rating";
 import LoadingSpinner from "./LoadingSpinner";
-import { useSelector } from "react-redux";
 
-const ItemGallery = ({ category, address, onItemClick, filters }) => {
+const ItemGallery = ({ category, onItemClick, filters }) => {
   const [items, setItems] = useState([]);
   const [loading, setLoading] = useState(true);
   const [currentPage, setCurrentPage] = useState(1);
@@ -13,7 +12,7 @@ const ItemGallery = ({ category, address, onItemClick, filters }) => {
   const itemsPerPage = 10;
 
   useEffect(() => {
-    const apiUrl = "https://64b1e204062767bc4826ae59.mockapi.io/da/Product";
+    const apiUrl = "https://63692ab028cd16bba716cff0.mockapi.io/login";
 
     fetch(apiUrl)
       .then((response) => response.json())
@@ -57,6 +56,11 @@ const ItemGallery = ({ category, address, onItemClick, filters }) => {
         item.name.toLowerCase().includes(searchQuery.toLowerCase())
       );
     }
+    if (filters.service) {
+      filteredItems = filteredItems.filter(
+        (item) => item.selectedService.some((service) => service.label === filters.service)
+      );
+    }``
 
     return filteredItems;
   };

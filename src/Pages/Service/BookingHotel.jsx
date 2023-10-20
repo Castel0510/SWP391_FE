@@ -17,7 +17,7 @@ const BookingPage = () => {
   const { itemId } = useParams();
   const userID = user.id;
   useEffect(() => {
-    const apiUrl = "https://64b1e204062767bc4826ae59.mockapi.io/da/Product";
+    const apiUrl = "https://63692ab028cd16bba716cff0.mockapi.io/login";
 
     fetch(apiUrl)
       .then((response) => response.json())

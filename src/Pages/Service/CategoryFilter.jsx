@@ -1,40 +1,38 @@
 import React, { useState } from 'react';
-import '../Service/service.scss'
+import '../Service/service.scss';
 import ItemGallery from './ItemGallery';
 
 const CategoryFilter = ({ onCategoryChange }) => {
-    const [selectedCategory, setSelectedCategory] = useState("Default"); 
+    const [selectedCategory, setSelectedCategory] = useState("Default");
 
     const handleCategoryClick = (category) => {
-        setSelectedCategory(category);
-        onCategoryChange(category);
+        if (category === selectedCategory) {
+            setSelectedCategory("Default");
+            onCategoryChange(null); 
+        } else {
+            setSelectedCategory(category);
+            onCategoryChange(category);
+        }
     };
 
     return (
         <div>
-            <div className="flex flex-row">        
-                    
+            <div className="flex flex-row">
                 <button
                     onClick={() => handleCategoryClick('Hotel')}
-                    className={`category-button ${
-                        selectedCategory === 'Hotel' ? 'active' : ''
-                    }`}
+                    className={`category-button ${selectedCategory === 'Hotel' ? 'active' : ''}`}
                 >
                     Boarding
                 </button>
                 <button
                     onClick={() => handleCategoryClick('Spa')}
-                    className={`category-button ${
-                        selectedCategory === 'Spa' ? 'active' : ''
-                    }`}
+                    className={`category-button ${selectedCategory === 'Spa' ? 'active' : ''}`}
                 >
                     Grooming
                 </button>
                 <button
                     onClick={() => handleCategoryClick('Medical')}
-                    className={`category-button ${
-                        selectedCategory === 'Medical' ? 'active' : ''
-                    }`}
+                    className={`category-button ${selectedCategory === 'Medical' ? 'active' : ''}`}
                 >
                     Medical
                 </button>
