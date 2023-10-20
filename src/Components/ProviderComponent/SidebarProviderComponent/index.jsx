@@ -20,7 +20,7 @@ const SidebarProviderComponent = () => {
     },
     {
       icon: <AiOutlineFileDone className='w-5 h-5' />,
-      path: '/order',
+      path: '/order-status',
       display: 'Order',
     },
     {

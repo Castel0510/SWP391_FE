@@ -21,6 +21,7 @@ import DashboardPage from '../Pages/AdminPage/DashboardPage'
 import AccountManagementPage from '../Pages/AdminPage/AccountManagementPage'
 import ProviderManagementPage from '../Pages/AdminPage/ProviderManagementPage'
 import ReportPage from '../Pages/AdminPage/ReportPage'
+import ProviderOrderStatus from "../Pages/Provider/ProviderOrderStatus/ProviderOrderStatus";
 
 export const routes = [
     {
@@ -88,8 +89,8 @@ export const routes = [
         isShowSidebarProvider: true
     },
     {
-        path: '/order',
-        page: OrderHistoryPage,
+        path: '/order-status',
+        page: ProviderOrderStatus,
         isShowSidebarProvider: true
     },
     {
