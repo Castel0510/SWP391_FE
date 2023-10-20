@@ -102,7 +102,7 @@ const OrderHistoryPage = () => {
             >
               {item.serviceName}
             </div>
-            <div className="p-3 flex">
+            {/* <div className="p-3 flex">
               <p className="font-bold pr-1">Date order: </p> {item.checkInDate}
             </div>
             <div className="p-3 flex">
@@ -121,7 +121,7 @@ const OrderHistoryPage = () => {
                 <p className="font-bold pr-1">ID: </p> {item.id}
 
               </div>
-            )}
+            )} */}
           </div>
         ))}
       </div>

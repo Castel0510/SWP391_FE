@@ -39,14 +39,14 @@ const DropdownUser = (props) => {
     ]
 
     const providerDropdownList = [
-        {
-            path: '/withdraw-money',
-            display: 'Withdraw money',
-        },
-        {
-            path: '/profile',
-            display: 'View profile',
-        },
+        // {
+        //     path: '/withdraw-money',
+        //     display: 'Withdraw money',
+        // },
+        // {
+        //     path: '/provider-profile',
+        //     display: 'View profile',
+        // },
     ]
 
     let dropdownItems = [];

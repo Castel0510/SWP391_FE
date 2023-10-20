@@ -68,27 +68,51 @@ const BookingPage = () => {
     status: 'ONGOING', 
   });
 
+  // const options = [];
+
+  // if (selectedItem2) {
+  //   options.push({ name: 'small', label: `SMALL SIZE(5-20cm)/${selectedItem2.price}$/bird`, price: selectedItem2.price });
+  // } else {
+  //   options.push({ name: 'small', label: 'SMALL SIZE(5-20cm)/$', price: 0 });
+  // }
+
+  // options.push(
+  //   { name: 'medium', label: 'MEDIUM SIZE (20-30cm)/(200$/bird)', price: 200 },
+  //   { name: 'big', label: 'BIG SIZE(>30cm)/(300$/bird)', price: 300 }
+  // );
+
+  // const checkboxOptions = [
+  //   { id: '1', label: 'Nail($200)', price: 200 },
+  //   { id: '2', label: 'Beak Trimming($300)', price: 300 },
+  //   { id: '3', label: 'Wing Clipping($400)', price: 400 },
+
+  //   // { id: '4', label: 'Wings($500)', price: 500 },
+
+  // ];
   const options = [];
 
   if (selectedItem2) {
-    options.push({ name: 'small', label: `SMALL SIZE(5-20cm)/${selectedItem2.price}$/bird`, price: selectedItem2.price });
-  } else {
-    options.push({ name: 'small', label: 'SMALL SIZE(5-20cm)/$', price: 0 });
+    selectedItem2.size.forEach((size) => {
+      options.push({
+        name: size.name,
+        label: `${size.label}/${size.price}$/bird`,
+        price: size.price,
+      });
+    });
   }
 
-  options.push(
-    { name: 'medium', label: 'MEDIUM SIZE (20-30cm)/(200$/bird)', price: 200 },
-    { name: 'big', label: 'BIG SIZE(>30cm)/(300$/bird)', price: 300 }
-  );
+  const checkboxOptions = [];
 
-  const checkboxOptions = [
-    { id: '1', label: 'Nail($200)', price: 200 },
-    { id: '2', label: 'Beak Trimming($300)', price: 300 },
-    { id: '3', label: 'Wing Clipping($400)', price: 400 },
+  if (selectedItem2) {
+    selectedItem2.selectedService.forEach((service) => {
+      checkboxOptions.push({
+        id: service.serviceID,
+        label: `${service.label}/$${service.price}`,
+        price: service.price,
+      });
+    });
+  }
 
-    // { id: '4', label: 'Wings($500)', price: 500 },
-
-  ];
   useEffect(() => {
     if (user && user.id) {
       setFormData((prevData) => ({
