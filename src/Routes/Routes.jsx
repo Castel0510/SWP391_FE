@@ -145,8 +145,8 @@ export const routes = [
     },
     
     {
-        path: '/order-provider',
-        page: OrderHistoryPage,
+        // path: '/order-provider',
+        // page: OrderHistoryPage,
         path: '/order-status',
         page: ProviderOrderStatus,
         isShowSidebarProvider: true
