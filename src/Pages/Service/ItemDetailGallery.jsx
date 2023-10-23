@@ -39,7 +39,7 @@ const ItemDetailGallery = ({ providerId }) => {
               <img src={item.image} alt={item.name} />
             </div>
             <div className="item-name-detail">{item.name}</div>
-            <div className="item-description-detail">
+            <div className="item-description-detail leading-5">
               {item.description.length > 100
                 ? item.description.slice(0, 90) + "..."
                 : item.description}

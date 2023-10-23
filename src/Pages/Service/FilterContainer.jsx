@@ -77,6 +77,7 @@ const FilterContainer = ({ onFilterChange ,selectedCategory }) => {
 
   return (
     <div className="filter-container">
+      <h4>Location:</h4>
 
       <select onChange={(e) => handleAddressChange(e.target.value)}>
         <option value="">Any</option>
