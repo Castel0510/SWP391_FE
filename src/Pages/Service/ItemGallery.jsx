@@ -3,6 +3,8 @@ import "./service.scss";
 import { Link } from "react-router-dom";
 import Rating from "./Rating";
 import LoadingSpinner from "./LoadingSpinner";
+import '../Service/service.scss';
+
 
 const ItemGallery = ({ category, onItemClick, filters }) => {
   const [items, setItems] = useState([]);

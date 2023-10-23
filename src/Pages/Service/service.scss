@@ -152,6 +152,7 @@
   display: inline;
   margin-right: 10px;
 }
+
 .item-detail img {
   max-width: 500px;
   height: 500px;
@@ -162,9 +163,8 @@
   margin-top: 50px;
 
 }
-.image-img{
-  
-}
+
+.image-img {}
 
 .item-detail h2 {
   display: flex;
@@ -190,6 +190,7 @@
   font-weight: normal;
   color: #555;
   width: 200px;
+
   .item-detail-text {
     display: inline-block;
     width: calc(100% - 100px);
@@ -232,6 +233,7 @@
   transition: background-color 0.3s ease;
   margin-top: 30px;
 }
+
 .book-now-button-2 {
   height: 100px;
   width: 200px;
@@ -250,6 +252,7 @@
 .item-detail button:hover {
   // background-color: #16f030;
 }
+
 // .book-now-button{
 //   height: 100px;
 //   width: 200px;
@@ -347,12 +350,13 @@
   }
 }
 
-.flex-filter  {
+.flex-filter {
   display: flex;
   justify-content: center;
 
-  
+
 }
+
 .form-submit-button {
   margin: 20px auto;
   padding: 25px 60px;
@@ -603,8 +607,7 @@ form button[type="submit"]:hover {
 
 .filter-container .category-filter,
 .filter-container .price-filter,
-.filter-container .rating-filter {
-}
+.filter-container .rating-filter {}
 
 .filter-container .title {
   align-items: flex-start;
@@ -667,6 +670,7 @@ form button[type="submit"]:hover {
   gap: 10px;
   min-height: 500px;
   margin: auto;
+
   .item {
     width: 34 0px;
     border: 1px solid #ccc;
@@ -677,6 +681,7 @@ form button[type="submit"]:hover {
     min-height: 520px;
     max-height: 520px;
     margin-bottom: 0;
+
     .item-image {
       img {
         width: 100%;
@@ -726,18 +731,21 @@ form button[type="submit"]:hover {
 
         font-weight: 900;
       }
+
       .item-address {
         font-size: 15px;
         padding: 0 10px;
         margin-bottom: 20px;
         margin-top: 20px;
       }
+
       .item-price-detail {
         margin-top: 5px;
         font-size: 18px;
         font-weight: 600;
         padding: 0 10px;
       }
+
       .bottom-button {
         padding: 0 10px;
       }
@@ -754,6 +762,7 @@ form button[type="submit"]:hover {
         box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
         transition: background-color 0.3s;
         margin-right: 20px;
+
         &:hover {
           background-color: #e6830a;
         }
@@ -761,6 +770,7 @@ form button[type="submit"]:hover {
     }
   }
 }
+
 .loading-spinner {
   border: 4px solid rgba(255, 255, 255, 0.3);
   border-radius: 50%;
@@ -775,6 +785,7 @@ form button[type="submit"]:hover {
   0% {
     transform: rotate(0deg);
   }
+
   100% {
     transform: rotate(360deg);
   }
@@ -1035,7 +1046,7 @@ form button[type="submit"]:hover {
 .searchBox {
   text-align: center;
   // margin: 20px 0;
-  
+
 }
 
 .search {
@@ -1057,6 +1068,7 @@ form button[type="submit"]:hover {
 .search::placeholder {
   color: #888;
 }
+
 .shop-detail {
   background-color: #ffffff;
   padding: 20px;
@@ -1077,46 +1089,251 @@ form button[type="submit"]:hover {
   line-height: 1.5;
 }
 
-
-.provider-data {
-
-  padding: 16px;
+.provider-details {
+  display: flex;
+  flex-wrap: wrap; /* Wrap items to the next line if they don't fit in one row */
+  padding: 20px;
+  border: 1px solid #e0e0e0;
   border-radius: 8px;
-    text-align: center;
+  background-color: #fff;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
 
+.provider-details-left {
+  flex: 1; /* Take up one full row */
+  display: flex;
+  flex-direction: column; /* Stack items vertically */
+  align-items: flex-start; /* Align items to the start (left) */
+  padding-right: 20px; /* Add some spacing to the right of the left section */
+}
+
+.provider-image {
+  width: 150px;
+  height: 150px;
+  margin-bottom: 20px;
+  border-radius: 50%;
+  overflow: hidden;
+
+  img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+}
+
+.provider-info {
+  width: 100%;
   h2 {
-    font-size: 1.5rem;
-    margin-bottom: 16px;
+    font-size: 24px;
+    margin-bottom: 10px;
   }
 
-  .provider-info {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    .provider-info-image {
-      width: 100px !important;
-      height: 100px !important;
-      border-radius: 50% !important;
-      margin-right: 16px !important;
-    }
-    
-    
-
-    .provider-details {
-      text-align: left !important;;
-      display: flex !important;;
-      flex-direction: column !important;;
-      align-items: flex-start !important;;
-  
-      .provider-detail {
-        margin: 8px 0 !important;;
-        font-weight: 500 !important;;
-  
-        &:first-child {
-          font-weight: 700 !important;;
-          font-size: 18px !important;; 
-        }
-      }}
+  p {
+    font-size: 16px;
+    margin: 5px 0;
   }
-  
+}
+
+.gallery {
+  flex: 1; /* Take up one full row */
+}
+
+/* Additional styling for .gallery if needed */
+
+
+/* Additional styling for .gallery if needed */
+
+
+// .item-gallery-detail{  
+//   display: flex !important;;
+//   flex-direction: column !important;;
+//   align-items: center;
+//   justify-content: center;
+//   min-height: 100vh;
+//   max-width: 80%;
+//   margin: 30px auto;
+//   padding: 20px;
+//   justify-content: flex-start !important;
+//   align-items: center !important;; ;
+//   display: flex !important;; ;
+//   flex-wrap: wrap !important;; ;
+//   gap: 10px !important;; ;
+//   min-height: 500px!important;; 
+//   margin: auto !important;; ;
+
+//   .item-content-detail{
+//     width: 340px !important;; ;;
+//     border: 1px solid #ccc;
+//     border-radius: 15px !important;; ;;
+//     overflow: hidden !important;; ;;
+//     box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+//     max-width: 270px !important;; ;;
+//     // min-height: 520px;
+//     // max-height: 520px!important;; ;;
+//     // margin-bottom: 0;
+//     .item-image-detail{
+//       img {
+        // width: 100% !important;;
+        // height: 300px !important;;; 
+        // object-fit: cover !important;; ;;
+        // border-radius: 20px !important;; ;;
+        // justify-content: center;
+        // align-items: center;
+//       }
+//     }
+
+//     .item-content-detail {
+//       .item-name-detail{
+//         font-size: 1800px !important;; ;;
+//         font-weight: bold !important;; ;;
+//         margin-top: 10px !important;;
+//         padding: 0 5px !important;;
+//         max-height: 30px !important;;
+//         min-height: 30px !important;;
+//       }
+
+//       .item-description-detail {
+//         font-size: 14px;
+//         color: #666;
+//         margin-top: 0;
+//         padding: 0 10px;
+//         height: 40px;
+//       }
+
+//       .item-rating-detail {
+//         font-size: 0px;
+//         font-weight: bold;
+//         color: #ff9900;
+//         padding: 0 10px;
+//       }
+
+//       .item-details-detail {
+//         display: flex;
+//         justify-content: center;
+//         align-items: center;
+//         padding: 0 10px;
+//       }
+
+//       .item-price-detail {
+//         font-size: 18px;
+//         padding: 0 10px;
+
+//         font-weight: 900;
+//       }
+//       .item-address-detail {
+//         font-size: 15px;
+//         padding: 0 10px;
+//         margin-bottom: 20px;
+//         margin-top: 20px;
+//       }
+//       .item-price-detail-detail {
+//         margin-top: 5px;
+//         font-size: 18px;
+//         font-weight: 600;
+//         padding: 0 10px;
+//       }
+//       .bottom-button-detail {
+//         padding: 0 10px;
+//       }
+
+//       .book-now-button-detail {
+//         background-color: #ff9900 !important;;
+//         color: #fff;
+//         border: none;
+//         border-radius: 4px;
+//         padding: 8px 16px;
+//         font-size: 14px;
+//         cursor: pointer;
+//         box-shadow: #000;
+//         box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
+//         transition: background-color 0.3s;
+//         margin-right: 20px;
+//         &:hover  {
+//           background-color: #e6830a !important;;
+//         }
+//       }
+//     }
+//   }
+// }
+.item-gallery-detail {
+  display: flex;
+  overflow-x: auto; 
+  gap: 20px;
+}
+
+.item-content-detail {
+  border: 1px solid #e4e4e4;
+  border-radius: 5px;
+  padding: 10px; 
+  background-color: #fff;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  transition: transform 0.2s;
+  cursor: pointer;
+  min-width: 200px; 
+  max-width: 300px; 
+  text-align: center; 
+
+  &:hover {
+    transform: translateY(-5px);
+  }
+}
+
+.item-image-detail img {
+   width: 100% !important;;
+        height: 300px !important;;; 
+        object-fit: cover !important;; ;;
+        border-radius: 20px !important;; ;;
+        justify-content: center;
+        align-items: center;
+}
+
+.item-name-detail {
+  font-size: 14px; 
+  margin: 10px 0;
+}
+.item-image-detail {
+  max-width: 100%;
+  height: auto;
+}
+
+.item-name-detail {
+  font-size: 20px;
+  font-weight: bold;
+  margin: 10px 0;
+}
+
+.item-description-detail {
+  font-size: 16px;
+  color: #555;
+}
+
+.item-rating-detail {
+  margin: 10px 0;
+}
+
+.item-price-detail-detail {
+  font-size: 18px;
+  font-weight: bold;
+  color: #f00;
+  /* Change the color to your preference */
+}
+
+.book-now-button-detail {
+  background-color: #007bff;
+  color: #fff;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 5px;
+  font-size: 16px;
+  cursor: pointer;
+
+  &:hover {
+    background-color: #0056b3;
+  }
+}
+
+.item-address-detail {
+  font-size: 14px;
+  color: #888;
+  margin-top: 10px;
 }

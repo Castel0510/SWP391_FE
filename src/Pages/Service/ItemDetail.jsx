@@ -5,6 +5,7 @@ import YouTube from "react-youtube";
 import LoadingSpinner from "./LoadingSpinner";
 import { useNavigate } from "react-router-dom";
 import { useSelector } from "react-redux";
+import ItemDetailGallery from "./ItemDetailGallery";
 
 const ItemDetailPage = () => {
   const [items, setItems] = useState([]);
@@ -82,11 +83,11 @@ const ItemDetailPage = () => {
       const itemsWithSameProviderID = providerData.filter(
         (item) => item.id === selectedItem.providerID
       );
-  
+
       console.log("Items with the same provider ID:", itemsWithSameProviderID);
     }
   }, [providerData, selectedItem]);
-  
+
   const handleBookNow = () => {
     if (!userID) {
       navigate("/login");
@@ -103,16 +104,18 @@ const ItemDetailPage = () => {
   const renderProviderData = () => {
     if (selectedItem && providerData) {
       const provider = providerData.find((item) => item.id === selectedItem.providerID);
-  
+
       if (provider) {
         const itemsWithSameProvider = providerData.filter((item) => item.providerID === selectedItem.providerID);
-  
+
         return (
-          <div>
-            <div className="provider-data">
-              <h2>{provider.provider}</h2>
-              <div className="provider-info">
+          <div className="provider-details">
+            <div className="provider-details-left"> 
+              <div className="provider-image">
                 <img src={provider.image} alt={provider.name} className="provider-info-image" />
+              </div>
+              <div className="provider-info">
+                <h2>{provider.provider}</h2>
                 <p>Name: {provider.name}</p>
                 <p>Phone: {provider.phone}</p>
                 <p>Email: {provider.email}</p>
@@ -123,13 +126,9 @@ const ItemDetailPage = () => {
                 <p>Follower: {provider.follower}</p>
               </div>
             </div>
-            <div>
-              <h3>Items from the same provider:</h3>
-              {itemsWithSameProvider.map((item) => (
-                <div key={item.id}>
-                  <p>Name: {item.name}</p>
-                </div>
-              ))}
+            <div className="gallery">
+              <h3></h3>
+              <ItemDetailGallery providerId={selectedItem.providerID} />
             </div>
           </div>
         );
@@ -137,7 +136,7 @@ const ItemDetailPage = () => {
     }
     return <p>Provider data not found</p>;
   };
-  
+
 
   return (
     <div className="item-detail">
@@ -195,7 +194,7 @@ const ItemDetailPage = () => {
               )}
             </div>
           ) : (
-            <p>Loading provider data...</p>
+            <LoadingSpinner />
           )}
         </div>
       )}

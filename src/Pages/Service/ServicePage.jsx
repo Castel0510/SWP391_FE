@@ -27,7 +27,7 @@ const ServicePage = () => {
 
   return (
     <div>
-      <HeroComponent />
+      {/* <HeroComponent /> */}
       <div className='h-fit'>
         <div className='flex-filter  category'>
           <CategoryFilter onCategoryChange={handleCategoryChange} />
