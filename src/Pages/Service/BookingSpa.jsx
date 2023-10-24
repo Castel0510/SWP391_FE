@@ -9,7 +9,7 @@ import { useSelector } from 'react-redux';
 
 
 
-const BookingPage = () => {
+const BookingSpa = () => {
   const [items1, setItems1] = useState([]);
   const user = useSelector((state) => state.user.user);
   const navigateTo = useNavigate();
@@ -30,9 +30,7 @@ const BookingPage = () => {
         // setLoading(false);
       });
   }, []);
-  // console.log("item 1", items);
 
-  // console.log("2items1", items1);
 
 
   const [selectedSize, setSelectedSize] = useState('');
@@ -40,17 +38,10 @@ const BookingPage = () => {
   const [checkInError, setCheckInError] = useState(null);
   const [checkOutError, setCheckOutError] = useState(null);
   const [selectedCheckboxes, setSelectedCheckboxes] = useState([]);
-  // const selectedItem = items.find((item) => item.id === parseInt(itemId, 10));
 
   const selectedItem2 = items1.find((item) => item.id === parseInt(itemId, 10));
 
-  // console.log("selectedItem",selectedItem2);
 
-  // if (selectedItem2) {
-  //   console.log("selectedItem2 name", selectedItem2.name);
-  // } else {
-  //   console.log("selectedItem2 is not defined or does not have a name property");
-  // }
   const [formData, setFormData] = useState({
     userID: userID,
     username: '',
@@ -68,27 +59,7 @@ const BookingPage = () => {
     status: 'ONGOING', 
   });
 
-  // const options = [];
 
-  // if (selectedItem2) {
-  //   options.push({ name: 'small', label: `SMALL SIZE(5-20cm)/${selectedItem2.price}$/bird`, price: selectedItem2.price });
-  // } else {
-  //   options.push({ name: 'small', label: 'SMALL SIZE(5-20cm)/$', price: 0 });
-  // }
-
-  // options.push(
-  //   { name: 'medium', label: 'MEDIUM SIZE (20-30cm)/(200$/bird)', price: 200 },
-  //   { name: 'big', label: 'BIG SIZE(>30cm)/(300$/bird)', price: 300 }
-  // );
-
-  // const checkboxOptions = [
-  //   { id: '1', label: 'Nail($200)', price: 200 },
-  //   { id: '2', label: 'Beak Trimming($300)', price: 300 },
-  //   { id: '3', label: 'Wing Clipping($400)', price: 400 },
-
-  //   // { id: '4', label: 'Wings($500)', price: 500 },
-
-  // ];
   const options = [];
 
   if (selectedItem2) {
@@ -478,4 +449,4 @@ const BookingPage = () => {
   );
 };
 
-export default BookingPage;
+export default BookingSpa;

@@ -109,28 +109,40 @@ const ItemDetailPage = () => {
         const itemsWithSameProvider = providerData.filter((item) => item.providerID === selectedItem.providerID);
 
         return (
-          <div className="provider-details">
-            <div className="provider-details-left"> 
-              <div className="provider-image">
-                <img src={provider.image} alt={provider.name} className="provider-info-image" />
+          <div class="provider-details">
+            <div class="provider-details-information">
+              <div class="provider-image">
+                <img src={provider.image} alt={provider.name} class="provider-info-image" />
               </div>
-              <div className="provider-info">
+              <div class="provider-info">
                 <h2>{provider.provider}</h2>
-                <p>Name: {provider.name}</p>
-                <p>Phone: {provider.phone}</p>
-                <p>Email: {provider.email}</p>
-                <p>Address: {provider.address}</p>
-                <p>Rating: {provider.rating}</p>
-                <p>Number of Services: {provider.numbOfService}</p>
-                <p>Day Join: {provider.dayJoin}</p>
-                <p>Follower: {provider.follower}</p>
+                <div class="info-row">
+                  <div class="info-col">
+                    <p>Name: {provider.name}</p>
+                    <p>Phone: {provider.phone}</p>
+                    <p>Email: {provider.email}</p>
+                  </div>
+                  <div class="info-col">
+                    <p>Address: {provider.address}</p>
+                    <p>Rating: {provider.rating}</p>
+                    <p>Number of Services: {provider.numbOfService}</p>
+                  </div>
+                </div>
+                <div class="info-row">
+                  <div class="info-col">
+                    <p>Day Join: {provider.dayJoin}</p>
+                    <p>Follower: {provider.follower}</p>
+                  </div>
+                </div>
               </div>
             </div>
-            <div className="gallery">
-              <h3></h3>
+            <div class="gallery">
+              
               <ItemDetailGallery providerId={selectedItem.providerID} />
             </div>
           </div>
+
+
         );
       }
     }

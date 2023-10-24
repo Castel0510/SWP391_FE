@@ -9,7 +9,7 @@ import { useSelector } from 'react-redux';
 
 
 
-const BookingPage = () => {
+const BookingHotel = () => {
   const [items1, setItems1] = useState([]);
   const user = useSelector((state) => state.user.user);
   const navigateTo = useNavigate();
@@ -62,24 +62,27 @@ const BookingPage = () => {
   const options = [];
 
   if (selectedItem2) {
-    options.push({ name: 'small', label: `SMALL SIZE(5-20cm)/${selectedItem2.price}$/bird`, price: selectedItem2.price });
-  } else {
-    options.push({ name: 'small', label: 'SMALL SIZE(5-20cm)/$', price: 0 });
+    selectedItem2.size.forEach((size) => {
+      options.push({
+        name: size.name,
+        label: `${size.label}/${size.price}$/bird`,
+        price: size.price,
+      });
+    });
   }
 
-  options.push(
-    { name: 'medium', label: 'MEDIUM SIZE (20-30cm)/(200$/bird)', price: 200 },
-    { name: 'big', label: 'BIG SIZE(>30cm)/(300$/bird)', price: 300 }
-  );
+  const checkboxOptions = [];
 
-  const checkboxOptions = [
-    { id: '1', label: 'Nail($200)', price: 200 },
-    { id: '2', label: 'Beak Trimming($300)', price: 300 },
-    { id: '3', label: 'Wing Clipping($400)', price: 400 },
+  if (selectedItem2) {
+    selectedItem2.selectedService.forEach((service) => {
+      checkboxOptions.push({
+        id: service.serviceID,
+        label: `${service.label}/$${service.price}`,
+        price: service.price,
+      });
+    });
+  }
 
-    // { id: '4', label: 'Wings($500)', price: 500 },
-
-  ];
   useEffect(() => {
     if (user && user.id) {
       setFormData((prevData) => ({
@@ -299,23 +302,9 @@ const BookingPage = () => {
   };
 
 
-  // console.log("formdata", formData);
-  // console.log(userID);
-  // console.log("selectedItem2", selectedItem2.category);
 
   return (
     <div className="form-container">
-      {/* <div className="user-info">
-        <h3>User Information:</h3>
-        {user ? (
-          <div>
-            <p>Name: {user.fullName}</p>
-            <p>Email: {user.email}</p>
-          </div>
-        ) : (
-          <p>User information not available</p>
-        )}
-      </div> */}
       <button onClick={() => window.history.back()} className="back-button">
         <FaArrowLeft />
       </button>
@@ -431,4 +420,4 @@ const BookingPage = () => {
   );
 };
 
-export default BookingPage;
+export default BookingHotel;

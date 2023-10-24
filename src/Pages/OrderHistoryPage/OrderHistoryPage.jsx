@@ -31,6 +31,8 @@ const OrderHistoryPage = () => {
 
   const getStatusBackgroundColor = (status) => {
     switch (status) {
+      case 'WAIT':
+        return 'bg-yellow-500';
       case 'ONGOING':
         return 'bg-yellow-300';
       case 'CANCEL':
@@ -70,6 +72,12 @@ const OrderHistoryPage = () => {
           >
             All
           </button>
+          <button
+            className={`bg-yellow-500 hover:bg-yellow-900 text-black font-bold py-2 px-4 rounded ml-5 ${selectedStatus === 'ONGOING' ? 'bg-yellow-500' : ''
+              }`}
+            onClick={() => setSelectedStatus('WAIT')}
+          >
+WAIT          </button>
           <button
             className={`bg-yellow-300 hover:bg-yellow-500 text-black font-bold py-2 px-4 rounded ml-5 ${selectedStatus === 'ONGOING' ? 'bg-yellow-500' : ''
               }`}

@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 
-const FilterContainer = ({ onFilterChange ,selectedCategory }) => {
+const FilterContainer = ({ onFilterChange, selectedCategory }) => {
   const [selectedPriceSort, setSelectedPriceSort] = useState('');
   const [selectedRating, setSelectedRating] = useState(0);
   const [selectedAddress, setSelectedAddress] = useState('');
@@ -16,6 +16,17 @@ const FilterContainer = ({ onFilterChange ,selectedCategory }) => {
       .then((response) => response.json())
       .then((data) => {
         setItems(data);
+        // Extract unique service labels here
+        const uniqueServiceLabels = new Set();
+        data.forEach((item) => {
+          if (item.selectedService && Array.isArray(item.selectedService)) {
+            item.selectedService.forEach((service) => {
+              uniqueServiceLabels.add(service.label);
+            });
+          }
+        });
+        setServiceOptions(Array.from(uniqueServiceLabels));
+
         setLoading(false);
       })
       .catch((error) => {
@@ -23,29 +34,7 @@ const FilterContainer = ({ onFilterChange ,selectedCategory }) => {
         setLoading(false);
       });
   }, []);
-  items.forEach((item) => {
-    if (item.selectedService && Array.isArray(item.selectedService)) {
-      item.selectedService.forEach((service) => {
-        serviceOptions.push(service.label);
-      });
-    }
-  });
 
-  useEffect(() => {
-    if (selectedCategory) {
-      const filteredData = items.filter((item) => item.category === selectedCategory);
-
-      const uniqueServiceSet = new Set();
-      filteredData.forEach((item) => {
-        item.selectedService.forEach((service) => {
-          uniqueServiceSet.add(service.label);
-        });
-      });
-
-      const uniqueServiceArray = [...uniqueServiceSet];
-      setServiceOptions(uniqueServiceArray);
-    }
-  }, [selectedCategory, items]);
   const handlePriceSortChange = (sort) => {
     setSelectedPriceSort(sort);
     onFilterChange({ priceSort: sort, rating: selectedRating, address: selectedAddress });
@@ -64,6 +53,7 @@ const FilterContainer = ({ onFilterChange ,selectedCategory }) => {
       address: address,
     });
   };
+
   const handleServiceChange = (service) => {
     setSelectedService(service);
     onFilterChange({
@@ -74,42 +64,65 @@ const FilterContainer = ({ onFilterChange ,selectedCategory }) => {
     });
   };
 
+  const handleClearFilters = () => {
+    setSelectedPriceSort('');
+    setSelectedRating(0);
+    setSelectedAddress('');
+    setSelectedService('');
+    onFilterChange({
+      priceSort: '',
+      rating: 0,
+      address: '',
+      service: '',
+    });
+  };
 
   return (
     <div className="filter-container">
-      <h4>Location:</h4>
-
-      <select onChange={(e) => handleAddressChange(e.target.value)}>
-        <option value="">Any</option>
-        <option value="Ha Noi">Ha Noi</option>
-        <option value="Ho Chi Minh">Ho Chi Minh</option>
-      </select>
-      <h4>Price:</h4>
-      <select value={selectedPriceSort} onChange={(e) => handlePriceSortChange(e.target.value)}>
-        <option value="increase">Increase</option>
-        <option value="decrease">Decrease</option>
-      </select>
-      <h4>Rating:</h4>
-      <select value={selectedRating} onChange={(e) => handleRatingChange(parseInt(e.target.value))}>
-        <option value={0}>Any Rating</option>
-        <option value={1}>1 Star</option>
-        <option value={2}>2 Stars</option>
-        <option value={3}>3 Stars</option>
-        <option value={4}>4 Stars</option>
-        <option value={5}>5 Stars</option>
-      </select>
-      <h4>Service:</h4>
-      <select
-        onChange={(e) => handleServiceChange(e.target.value)}
-        value={selectedService}
-      >
-        <option value="">Any</option>
-        {serviceOptions.map((service, index) => (
-          <option key={index} value={service}>
-            {service}
-          </option>
-        ))}
-      </select>
+      <div className="filter-option">
+        <label>Location:</label>
+        <select onChange={(e) => handleAddressChange(e.target.value)}>
+          <option value="">Any</option>
+          <option value="Ha Noi">Ha Noi</option>
+          <option value="Ho Chi Minh">Ho Chi Minh</option>
+        </select>
+      </div>
+      <div className="filter-option">
+        <label>Price:</label>
+        <select value={selectedPriceSort} onChange={(e) => handlePriceSortChange(e.target.value)}>
+          <option value="">Any</option>
+          <option value="increase">Increase</option>
+          <option value="decrease">Decrease</option>
+        </select>
+      </div>
+      <div className="filter-option">
+        <label>Rating:</label>
+        <select value={selectedRating} onChange={(e) => handleRatingChange(parseInt(e.target.value))}>
+          <option value={0}>Any Rating</option>
+          <option value={1}>1 Star</option>
+          <option value={2}>2 Stars</option>
+          <option value={3}>3 Stars</option>
+          <option value={4}>4 Stars</option>
+          <option value={5}>5 Stars</option>
+        </select>
+      </div>
+      <div className="filter-option">
+        <label>Service:</label>
+        <select
+          onChange={(e) => handleServiceChange(e.target.value)}
+          value={selectedService}
+        >
+          <option value="">Any</option>
+          {serviceOptions.map((service, index) => (
+            <option key={index} value={service}>
+              {service}
+            </option>
+          ))}
+        </select>
+      </div>
+      <button className="clear-filters-button" onClick={handleClearFilters}>
+        Clear choices
+      </button>
     </div>
   );
 };

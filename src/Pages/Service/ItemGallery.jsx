@@ -113,8 +113,8 @@ const ItemGallery = ({ category, onItemClick, filters }) => {
               <div className="item-name">{item.name}</div>
 
               <div className="item-description">
-                {item.description.length > 100
-                  ? item.description.slice(0, 90) + "..."
+                {item.description.length > 50
+                  ? item.description.slice(0, 65) + "..."
                   : item.description}
               </div>
 

@@ -40,8 +40,8 @@ const ItemDetailGallery = ({ providerId }) => {
             </div>
             <div className="item-name-detail">{item.name}</div>
             <div className="item-description-detail leading-5">
-              {item.description.length > 100
-                ? item.description.slice(0, 90) + "..."
+              {item.description.length > 50
+                ? item.description.slice(0, 50) + "..."
                 : item.description}
             </div>
             <div className="item-rating-detail">
