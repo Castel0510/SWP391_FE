@@ -12,28 +12,54 @@ const removeUserFromLocalStorage = () => {
   localStorage.removeItem("user");
 };
 
+const saveUserInfoToLocalStorage = (user) => {
+  localStorage.setItem("userInfo", JSON.stringify(user));
+};
+
+const removeUserInfoFromLocalStorage = () => {
+  localStorage.removeItem("userInfo");
+};
+
 export const getUser = () => {
-  let user = localStorage.getItem('user');
+  let user = localStorage.getItem("user");
   if (user) {
     user = JSON.parse(user);
   } else {
     user = null;
   }
   return user;
-}
+};
+
+export const getUserInfoInLocalStorage = () => {
+  let user = localStorage.getItem("userInfo");
+  if (user) {
+    user = JSON.parse(user);
+  } else {
+    user = null;
+  }
+  return user;
+};
 
 export const loginUser = createAsyncThunk(
   "user/loginUser",
   async (userCredentials) => {
-    //vì chưa có api nên sài tạm như thế này, sau này có thì sẽ làm kĩ hơn
     const response = await axios.post(
-      `${LINK_API}/api/auth/login`,
+      `${LINK_API}/api/User/Login`,
       userCredentials
     );
 
-    const token = response.data.accessToken;
-    const user = jwt_decode(token).user;
+    const token = response.data.result;
+    const user = jwt_decode(token);
     saveUserToLocalStorage(user);
+
+    if (response.status === 200) {
+      const id = user.Id;
+      const infoResponse = await axios.get(
+        `${LINK_API}/api/User/Info?id=${id}`
+      );
+      saveUserInfoToLocalStorage(infoResponse?.data.result);
+    }
+
     return user;
   }
 );
@@ -47,11 +73,18 @@ export const createUser = createAsyncThunk(
         userCredentials
       );
       return response;
-    } catch (error) {
-      throw error;
+    } catch (err) {
+      console.log(err);
     }
-  } 
+  }
 );
+
+// export const getUserInfo = createAsyncThunk("user/getUserInfo", async (id) => {
+//   const response = await axios.get(`${LINK_API}/api/User/Info?id=${id}`);
+//   saveUserInfoToLocalStorage(response?.data.result);
+//   console.log(response);
+//   return response;
+// });
 
 const userSlice = createSlice({
   name: "user",
@@ -79,9 +112,11 @@ const userSlice = createSlice({
 
         if (action.error.message === "Request failed with status code 401") {
           state.error = "Access Denied! Your password is not correct";
-        } else if (action.error.message === "Request failed with status code 404"){
+        } else if (
+          action.error.message === "Request failed with status code 404"
+        ) {
           state.error = "Account not found!";
-        }else {
+        } else {
           state.error = action.error.message;
         }
       })
@@ -103,11 +138,28 @@ const userSlice = createSlice({
         } else {
           state.error = action.error.message;
         }
-      });
+      })
+      //get user info
+      // .addCase(getUserInfo.pending, (state) => {
+      //   state.loading = true;
+      //   state.error = null;
+      // })
+      // .addCase(getUserInfo.fulfilled, (state, action) => {
+      //   state.loading = false;
+      //   state.user = action.payload;
+      //   state.error = null;
+      // })
+      // .addCase(getUserInfo.rejected, (state, action) => {
+      //   state.loading = false;
+      //   state.user = null;
+      //   state.error = action.error.message;
+      // });
   },
   reducers: {
     logoutUser: (state) => {
       removeUserFromLocalStorage();
+      removeUserInfoFromLocalStorage();
+
       state.loading = false;
       state.user = null;
       state.error = null;

@@ -8,21 +8,20 @@ import { IoPersonCircleSharp } from "react-icons/io5"
 import { useNavigate, Link } from 'react-router-dom'
 import { useDispatch, useSelector } from 'react-redux';
 import { createUser, loginUser } from '../../Store/userSlice';
-import { validateEmail } from '../../Utils'
 
 const RegisterPage = () => {
   const [fullName, setFullName] = useState('');
-  const [email, setEmail] = useState('');
+  const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [confirmPwd, setConfirmPwd] = useState('');
-  const [roleName, setRoleName] = useState('');
+  const [role, setRole] = useState('');
 
   const [errors, setErrors] = useState({
     fullName: '',
-    email: '',
+    username: '',
     password: '',
     confirmPwd: '',
-    roleName: ''
+    role: ''
   });
 
   const dispatch = useDispatch();
@@ -35,10 +34,10 @@ const RegisterPage = () => {
 
     setErrors({
       fullName: '',
-      email: '',
+      username: '',
       password: '',
       confirmPwd: '',
-      roleName: ''
+      role: ''
     });
 
     let hasErrors = false;
@@ -51,16 +50,10 @@ const RegisterPage = () => {
       hasErrors = true;
     }
 
-    if (!email) {
+    if (!username) {
       setErrors((prevErrors) => ({
         ...prevErrors,
-        email: 'Please enter your email!'
-      }));
-      hasErrors = true;
-    } else if (!validateEmail(email)) {
-      setErrors((prevErrors) => ({
-        ...prevErrors,
-        email: 'Invalid email!'
+        username: 'Please enter your username!'
       }));
       hasErrors = true;
     }
@@ -81,10 +74,10 @@ const RegisterPage = () => {
       hasErrors = true;
     }
 
-    if (!roleName) {
+    if (!role) {
       setErrors((prevErrors) => ({
         ...prevErrors,
-        roleName: 'Please choose a roleName!'
+        role: 'Please choose a role!'
       }));
       hasErrors = true;
     }
@@ -95,9 +88,14 @@ const RegisterPage = () => {
 
     const userCredentials = {
       fullName,
-      email,
+      username,
       password,
-      roleName
+      email : "string",
+      dob: "2023-10-24T15:32:59.180Z",
+      phoneNumber: 0,
+      gender: "string",
+      image: "string",
+      role
     };
 
     dispatch(createUser(userCredentials))
@@ -131,10 +129,10 @@ const RegisterPage = () => {
             icon={BiAt}
             type="text"
             placeholder=" "
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-            label="Email address"
-            error={errors.email}
+            value={username}
+            onChange={(e) => setUsername(e.target.value)}
+            label="Username"
+            error={errors.username}
           />
 
           <InputField
@@ -156,14 +154,14 @@ const RegisterPage = () => {
           />
 
           <div className='dropdown'>
-            <select value={roleName} onChange={(e) => setRoleName(e.target.value)}>
+            <select value={role} onChange={(e) => setRole(e.target.value)}>
               <option value="">Choose option: Customer or Provider</option>
-              <option value="Customer">Customer</option>
-              <option value="Provider">Provider</option>
+              <option value="0">Customer</option>
+              <option value="1">Provider</option>
             </select>
           </div>
 
-          {errors.roleName && <span className="text-red-600">{errors.roleName}</span>}
+          {errors.role && <span className="text-red-600">{errors.role}</span>}
 
           <div className='password-feature'>
             <div className='remember'>
@@ -174,7 +172,7 @@ const RegisterPage = () => {
           </div>
 
           {error && (
-            <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 w-full mt-1 rounded relative" roleName="alert">
+            <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 w-full mt-1 rounded relative" role="alert">
               <span className="block sm:inline">{error}</span>
             </div>
           )}

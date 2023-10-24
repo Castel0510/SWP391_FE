@@ -6,9 +6,9 @@ import { Tooltip } from 'react-tooltip'
 const ProviderUpdateProfile = (props) => {
 
     const { user, updateUser, onClose } = props;
-    const [fullName, setFullName] = useState(user.fullName);
+    const [fullname, setFullname] = useState(user.fullname);
     const [email, setEmail] = useState(user.email);
-    const [phone, setPhone] = useState(user.phone);
+    const [phoneNumber, setPhoneNumber] = useState(user.phoneNumber);
     const [location, setLocation] = useState(user.location);
     const [about, setAbout] = useState(user.about);
 
@@ -25,9 +25,9 @@ const ProviderUpdateProfile = (props) => {
     const handleUpdateProfile = () => {
         const updatedUser = {
             ...user,
-            fullName,
+            fullname,
             email,
-            phone,
+            phoneNumber,
             location,
             about
         };
@@ -66,10 +66,10 @@ const ProviderUpdateProfile = (props) => {
                                     <input
                                         className="appearance-none block w-full bg-gray-200 text-gray-700 border rounded py-3 px-4 leading-tight focus:outline-none focus:bg-white"
                                         id="grid-full-name"
-                                        name="fullName"
+                                        name="fullname"
                                         type="text"
-                                        value={fullName}
-                                        onChange={(e) => setFullName(e.target.value)}
+                                        value={fullname}
+                                        onChange={(e) => setFullname(e.target.value)}
                                     />
                                 </div>
 
@@ -97,15 +97,15 @@ const ProviderUpdateProfile = (props) => {
                                 <div className="w-full px-3 my-6 md:mb-0">
                                     <label
                                         className="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2"
-                                        htmlFor="grid-phone">
+                                        htmlFor="grid-phoneNumber">
                                         Phone
                                     </label>
                                     <input
                                         className="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
-                                        id="grid-phone"
+                                        id="grid-phoneNumber"
                                         type="text"
-                                        value={phone}
-                                        onChange={(e) => setPhone(e.target.value)}
+                                        value={phoneNumber}
+                                        onChange={(e) => setPhoneNumber(e.target.value)}
                                     />
                                 </div>
 
