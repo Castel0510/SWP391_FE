@@ -14,24 +14,25 @@ const ItemGallery = ({ category, onItemClick, filters }) => {
   const itemsPerPage = 10;
 
   useEffect(() => {
-    const apiUrl = "https://63692ab028cd16bba716cff0.mockapi.io/login";
+    const apiUrl = 'https://63692ab028cd16bba716cff0.mockapi.io/login';
+
+    setLoading(true); // Set loading to true when filters change
 
     fetch(apiUrl)
       .then((response) => response.json())
       .then((data) => {
         setItems(data);
-        setLoading(false);
+        setLoading(false); // Set loading to false when data is fetched
       })
       .catch((error) => {
-        console.error("Error fetching data:", error);
-        setLoading(false);
+        console.error('Error fetching data:', error);
+        setLoading(false); // Set loading to false in case of an error
       });
-  }, []);
+  }, [category, filters]);
 
   useEffect(() => {
     setCurrentPage(1);
   }, [category]);
-
   const applyFilters = (items) => {
     let filteredItems = items;
 
