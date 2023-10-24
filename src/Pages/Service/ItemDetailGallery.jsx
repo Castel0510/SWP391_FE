@@ -2,11 +2,13 @@ import { Rating } from '@material-tailwind/react';
 import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import './service.scss'
+import LoadingSpinner from './LoadingSpinner';
 
 
 const ItemDetailGallery = ({ providerId }) => {
   const [galleryData, setGalleryData] = useState(null);
   const [loading, setLoading] = useState(true);
+  const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
     if (providerId) {
@@ -26,41 +28,54 @@ const ItemDetailGallery = ({ providerId }) => {
       setLoading(false);
     }
   }, [providerId]);
+  const handleBookNow = () => {
+    setIsLoading(true);
+    
+    window.scrollTo(0, 0);
+  
+    setTimeout(() => {
+      setIsLoading(false);
+    }, 2000); 
+  };
   console.log(galleryData);
   return (
     <div className="item-gallery-detail">
-    {loading ? (
-      <p>Loading gallery data...</p>
-    ) : galleryData ? (
-      <>
-        {galleryData.map((item) => (
-          <div key={item.id} className="item-content-detail">
-            <div className="item-image-detail">
-              <img src={item.image} alt={item.name} />
+      {loading ? (
+        <div className="loading-spinner">
+            <LoadingSpinner/>
+        </div>
+      ) : galleryData ? (
+        <>
+          {galleryData.map((item) => (
+            <div key={item.id} className="item-content-detail">
+              <div className="item-image-detail">
+                <img src={item.image} alt={item.name} />
+              </div>
+              <div className="item-name-detail">{item.name}</div>
+              <div className="item-description-detail leading-5">
+                {item.description.length > 50
+                  ? item.description.slice(0, 50) + "..."
+                  : item.description}
+              </div>
+              <div className="item-rating-detail">
+                <Rating rating={item.rating} />
+              </div>
+              <div className="flex justify-between-detail">
+                <div className="item-price-detail-detail">${item.price}/Day</div>
+                <Link to={`/detail/${item.id}`} state={{ galleryData: item }}>
+                  <button onClick={(e) => handleBookNow(e)} className="book-now-button-detail">
+                    BOOK NOW
+                  </button>
+                </Link>
+              </div>
+              <div className="item-address-detail">{item.address}</div>
             </div>
-            <div className="item-name-detail">{item.name}</div>
-            <div className="item-description-detail leading-5">
-              {item.description.length > 50
-                ? item.description.slice(0, 50) + "..."
-                : item.description}
-            </div>
-            <div className="item-rating-detail">
-              <Rating rating={item.rating} />
-            </div>
-            <div className="flex justify-between-detail">
-              <div className="item-price-detail-detail">${item.price}/Day</div>
-              <Link to={`/detail/${item.id}`} state={{ galleryData: item }}>
-                <button className="book-now-button-detail">BOOK NOW</button>
-              </Link>
-            </div>
-            <div className="item-address-detail">{item.address}</div>
-          </div>
-        ))}
-      </>
-    ) : (
-      <p>Gallery data not found</p>
-    )}
-  </div>
+          ))}
+        </>
+      ) : (
+        <p>Gallery data not found</p>
+      )}
+    </div>
   );
 };
 
