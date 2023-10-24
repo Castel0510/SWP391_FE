@@ -106,7 +106,6 @@ const ItemDetailPage = () => {
       const provider = providerData.find((item) => item.id === selectedItem.providerID);
 
       if (provider) {
-        const itemsWithSameProvider = providerData.filter((item) => item.providerID === selectedItem.providerID);
 
         return (
           <div class="provider-details">
@@ -156,7 +155,7 @@ const ItemDetailPage = () => {
         <div className="detail-content">
           <div className="flex">
             <div className="image">
-              <button onClick={() => window.history.back()} className="back-button">
+              <button onClick={() => navigate('/service')} className="back-button">
                 <FaArrowLeft />
               </button>
               <img src={selectedItem.image} alt={selectedItem.name} className="image-img" />
