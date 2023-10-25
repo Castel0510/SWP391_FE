@@ -36,7 +36,7 @@ const BookingMedical = () => {
   const [selectedSize, setSelectedSize] = useState('');
   const [selectedOption, setSelectedOption] = useState('');
   const [checkInError, setCheckInError] = useState(null);
-  // const [checkOutError, setCheckOutError] = useState(null);
+  const [checkOutError, setCheckOutError] = useState(null);
   const [selectedCheckboxes, setSelectedCheckboxes] = useState([]);
 
   const selectedItem2 = items1.find((item) => item.id === parseInt(itemId, 10));
@@ -56,7 +56,7 @@ const BookingMedical = () => {
     selectedOption: selectedOption,
     selectedCheckboxes: [],
     category: selectedItem2 ? selectedItem2.category : '',
-    status: 'ONGOING',
+    status: 'WAIT', 
   });
 
 
@@ -95,6 +95,7 @@ const BookingMedical = () => {
 
 
 
+
   const handleInputChange = (e) => {
     const { name, value } = e.target;
     console.log(`Input name: ${name}, Value: ${value}`);
@@ -107,7 +108,17 @@ const BookingMedical = () => {
       } else {
         setCheckInError(null);
       }
-    }
+    } else if (name === 'checkOutDate') {
+      const currentDate = new Date();
+      const selectedDate = new Date(value);
+      if (selectedDate < currentDate) {
+        setCheckOutError('Check-out date cannot be in the past');
+      } else if (selectedDate > currentDate && selectedDate <= addDays(currentDate, 30)) {
+        setCheckOutError(null);
+      }else {
+        setCheckOutError('Check-out date must be within 30 days from today');
+      }
+    } 
 
     setFormData({
       ...formData,
@@ -116,28 +127,43 @@ const BookingMedical = () => {
     console.log('inputchangedata', formData);
   };
 
+
+
   useEffect(() => {
     const calculateTotalPrice = () => {
       const checkInDate = new Date(formData.checkInDate);
+      const checkOutDate = new Date(formData.checkOutDate);
+      const days = differenceInDays(checkOutDate, checkInDate);
 
       if (selectedItem2) {
         const selectedItemPrice = parseFloat(selectedItem2.price);
         const selectedOptionPrice = parseFloat(selectedOption);
         const checkboxPrices = selectedCheckboxes.map((checkbox) => parseFloat(checkbox.price));
         const checkboxTotalPrice = checkboxPrices.reduce((acc, price) => acc + price, 0);
-        setTotalPrice(selectedItemPrice + selectedOptionPrice + checkboxTotalPrice);
+        const newTotalPrice = days * selectedItemPrice + days * selectedOptionPrice + checkboxTotalPrice;
+        setTotalPrice(newTotalPrice);
+
+        const selectedSizeName = options.find((option) => option.price === selectedOption)?.name || '';
+        setSelectedSize(selectedSizeName);
       }
+
     };
+
+
 
     calculateTotalPrice();
 
     const checkInDateInput = document.querySelector('[name="checkInDate"]');
+    const checkOutDateInput = document.querySelector('[name="checkOutDate"]');
+
     checkInDateInput.addEventListener('change', calculateTotalPrice);
+    checkOutDateInput.addEventListener('change', calculateTotalPrice);
 
     return () => {
       checkInDateInput.removeEventListener('change', calculateTotalPrice);
+      checkOutDateInput.removeEventListener('change', calculateTotalPrice);
     };
-  }, [formData, selectedItem2, selectedOption, selectedCheckboxes, totalPrice]);
+  }, [formData, selectedItem2, selectedOption, selectedCheckboxes, options, totalPrice]);
 
   const isCheckOutAfterCheckIn = (checkInDate, checkOutDate) => {
     const checkIn = new Date(checkInDate);
@@ -178,16 +204,20 @@ const BookingMedical = () => {
 
     )
 
+      if (!isCheckOutAfterCheckIn(formData.checkInDate, formData.checkOutDate)) {
+        toast.error('check your booking date again, must be in 30 day from checkindate');
+        return;
+      }
+    const dataToSend = updatedFormData;
 
-    if (checkInError ) {
-
+    if (checkInError || checkOutError) {
+      
       toast.error('Please check your information again');
       return;
     }
+    console.log(categoryData);
 
-
-    const dataToSend = updatedFormData;
-
+    
 
     fetch('https://64b1e204062767bc4826ae59.mockapi.io/da/Nhasx', {
       method: 'POST',
@@ -279,12 +309,24 @@ const BookingMedical = () => {
 
   return (
     <div className="form-container">
+      {/* <div className="user-info">
+        <h3>User Information:</h3>
+        {user ? (
+          <div>
+            <p>Name: {user.fullName}</p>
+            <p>Email: {user.email}</p>
+          </div>
+        ) : (
+          <p>User information not available</p>
+        )}
+      </div> */}
       <button onClick={() => window.history.back()} className="back-button">
         <FaArrowLeft />
       </button>
       <h2 className="form-header">Booking Form for: {selectedItem2 ? selectedItem2.name : 'No item selected'}</h2>
       <form onSubmit={handleSubmit}>
         <div className="form-input">
+        
           <label>Full Name</label>
           <input
             type="text"
@@ -317,6 +359,7 @@ const BookingMedical = () => {
             className="input-text"
           />
         </div>
+
         <div className="form-input">
           <label>Note:</label>
           <textarea
@@ -341,6 +384,18 @@ const BookingMedical = () => {
             className="input-date"
           />
           {checkInError && <p className="error-message">{checkInError}</p>}
+        </div>
+        <div className="form-input">
+          <label>Check-Out Date:</label>
+          <input
+            type="date"
+            name="checkOutDate"
+            value={formData.checkOutDate}
+            onChange={handleInputChange}
+            required
+            className="input-date"
+          />
+          {checkOutError && <p className="error-message">{checkOutError}</p>}
         </div>
         <div className="form-input">
           <label>Select an Option of your bird size:</label>
@@ -387,6 +442,7 @@ const BookingMedical = () => {
           </button>
         </div>
       </form>
+
       <ToastContainer />
     </div>
 

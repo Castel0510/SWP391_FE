@@ -16,17 +16,17 @@ const ItemGallery = ({ category, onItemClick, filters }) => {
   useEffect(() => {
     const apiUrl = 'https://63692ab028cd16bba716cff0.mockapi.io/login';
 
-    setLoading(true); // Set loading to true when filters change
+    setLoading(true); 
 
     fetch(apiUrl)
       .then((response) => response.json())
       .then((data) => {
         setItems(data);
-        setLoading(false); // Set loading to false when data is fetched
+        setLoading(false); 
       })
       .catch((error) => {
         console.error('Error fetching data:', error);
-        setLoading(false); // Set loading to false in case of an error
+        setLoading(false);
       });
   }, [category, filters]);
 

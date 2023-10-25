@@ -16,7 +16,6 @@ const FilterContainer = ({ onFilterChange, selectedCategory }) => {
       .then((response) => response.json())
       .then((data) => {
         setItems(data);
-        // Extract unique service labels here
         const uniqueServiceLabels = new Set();
         data.forEach((item) => {
           if (item.selectedService && Array.isArray(item.selectedService)) {
