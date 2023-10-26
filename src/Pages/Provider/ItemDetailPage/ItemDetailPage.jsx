@@ -9,6 +9,7 @@ const ItemDetailPage = () => {
 
   const location = useLocation();
   const item = location.state?.item;
+  console.log(item);
   const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
   const validationSchema = Yup.object().shape({
     ServiceTitle: Yup.string().required('Service Title is required'),

@@ -79,7 +79,7 @@ const ProviderBirdType = () => {
                                     </div>
 
                                     {values.birdType.map((bird, index) => (
-                                        <div key={index}>
+                                        <div key={index} className='flex my-4'>
                                             <Field
                                                 name={`birdType.${index}.name`}
                                                 type="text"
@@ -132,7 +132,7 @@ const ProviderBirdType = () => {
                                     </div>
 
                                     {values.birdSize.map((bird, index) => (
-                                        <div key={index}>
+                                        <div key={index} className='flex my-4'>
                                             <Field
                                                 name={`birdSize.${index}.size`}
                                                 type="text"

@@ -21,6 +21,7 @@ import {
     IconButton,
     Tooltip,
 } from "@material-tailwind/react";
+import { Link } from 'react-router-dom';
 
 const ProviderOrderStatus = () => {
     const TABS = [
@@ -29,12 +30,24 @@ const ProviderOrderStatus = () => {
             value: "all",
         },
         {
-            label: "Waiting for confirmation",
-            value: "waiting for confirming",
+            label: "Waiting",
+            value: "waiting",
+        },
+        {
+            label: "Confirm",
+            value: "confirm",
+        },
+        {
+            label: "Refuse",
+            value: "refuse",
         },
         {
             label: "On going",
             value: "onGoing",
+        },
+        {
+            label: "Waiting for payment",
+            value: "waiting for payment",
         },
         {
             label: "Done",
@@ -56,39 +69,15 @@ const ProviderOrderStatus = () => {
             phone: "0916480235",
             dateOrder: "01/01/2023",
             dateComplete: "02/01/2023",
-            totalPrice: "50",
-            status: "Done"
+            totalPrice: "100",
+            status: "Refuse",
+            serviceTitle: "Hotel A",
+            category: "Boarding",
+            service: "Bird sitting",
+            price:"50",
+            amount:"2"
         },
-        {
-            id: '2',
-            customer: "Nguyễn Như Bích Ngân",
-            email: "ngannnb@gmail.com",
-            phone: "0916480235",
-            dateOrder: "02/01/2023",
-            dateComplete: null,
-            totalPrice: "50",
-            status: "On going"
-        },
-        {
-            id: '3',
-            customer: "Đỗ Hữu Đức",
-            email: "ducdh@gmail.com",
-            phone: "0916480235",
-            dateOrder: "01/02/2023",
-            dateComplete: null,
-            totalPrice: "50",
-            status: "Waiting for confirming"
-        },
-        {
-            id: '4',
-            customer: "Phạm	Đỗ Nam Anh",
-            email: "anhpdna@gmail.com",
-            phone: "0916480235",
-            dateOrder: "03/02/2023",
-            dateComplete: null,
-            totalPrice: "50",
-            status: "Cancel"
-        },
+
 
 
     ];
@@ -105,10 +94,16 @@ const ProviderOrderStatus = () => {
     };
 
     const filteredRows = TABLE_ROWS.filter((row) => {
-        if (selectedTab === "waiting for confirming") {
-            return row.status === "Waiting for confirming";
+        if (selectedTab === "waiting") {
+            return row.status === "Waiting";
+        } else if (selectedTab === "confirm") {
+            return row.status === "Confirm";
+        } else if (selectedTab === "refuse") {
+            return row.status === "Refuse";
         } else if (selectedTab === "onGoing") {
             return row.status === "On going";
+        } else if (selectedTab === "waiting for payment") {
+            return row.status === "Waiting for payment";
         } else if (selectedTab === "done") {
             return row.status === "Done";
         } else if (selectedTab === "cancel") {
@@ -198,8 +193,11 @@ const ProviderOrderStatus = () => {
                                         : "p-4 border-b border-blue-gray-50";
 
                                     let chipColor = "";
-                                    if (status === "Waiting for confirming") chipColor = "yellow";
+                                    if (status === "Waiting") chipColor = "yellow";
+                                    else if (status === "Confirm") chipColor = "green";
+                                    else if (status === "Refuse") chipColor = "red";
                                     else if (status === "On going") chipColor = "blue";
+                                    else if (status === "Waiting for payment") chipColor = "yellow";
                                     else if (status === "Done") chipColor = "green";
                                     else if (status === "Cancel") chipColor = "red";
 
@@ -284,13 +282,20 @@ const ProviderOrderStatus = () => {
                                                     />
                                                 </div>
                                             </td>
+
                                             <td className={classes}>
                                                 <Tooltip content="View">
                                                     <IconButton variant="text">
-                                                        <EyeIcon className="h-4 w-4" />
+                                                        <Link
+                                                            to={{ pathname: `/order-status-detail/${id}`, }}
+                                                            state={{ filteredRows }}
+                                                        >
+                                                            <EyeIcon className="h-4 w-4" />
+                                                        </Link>
                                                     </IconButton>
                                                 </Tooltip>
                                             </td>
+
                                         </tr>
                                     );
                                 },

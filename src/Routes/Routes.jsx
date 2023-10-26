@@ -21,6 +21,7 @@ import ProviderOrderStatus from "../Pages/Provider/ProviderOrderStatus/ProviderO
 import ItemDetailPage from "../Pages/Provider/ItemDetailPage/ItemDetailPage";
 import MyShopPage from "../Pages/Provider/MyShopPage/MyShopPage";
 import ProviderBirdType from "../Pages/Provider/ProviderBirdType/ProviderBirdType";
+import ProviderOrderStatusDetail from "../Pages/Provider/ProviderOrderStatusDetail/ProviderOrderStatusDetail";
 
 export const routes = [
     {
@@ -95,6 +96,12 @@ export const routes = [
     {
         path: '/order-status',
         page: ProviderOrderStatus,
+        isShowSidebarProvider: true
+    },
+    
+    {
+        path: '/order-status-detail/:id',
+        page: ProviderOrderStatusDetail,
         isShowSidebarProvider: true
     },
     {
