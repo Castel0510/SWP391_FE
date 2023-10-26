@@ -6,22 +6,21 @@ import OrderHistoryPage from "../Pages/OrderHistoryPage/OrderHistoryPage";
 import ProfilePage from "../Pages/ProfilePage/ProfilePage";
 import RegisterPage from "../Pages/RegisterPage/RegisterPage";
 import BookingPage from "../Pages/Service/BookingPage";
-
 import TransactionHistoryPage from "../Pages/TransactionHistoryPage/TransactionHistoryPage";
 import ServicePage from "../Pages/ServicePage";
-import MyShopPage from "../Pages/MyShopPage/MyShopPage";
-import CreateServicePage from "../Pages/CreateServicePage/CreateServicePage";
-import ItemDetailPage from "../Pages/ItemDetailPage/ItemDetailPage";
+import CreateServicePage from "../Pages/Provider/CreateServicePage/CreateServicePage";
 import ProviderPage from "../Pages/Provider/ProviderPage";
 import ProviderProfile from "../Pages/Provider/ProviderProfile";
 import ProviderSecurity from "../Pages/Provider/ProviderSecurity";
 import CustomerChangePasswordPage from "../Pages/CustomerChangePasswordPage"
-
 import DashboardPage from '../Pages/AdminPage/DashboardPage'
 import AccountManagementPage from '../Pages/AdminPage/AccountManagementPage'
 import ProviderManagementPage from '../Pages/AdminPage/ProviderManagementPage'
 import ReportPage from '../Pages/AdminPage/ReportPage'
 import ProviderOrderStatus from "../Pages/Provider/ProviderOrderStatus/ProviderOrderStatus";
+import ItemDetailPage from "../Pages/Provider/ItemDetailPage/ItemDetailPage";
+import MyShopPage from "../Pages/Provider/MyShopPage/MyShopPage";
+import ProviderBirdType from "../Pages/Provider/ProviderBirdType/ProviderBirdType";
 
 export const routes = [
     {
@@ -71,6 +70,11 @@ export const routes = [
     {
         path: '/provider-dashboard',
         page: ProviderPage,
+        isShowSidebarProvider: true
+    },
+    {
+        path: '/provider-bird-type',
+        page: ProviderBirdType,
         isShowSidebarProvider: true
     },
     {

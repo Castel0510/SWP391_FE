@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
-import { renderRatingStars } from '../../Utils'
 import { Link } from 'react-router-dom'
+import { renderRatingStars } from '../../../Utils';
 
 const MyShopPage = () => {
     const itemsPerPage = 9; // Number of items to display per page
