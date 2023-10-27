@@ -34,7 +34,8 @@ const ProviderProfile = () => {
     <div className="flex flex-col justify-center items-start bg-white md:flex-row">
       <div className='p-4 flex h-full flex-col justify-center items-center gap-5 '>
         <div className="img-avatar">
-          <img className="object-cover w-full ring-1 ring-gray-300 md:h-auto md:w-48 md:rounded-none" src={avatar_tmp} alt="" />
+          <img className="object-cover w-full ring-1 ring-gray-300 md:h-auto md:w-48 md:rounded-none"
+            src={user?.avatarURL || user?.image || avatar_tmp} alt="" />
 
           <div className="hidden absolute bottom-0 right-0 bg-white p-2">
             <AiFillCamera className="w-5 h-5" />
@@ -97,7 +98,7 @@ const ProviderProfile = () => {
                   Email
                 </dt>
                 <dd className="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">
-                  {user?.email === 'string' ? 'havenprovider@gmail.com' : user?.email }
+                  {user?.email === 'string' ? 'havenprovider@gmail.com' : user?.email}
                 </dd>
               </div>
 

@@ -71,7 +71,7 @@ const DropdownUser = (props) => {
                 >
                     <div className="w-8 h-8 rounded-full border border-solid border-black p-1">
                         <img
-                            src={avatar_tmp}
+                            src={user?.avatarURL || user?.image || avatar_tmp}
                             alt="User Avatar"
                             className="w-full h-full rounded-full"
                         />
