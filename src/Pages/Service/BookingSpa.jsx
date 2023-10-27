@@ -117,8 +117,6 @@ const BookingSpa = () => {
         setCheckOutError('Check-out date cannot be in the past');
       } else if (selectedDate > currentDate && selectedDate <= addDays(currentDate, 30)) {
         setCheckOutError(null);
-      }else {
-        setCheckOutError('Check-out date must be within 30 days from today');
       }
     } 
 

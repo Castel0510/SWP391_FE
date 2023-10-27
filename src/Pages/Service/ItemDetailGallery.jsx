@@ -37,7 +37,6 @@ const ItemDetailGallery = ({ providerId }) => {
       setIsLoading(false);
     }, 2000); 
   };
-  console.log(galleryData);
   return (
     <div className="item-gallery-detail">
       {loading ? (

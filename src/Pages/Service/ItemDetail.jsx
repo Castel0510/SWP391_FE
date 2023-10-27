@@ -75,7 +75,6 @@ const ItemDetailPage = () => {
         (item) => item.providerID === selectedItem?.providerID
       );
 
-      console.log("Items with the same provider ID:", itemsWithSameProviderID);
     }
   }, [providerData, selectedItem]);
 
@@ -85,7 +84,6 @@ const ItemDetailPage = () => {
         (item) => item.id === selectedItem.providerID
       );
 
-      console.log("Items with the same provider ID:", itemsWithSameProviderID);
     }
   }, [providerData, selectedItem]);
 
