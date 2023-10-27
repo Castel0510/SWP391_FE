@@ -30,7 +30,9 @@ const BookingSpa = () => {
         // setLoading(false);
       });
   }, []);
+  // console.log("item 1", items);
 
+  // console.log("2items1", items1);
 
 
   const [selectedSize, setSelectedSize] = useState('');
@@ -38,10 +40,17 @@ const BookingSpa = () => {
   const [checkInError, setCheckInError] = useState(null);
   const [checkOutError, setCheckOutError] = useState(null);
   const [selectedCheckboxes, setSelectedCheckboxes] = useState([]);
+  // const selectedItem = items.find((item) => item.id === parseInt(itemId, 10));
 
   const selectedItem2 = items1.find((item) => item.id === parseInt(itemId, 10));
 
+  // console.log("selectedItem",selectedItem2);
 
+  // if (selectedItem2) {
+  //   console.log("selectedItem2 name", selectedItem2.name);
+  // } else {
+  //   console.log("selectedItem2 is not defined or does not have a name property");
+  // }
   const [formData, setFormData] = useState({
     userID: userID,
     username: '',
@@ -56,34 +65,29 @@ const BookingSpa = () => {
     selectedOption: selectedOption,
     selectedCheckboxes: [],
     category: selectedItem2 ? selectedItem2.category : '',
-    status: 'WAIT', 
   });
-
 
   const options = [];
 
   if (selectedItem2) {
-    selectedItem2.size.forEach((size) => {
-      options.push({
-        name: size.name,
-        label: `${size.label}/${size.price}$/bird`,
-        price: size.price,
-      });
-    });
+    options.push({ name: 'small', label: `SMALL SIZE(5-20cm)/${selectedItem2.price}$/bird`, price: selectedItem2.price });
+  } else {
+    options.push({ name: 'small', label: 'SMALL SIZE(5-20cm)/$', price: 0 });
   }
 
-  const checkboxOptions = [];
+  options.push(
+    { name: 'medium', label: 'MEDIUM SIZE (20-30cm)/(200$/bird)', price: 200 },
+    { name: 'big', label: 'BIG SIZE(>30cm)/(300$/bird)', price: 300 }
+  );
 
-  if (selectedItem2) {
-    selectedItem2.selectedService.forEach((service) => {
-      checkboxOptions.push({
-        id: service.serviceID,
-        label: `${service.label}/$${service.price}`,
-        price: service.price,
-      });
-    });
-  }
+  const checkboxOptions = [
+    { id: '1', label: 'Nail($200)', price: 200 },
+    { id: '2', label: 'Beak Trimming($300)', price: 300 },
+    { id: '3', label: 'Wing Clipping($400)', price: 400 },
 
+    // { id: '4', label: 'Wings($500)', price: 500 },
+
+  ];
   useEffect(() => {
     if (user && user.id) {
       setFormData((prevData) => ({
@@ -111,12 +115,12 @@ const BookingSpa = () => {
     } else if (name === 'checkOutDate') {
       const currentDate = new Date();
       const selectedDate = new Date(value);
-      selectedDate.setDate(selectedDate.getDate() + 1);
-
       if (selectedDate < currentDate) {
         setCheckOutError('Check-out date cannot be in the past');
       } else if (selectedDate > currentDate && selectedDate <= addDays(currentDate, 30)) {
         setCheckOutError(null);
+      }else {
+        setCheckOutError('Check-out date must be within 30 days from today');
       }
     } 
 
@@ -326,7 +330,6 @@ const BookingSpa = () => {
       <h2 className="form-header">Booking Form for: {selectedItem2 ? selectedItem2.name : 'No item selected'}</h2>
       <form onSubmit={handleSubmit}>
         <div className="form-input">
-        
           <label>Full Name</label>
           <input
             type="text"
@@ -385,12 +388,12 @@ const BookingSpa = () => {
           />
           {checkInError && <p className="error-message">{checkInError}</p>}
         </div>
-        <div className="hidden">
+        <div className="form-input">
           <label>Check-Out Date:</label>
           <input
             type="date"
             name="checkOutDate"
-            value={formData.checkInDate + 1}
+            value={formData.checkOutDate}
             onChange={handleInputChange}
             required
             className="input-date"

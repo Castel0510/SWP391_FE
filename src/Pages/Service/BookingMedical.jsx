@@ -95,7 +95,6 @@ const BookingMedical = () => {
 
 
 
-
   const handleInputChange = (e) => {
     const { name, value } = e.target;
     console.log(`Input name: ${name}, Value: ${value}`);
@@ -107,27 +106,22 @@ const BookingMedical = () => {
         setCheckInError('Check-in date cannot be in the past');
       } else {
         setCheckInError(null);
+        
+        // Automatically set the checkout date to check-in date + 1 day
+        const nextDay = addDays(selectedDate, 1);
+        setFormData({
+          ...formData,
+          checkOutDate: format(nextDay, 'yyyy-MM-dd'),
+        });
       }
-    } else if (name === 'checkOutDate') {
-      const currentDate = new Date();
-      const selectedDate = new Date(value);
-      if (selectedDate < currentDate) {
-        setCheckOutError('Check-out date cannot be in the past');
-      } else if (selectedDate > currentDate && selectedDate <= addDays(currentDate, 30)) {
-        setCheckOutError(null);
-      }else {
-        setCheckOutError('Check-out date must be within 30 days from today');
-      }
-    } 
+    }
 
     setFormData({
       ...formData,
       [name]: value,
     });
     console.log('inputchangedata', formData);
-  };
-
-
+  }
 
   useEffect(() => {
     const calculateTotalPrice = () => {
@@ -385,7 +379,7 @@ const BookingMedical = () => {
           />
           {checkInError && <p className="error-message">{checkInError}</p>}
         </div>
-        <div className="form-input">
+        <div className="form-input hidden">
           <label>Check-Out Date:</label>
           <input
             type="date"
