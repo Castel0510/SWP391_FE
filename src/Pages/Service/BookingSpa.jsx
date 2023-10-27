@@ -65,6 +65,10 @@ const BookingSpa = () => {
     selectedOption: selectedOption,
     selectedCheckboxes: [],
     category: selectedItem2 ? selectedItem2.category : '',
+<<<<<<< HEAD
+=======
+    status: 'ONGOING', 
+>>>>>>> parent of 2123ae7 (fixStatus)
   });
 
   const options = [];

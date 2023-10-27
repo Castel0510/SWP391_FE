@@ -36,7 +36,7 @@ const BookingMedical = () => {
   const [selectedSize, setSelectedSize] = useState('');
   const [selectedOption, setSelectedOption] = useState('');
   const [checkInError, setCheckInError] = useState(null);
-  const [checkOutError, setCheckOutError] = useState(null);
+  // const [checkOutError, setCheckOutError] = useState(null);
   const [selectedCheckboxes, setSelectedCheckboxes] = useState([]);
 
   const selectedItem2 = items1.find((item) => item.id === parseInt(itemId, 10));
@@ -56,7 +56,7 @@ const BookingMedical = () => {
     selectedOption: selectedOption,
     selectedCheckboxes: [],
     category: selectedItem2 ? selectedItem2.category : '',
-    status: 'WAIT', 
+    status: 'ONGOING',
   });
 
 
@@ -121,43 +121,30 @@ const BookingMedical = () => {
       [name]: value,
     });
     console.log('inputchangedata', formData);
-  }
+  };
 
   useEffect(() => {
     const calculateTotalPrice = () => {
       const checkInDate = new Date(formData.checkInDate);
-      const checkOutDate = new Date(formData.checkOutDate);
-      const days = differenceInDays(checkOutDate, checkInDate);
 
       if (selectedItem2) {
         const selectedItemPrice = parseFloat(selectedItem2.price);
         const selectedOptionPrice = parseFloat(selectedOption);
         const checkboxPrices = selectedCheckboxes.map((checkbox) => parseFloat(checkbox.price));
         const checkboxTotalPrice = checkboxPrices.reduce((acc, price) => acc + price, 0);
-        const newTotalPrice = days * selectedItemPrice + days * selectedOptionPrice + checkboxTotalPrice;
-        setTotalPrice(newTotalPrice);
-
-        const selectedSizeName = options.find((option) => option.price === selectedOption)?.name || '';
-        setSelectedSize(selectedSizeName);
+        setTotalPrice(selectedItemPrice + selectedOptionPrice + checkboxTotalPrice);
       }
-
     };
-
-
 
     calculateTotalPrice();
 
     const checkInDateInput = document.querySelector('[name="checkInDate"]');
-    const checkOutDateInput = document.querySelector('[name="checkOutDate"]');
-
     checkInDateInput.addEventListener('change', calculateTotalPrice);
-    checkOutDateInput.addEventListener('change', calculateTotalPrice);
 
     return () => {
       checkInDateInput.removeEventListener('change', calculateTotalPrice);
-      checkOutDateInput.removeEventListener('change', calculateTotalPrice);
     };
-  }, [formData, selectedItem2, selectedOption, selectedCheckboxes, options, totalPrice]);
+  }, [formData, selectedItem2, selectedOption, selectedCheckboxes, totalPrice]);
 
   const isCheckOutAfterCheckIn = (checkInDate, checkOutDate) => {
     const checkIn = new Date(checkInDate);
@@ -198,20 +185,16 @@ const BookingMedical = () => {
 
     )
 
-      if (!isCheckOutAfterCheckIn(formData.checkInDate, formData.checkOutDate)) {
-        toast.error('check your booking date again, must be in 30 day from checkindate');
-        return;
-      }
-    const dataToSend = updatedFormData;
 
-    if (checkInError || checkOutError) {
-      
+    if (checkInError ) {
+
       toast.error('Please check your information again');
       return;
     }
-    console.log(categoryData);
 
-    
+
+    const dataToSend = updatedFormData;
+
 
     fetch('https://64b1e204062767bc4826ae59.mockapi.io/da/Nhasx', {
       method: 'POST',
@@ -303,24 +286,12 @@ const BookingMedical = () => {
 
   return (
     <div className="form-container">
-      {/* <div className="user-info">
-        <h3>User Information:</h3>
-        {user ? (
-          <div>
-            <p>Name: {user.fullName}</p>
-            <p>Email: {user.email}</p>
-          </div>
-        ) : (
-          <p>User information not available</p>
-        )}
-      </div> */}
       <button onClick={() => window.history.back()} className="back-button">
         <FaArrowLeft />
       </button>
       <h2 className="form-header">Booking Form for: {selectedItem2 ? selectedItem2.name : 'No item selected'}</h2>
       <form onSubmit={handleSubmit}>
         <div className="form-input">
-        
           <label>Full Name</label>
           <input
             type="text"
@@ -353,7 +324,6 @@ const BookingMedical = () => {
             className="input-text"
           />
         </div>
-
         <div className="form-input">
           <label>Note:</label>
           <textarea
@@ -378,18 +348,6 @@ const BookingMedical = () => {
             className="input-date"
           />
           {checkInError && <p className="error-message">{checkInError}</p>}
-        </div>
-        <div className="form-input hidden">
-          <label>Check-Out Date:</label>
-          <input
-            type="date"
-            name="checkOutDate"
-            value={formData.checkOutDate}
-            onChange={handleInputChange}
-            required
-            className="input-date"
-          />
-          {checkOutError && <p className="error-message">{checkOutError}</p>}
         </div>
         <div className="form-input">
           <label>Select an Option of your bird size:</label>
@@ -436,7 +394,6 @@ const BookingMedical = () => {
           </button>
         </div>
       </form>
-
       <ToastContainer />
     </div>
 

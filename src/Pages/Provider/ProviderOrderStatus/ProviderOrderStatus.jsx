@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import {
     MagnifyingGlassIcon,
     ChevronUpDownIcon,
@@ -20,32 +20,9 @@ import {
     Avatar,
     IconButton,
     Tooltip,
-    Select,
 } from "@material-tailwind/react";
 
 const ProviderOrderStatus = () => {
-    const [data, setData] = useState([]);
-    const [selectedStatus, setSelectedStatus] = useState('');
-
-    const fetchData = async () => {
-        try {
-            const response = await fetch('https://64b1e204062767bc4826ae59.mockapi.io/da/Nhasx');
-            if (response.ok) {
-                const jsonData = await response.json();
-                setData(jsonData);
-            } else {
-                console.error('Failed to fetch data');
-            }
-        } catch (error) {
-            console.error('An error occurred:', error);
-        }
-    };
-    useEffect(() => {
-        fetchData();
-    }, []);
-    const TABLE_ROWS = data;
-    console.log(TABLE_ROWS);
-    // console.log(data);
     const TABS = [
         {
             label: "All",
@@ -53,68 +30,68 @@ const ProviderOrderStatus = () => {
         },
         {
             label: "Waiting for confirmation",
-            value: "Wait",
+            value: "waiting for confirming",
         },
         {
             label: "On going",
-            value: "ONGOING",
+            value: "onGoing",
         },
         {
             label: "Done",
-            value: "DONE",
+            value: "done",
         },
         {
             label: "Cancel",
-            value: "CANCEL",
+            value: "cancel",
         },
     ];
 
     const TABLE_HEAD = ["Id", "Customer", "Phone", "Date order", "Date complete", "Total price", "Status", ""];
 
-    // const TABLE_ROWS = [
-    //     {
-    //         id: '1',
-    //         customer: "Lương Duyên Đức",
-    //         email: "ducld@gmail.com",
-    //         phone: "0916480235",
-    //         dateOrder: "01/01/2023",
-    //         dateComplete: "02/01/2023",
-    //         totalPrice: "50",
-    //         status: "Done"
-    //     },
-    //     {
-    //         id: '2',
-    //         customer: "Nguyễn Như Bích Ngân",
-    //         email: "ngannnb@gmail.com",
-    //         phone: "0916480235",
-    //         dateOrder: "02/01/2023",
-    //         dateComplete: null,
-    //         totalPrice: "50",
-    //         status: "On going"
-    //     },
-    //     {
-    //         id: '3',
-    //         customer: "Đỗ Hữu Đức",
-    //         email: "ducdh@gmail.com",
-    //         phone: "0916480235",
-    //         dateOrder: "01/02/2023",
-    //         dateComplete: null,
-    //         totalPrice: "50",
-    //         status: "Waiting for confirming"
-    //     },
-    //     {
-    //         id: '4',
-    //         customer: "Phạm	Đỗ Nam Anh",
-    //         email: "anhpdna@gmail.com",
-    //         phone: "0916480235",
-    //         dateOrder: "03/02/2023",
-    //         dateComplete: null,
-    //         totalPrice: "50",
-    //         status: "Cancel"
-    //     },
+    const TABLE_ROWS = [
+        {
+            id: '1',
+            customer: "Lương Duyên Đức",
+            email: "ducld@gmail.com",
+            phone: "0916480235",
+            dateOrder: "01/01/2023",
+            dateComplete: "02/01/2023",
+            totalPrice: "50",
+            status: "Done"
+        },
+        {
+            id: '2',
+            customer: "Nguyễn Như Bích Ngân",
+            email: "ngannnb@gmail.com",
+            phone: "0916480235",
+            dateOrder: "02/01/2023",
+            dateComplete: null,
+            totalPrice: "50",
+            status: "On going"
+        },
+        {
+            id: '3',
+            customer: "Đỗ Hữu Đức",
+            email: "ducdh@gmail.com",
+            phone: "0916480235",
+            dateOrder: "01/02/2023",
+            dateComplete: null,
+            totalPrice: "50",
+            status: "Waiting for confirming"
+        },
+        {
+            id: '4',
+            customer: "Phạm	Đỗ Nam Anh",
+            email: "anhpdna@gmail.com",
+            phone: "0916480235",
+            dateOrder: "03/02/2023",
+            dateComplete: null,
+            totalPrice: "50",
+            status: "Cancel"
+        },
 
 
-    // ];
+    ];
 
     const [selectedTab, setSelectedTab] = useState("all");
     const [searchValue, setSearchValue] = useState("");
@@ -129,13 +106,13 @@ const ProviderOrderStatus = () => {
 
     const filteredRows = TABLE_ROWS.filter((row) => {
         if (selectedTab === "waiting for confirming") {
-            return row.status === "Wait";
-        } else if (selectedTab === "ONGOING") {
-            return row.status === "ONGOING";
-        } else if (selectedTab === "DONE") {
-            return row.status === "DONE";
-        } else if (selectedTab === "CANCEL") {
-            return row.status === "CANCEL";
+            return row.status === "Waiting for confirming";
+        } else if (selectedTab === "onGoing") {
+            return row.status === "On going";
+        } else if (selectedTab === "done") {
+            return row.status === "Done";
+        } else if (selectedTab === "cancel") {
+            return row.status === "Cancel";
         } else {
             return true; // Show all rows for "all" tab
         }
@@ -150,16 +127,6 @@ const ProviderOrderStatus = () => {
     });
 
 
-    const handleStatusChange = (id, newStatus) => {
-        const updatedData = data.map((row) => {
-            if (row.id === id) {
-                return { ...row, status: newStatus };
-            }
-            return row;
-        });
-        setData(updatedData);
-
-    };
 
 
     return (
@@ -223,112 +190,110 @@ const ProviderOrderStatus = () => {
                             </tr>
                         </thead>
                         <tbody>
-                            {filteredRows.map(({ id, email, customer, phone, checkInDate, checkOutDate, price, status,username }, index) => {
+                            {filteredRows.map(
+                                ({ id, email, customer, phone, dateOrder, dateComplete, totalPrice, status }, index) => {
+                                    const isLast = index === TABLE_ROWS.length - 1;
+                                    const classes = isLast
+                                        ? "p-4"
+                                        : "p-4 border-b border-blue-gray-50";
 
-                                const isLast = index === TABLE_ROWS.length - 1;
-                                const classes = isLast
-                                    ? "p-4"
-                                    : "p-4 border-b border-blue-gray-50";
+                                    let chipColor = "";
+                                    if (status === "Waiting for confirming") chipColor = "yellow";
+                                    else if (status === "On going") chipColor = "blue";
+                                    else if (status === "Done") chipColor = "green";
+                                    else if (status === "Cancel") chipColor = "red";
 
-                                let chipColor = "";
-                                if (status === "Waiting for confirming") chipColor = "yellow";
-                                else if (status === "On going") chipColor = "blue";
-                                else if (status === "Done") chipColor = "green";
-                                else if (status === "Cancel") chipColor = "red";
+                                    return (
+                                        <tr key={id}>
+                                            <td className={classes}>
+                                                <div className="flex items-center gap-3">
+                                                    <div className="flex flex-col">
+                                                        <Typography
+                                                            variant="small"
+                                                            color="blue-gray"
+                                                            className="font-normal"
+                                                        >
+                                                            {id}
+                                                        </Typography>
 
-                                return (
-                                    <tr key={id}>
-                                        <td className={classes}>
-                                            <div className="flex items-center gap-3">
+                                                    </div>
+                                                </div>
+                                            </td>
+                                            <td className={classes}>
                                                 <div className="flex flex-col">
                                                     <Typography
                                                         variant="small"
                                                         color="blue-gray"
                                                         className="font-normal"
                                                     >
-                                                        {id}
+                                                        {customer}
                                                     </Typography>
-
+                                                    <Typography
+                                                        variant="small"
+                                                        color="blue-gray"
+                                                        className="font-normal opacity-70"
+                                                    >
+                                                        {email}
+                                                    </Typography>
                                                 </div>
-                                            </div>
-                                        </td>
-                                        <td className={classes}>
-                                            <div className="flex flex-col">
+                                            </td>
+                                            <td className={classes}>
                                                 <Typography
                                                     variant="small"
                                                     color="blue-gray"
                                                     className="font-normal"
                                                 >
-                                                    {username}
+                                                    {phone}
                                                 </Typography>
+                                            </td>
+
+                                            <td className={classes}>
                                                 <Typography
                                                     variant="small"
                                                     color="blue-gray"
-                                                    className="font-normal opacity-70"
+                                                    className="font-normal"
                                                 >
-                                                    {email}
+                                                    {dateOrder}
                                                 </Typography>
-                                            </div>
-                                        </td>
-                                        <td className={classes}>
-                                            <Typography
-                                                variant="small"
-                                                color="blue-gray"
-                                                className="font-normal"
-                                            >
-                                                {phone}
-                                            </Typography>
-                                        </td>
-
-                                        <td className={classes}>
-                                            <Typography
-                                                variant="small"
-                                                color="blue-gray"
-                                                className="font-normal"
-                                            >
-                                                {checkInDate}
-                                            </Typography>
-                                        </td>
-                                        <td className={classes}>
-                                            <Typography
-                                                variant="small"
-                                                color="blue-gray"
-                                                className="font-normal"
-                                            >
-                                                {checkOutDate}
-                                            </Typography>
-                                        </td>
-                                        <td className={classes}>
-                                            <Typography
-                                                variant="small"
-                                                color="blue-gray"
-                                                className="font-normal"
-                                            >
-                                                {price} $
-                                            </Typography>
-                                        </td>
-                                        <td className={classes}>
-                                            <div className="w-max">
-                                                <Select
-                                                    value={status}
+                                            </td>
+                                            <td className={classes}>
+                                                <Typography
+                                                    variant="small"
+                                                    color="blue-gray"
+                                                    className="font-normal"
                                                 >
-                                                    <option value="Waiting for confirming">Waiting for confirming</option>
-                                                    <option value="On going">On going</option>
-                                                    <option value="Done">Done</option>
-                                                    <option value="Cancel">Cancel</option>
-                                                </Select>
-                                            </div>
-                                        </td>
-                                        <td className={classes}>
-                                            <Tooltip content="View">
-                                                <IconButton variant="text">
-                                                    <EyeIcon className="h-4 w-4" />
-                                                </IconButton>
-                                            </Tooltip>
-                                        </td>
-                                    </tr>
-                                );
-                            },
+                                                    {dateComplete}
+                                                </Typography>
+                                            </td>
+                                            <td className={classes}>
+                                                <Typography
+                                                    variant="small"
+                                                    color="blue-gray"
+                                                    className="font-normal"
+                                                >
+                                                    {totalPrice}
+                                                </Typography>
+                                            </td>
+                                            <td className={classes}>
+                                                <div className="w-max">
+                                                    <Chip
+                                                        variant="ghost"
+                                                        size="sm"
+                                                        color={chipColor}
+                                                        value={status}
+                                                    />
+                                                </div>
+                                            </td>
+                                            <td className={classes}>
+                                                <Tooltip content="View">
+                                                    <IconButton variant="text">
+                                                        <EyeIcon className="h-4 w-4" />
+                                                    </IconButton>
+                                                </Tooltip>
+                                            </td>
+                                        </tr>
+                                    );
+                                },
                             )}
                         </tbody>
                     </table>

@@ -30,7 +30,9 @@ const BookingHotel = () => {
         // setLoading(false);
       });
   }, []);
+  // console.log("item 1", items);
 
+  // console.log("2items1", items1);
 
 
   const [selectedSize, setSelectedSize] = useState('');
@@ -54,7 +56,7 @@ const BookingHotel = () => {
     selectedOption: selectedOption,
     selectedCheckboxes: [],
     category: selectedItem2 ? selectedItem2.category : '',
-    status: 'WAIT', 
+    status: 'ONGOING', 
   });
   
   const options = [];
