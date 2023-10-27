@@ -29,7 +29,6 @@ const ItemGallery = ({ category, onItemClick, filters }) => {
         setLoading(false);
       });
   }, [category, filters]);
-
   useEffect(() => {
     setCurrentPage(1);
   }, [category]);

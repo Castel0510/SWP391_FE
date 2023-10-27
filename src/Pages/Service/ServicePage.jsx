@@ -33,7 +33,7 @@ const ServicePage = () => {
           <CategoryFilter onCategoryChange={handleCategoryChange} />
         </div>
         <div className='flex-filter '>
-          <FilterContainer onFilterChange={handleFilterChange} selectedFilters={selectedFilters} />
+          <FilterContainer onFilterChange={handleFilterChange} selectedFilters={selectedFilters}  selectedCategory={selectedCategory}  />
           <div className='w-9/12 mt-20 border-black rounded-2xl'>
             <ItemGallery
               category={selectedCategory}

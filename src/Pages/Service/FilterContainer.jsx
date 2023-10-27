@@ -5,10 +5,28 @@ const FilterContainer = ({ onFilterChange, selectedCategory }) => {
   const [selectedRating, setSelectedRating] = useState(0);
   const [selectedAddress, setSelectedAddress] = useState('');
   const [items, setItems] = useState([]);
+  const [items2, setItems2] = useState([]);
+  const [items3, setItems3] = useState([]);
+
   const [loading, setLoading] = useState(true);
   const [serviceOptions, setServiceOptions] = useState([]);
   const [selectedService, setSelectedService] = useState('');
+  useEffect(() => {
+    const apiUrl = "https://apis20231023230305.azurewebsites.net/api/BirdService/GetAllService?pageIndex=0&pageSize=10";
 
+    fetch(apiUrl)
+      .then((response) => response.json())
+      .then((data) => {
+        setItems3(data);
+
+        setLoading(false);
+        console.log(items3.result.items);
+      })
+      .catch((error) => {
+        console.error("Error fetching data:", error);
+        setLoading(false);
+      });
+  }, []);
   useEffect(() => {
     const apiUrl = "https://63692ab028cd16bba716cff0.mockapi.io/login";
 
@@ -34,6 +52,34 @@ const FilterContainer = ({ onFilterChange, selectedCategory }) => {
       });
   }, []);
 
+  useEffect(() => {
+    // Fetch data and set serviceOptions based on selectedCategory
+    const apiUrl = "https://63692ab028cd16bba716cff0.mockapi.io/login";
+
+    fetch(apiUrl)
+      .then((response) => response.json())
+      .then((data) => {
+        setItems2(data);
+
+        const uniqueServiceLabels = new Set();
+        data.forEach((item) => {
+          if (!selectedCategory || item.category === selectedCategory) {
+            if (item.selectedService && Array.isArray(item.selectedService)) {
+              item.selectedService.forEach((service) => {
+                uniqueServiceLabels.add(service.label);
+              });
+            }
+          }
+        });
+        setServiceOptions(Array.from(uniqueServiceLabels));
+
+        setLoading(false);
+      })
+      .catch((error) => {
+        console.error("Error fetching data:", error);
+        setLoading(false);
+      });
+  }, [selectedCategory]);
   const handlePriceSortChange = (sort) => {
     setSelectedPriceSort(sort);
     onFilterChange({ priceSort: sort, rating: selectedRating, address: selectedAddress });
@@ -75,6 +121,14 @@ const FilterContainer = ({ onFilterChange, selectedCategory }) => {
       service: '',
     });
   };
+  // const logItemsByCategory = (category) => {
+  //   const filteredItems = items2.filter((item) => item.category === category);
+  //   console.log(`Items in category "${category}":`, filteredItems);
+  // };  
+
+  // logItemsByCategory("Hotel");
+  // logItemsByCategory("Spa");
+  // logItemsByCategory("Medical");
 
   return (
     <div className="filter-container">

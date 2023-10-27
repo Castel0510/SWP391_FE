@@ -8,7 +8,7 @@ const CategoryFilter = ({ onCategoryChange }) => {
     const handleCategoryClick = (category) => {
         if (category === selectedCategory) {
             setSelectedCategory("Default");
-            onCategoryChange(null); 
+            onCategoryChange(null);
         } else {
             setSelectedCategory(category);
             onCategoryChange(category);
@@ -34,7 +34,7 @@ const CategoryFilter = ({ onCategoryChange }) => {
                     onClick={() => handleCategoryClick('Medical')}
                     className={`category-button ${selectedCategory === 'Medical' ? 'active' : ''}`}
                 >
-                    Medical
+                    Healcare
                 </button>
             </div>
         </div>

@@ -111,6 +111,8 @@ const BookingSpa = () => {
     } else if (name === 'checkOutDate') {
       const currentDate = new Date();
       const selectedDate = new Date(value);
+      selectedDate.setDate(selectedDate.getDate() + 1);
+
       if (selectedDate < currentDate) {
         setCheckOutError('Check-out date cannot be in the past');
       } else if (selectedDate > currentDate && selectedDate <= addDays(currentDate, 30)) {
@@ -385,12 +387,12 @@ const BookingSpa = () => {
           />
           {checkInError && <p className="error-message">{checkInError}</p>}
         </div>
-        <div className="form-input">
+        <div className="hidden">
           <label>Check-Out Date:</label>
           <input
             type="date"
             name="checkOutDate"
-            value={formData.checkOutDate}
+            value={formData.checkInDate + 1}
             onChange={handleInputChange}
             required
             className="input-date"

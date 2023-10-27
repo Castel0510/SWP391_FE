@@ -6,6 +6,7 @@ import LoadingSpinner from "./LoadingSpinner";
 import { useNavigate } from "react-router-dom";
 import { useSelector } from "react-redux";
 import ItemDetailGallery from "./ItemDetailGallery";
+import CommentsComponent from "./CommentComponent";
 
 const ItemDetailPage = () => {
   const [items, setItems] = useState([]);
@@ -209,6 +210,7 @@ const ItemDetailPage = () => {
           )}
         </div>
       )}
+         <CommentsComponent />
     </div>
   );
 };

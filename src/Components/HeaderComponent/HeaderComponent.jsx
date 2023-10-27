@@ -58,10 +58,10 @@ const HeaderComponent = () => {
             path: '/service',
             display: 'Service',
         },
-        {
-            path: '/cart',
-            display: 'Cart',
-        },
+        // {
+        //     path: '/cart',
+        //     display: 'Cart',
+        // },
     ];
 
     const providerMenu = [
