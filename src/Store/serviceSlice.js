@@ -15,6 +15,7 @@ export const fetchServices = createAsyncThunk("services/fetchServices", async ()
       throw new Error(`Network response was not ok: ${response.status}`);
     }
     const data = await response.json();
+
     return data.result.items;
   } catch (error) {
     throw error;

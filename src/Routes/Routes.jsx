@@ -29,7 +29,7 @@ import ProviderOrderStatus from "../Pages/Provider/ProviderOrderStatus/ProviderO
 import BookingPageSpa from "../Pages/Service/BookingSpa";
 import BookingPageHotel from "../Pages/Service/BookingHotel";
 import BookingPageMedical from "../Pages/Service/BookingMedical";
-
+import Payment from "../Pages/Service/PaymentComponent"
 
 import OrderDetailPage from "../Pages/OrderHistoryPage/OrderDetailPage";
 
@@ -116,6 +116,12 @@ export const routes = [
       page: BookingPageMedical,
       isShowHeaderFooter: true,
     },
+    {
+        path: "/payment",
+        page: Payment,
+        isShowHeaderFooter: true,
+      },
+  
 
     // provider
     {

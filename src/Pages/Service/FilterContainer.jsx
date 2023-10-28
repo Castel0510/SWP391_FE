@@ -19,7 +19,6 @@ const FilterContainer = ({ onFilterChange, selectedCategory }) => {
       .then((data) => {
         setItems3(data);
         setLoading(false);
-        console.log("11", data.result.items);
       })
       .catch((error) => {
         console.error("Error fetching data:", error);

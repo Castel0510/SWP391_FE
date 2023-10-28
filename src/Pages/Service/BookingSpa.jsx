@@ -84,6 +84,8 @@ const BookingSpa = () => {
     });
   }
 
+
+  
   useEffect(() => {
     if (user && user.id) {
       setFormData((prevData) => ({
@@ -173,6 +175,8 @@ const BookingSpa = () => {
       serviceName: newServiceName,
       category: categoryData,
     };
+    const dataToSend = updatedFormData;
+
     if (
       !formData.username ||
       !formData.email ||
@@ -193,9 +197,8 @@ const BookingSpa = () => {
     }
 
 
-    const dataToSend = updatedFormData;
 
-
+    console.log("aa",dataToSend);
     fetch('https://64b1e204062767bc4826ae59.mockapi.io/da/Nhasx', {
       method: 'POST',
       headers: {
@@ -220,7 +223,7 @@ const BookingSpa = () => {
         });
 
         setTimeout(() => {
-          navigateTo('/order');
+          navigateTo('/payment',{ state: { dataToSend },});
         }, 3000);
       })
       .catch((error) => {

@@ -19,7 +19,6 @@ const CommentsComponent = () => {
         return response.json();
       })
       .then((data) => {
-        // Extract comment data and store it in the state
         setComments(data.result.items);
       })
       .catch((error) => {
@@ -27,32 +26,7 @@ const CommentsComponent = () => {
       });
   }, []);
 
-  // useEffect(() => {
-  //   // Fetch customer names for each comment by their IDs
-  //   const fetchCustomerNames = async () => {
-  //     const updatedComments = await Promise.all(
-  //       comments.map(async (comment) => {
-  //         const apiUrlCustomerGet = `https://apis20231023230305.azurewebsites.net/api/Customer/GetById?id=${comment.customerId}`;
-  //         try {
-  //           const response = await fetch(apiUrlCustomerGet);
-  //           if (!response.ok) {
-  //             throw new Error(`Network response was not ok: ${response.status}`);
-  //           }
-  //           const customerData = await response.json();
-  //           const customerName = customerData.result.fullName;
-  //           return { ...comment, customerName };
-  //         } catch (error) {
-  //           console.error("Error fetching customer data:", error);
-  //           return comment;
-  //         }
-  //       })
-  //     );
-        
-  //     setComments(updatedComments);
-  //   };
-
-  //   fetchCustomerNames();
-  // }, [comments]);
+  
 
   const submitComment = () => {
     if (newComment) {

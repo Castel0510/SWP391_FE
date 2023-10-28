@@ -220,7 +220,7 @@ const BookingMedical = () => {
         });
 
         setTimeout(() => {
-          navigateTo('/order');
+          navigateTo('/payment',{ state: { dataToSend },});
         }, 3000);
       })
       .catch((error) => {
