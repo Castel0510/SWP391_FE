@@ -1,32 +1,23 @@
 import React, { useState, useEffect, useRef } from 'react';
-// import { useSelector } from 'react-redux';
+import { useSelector } from 'react-redux';
 import avatar_tmp from '../../../Assets/Images/bird_hero.png'
 import { LiaSuitcaseRollingSolid } from 'react-icons/lia'
 import { AiOutlineEdit, AiFillCamera } from 'react-icons/ai'
 import './style.scss'
 import ProviderUpdateProfile from '../ProviderUpdateProfile';
-
-// const getUser = () => {
-//   const user = JSON.parse(localStorage.getItem('user')) || null;
-//   return user;
-// };
+import { getUserInfoInLocalStorage } from '../../../Store/userSlice';
 
 const ProviderProfile = () => {
 
-  // const dataUser = useSelector((state) => state.user);
-  const [user, setUser] = useState({
-    email: "provider@gmail.com",
-    fullName: "Ngân",
-    phone: "0182312123",
-    location: "TP HCM",
-    about: "At Bird Haven, we are dedicated to bringing the joy of avian companionship to your life. As a premier bird shop, we offer a wide range of services and products to cater to bird enthusiasts of all kinds. Whether you're an experienced avian aficionado or just starting your journey with feathered friends, we have something for everyone"
-  });
+  const [user, setUser] = useState('')
+
+  const dataUser = useSelector((state) => state.user);
 
   const [showUpdateProfile, setShowUpdateProfile] = useState(false);
 
-  // useEffect(() => {
-  //   setUser(getUser());
-  // }, [dataUser]);
+  useEffect(() => {
+    setUser(getUserInfoInLocalStorage());
+  }, [dataUser]);
 
   const updateUser = (newUserData) => {
 
@@ -43,7 +34,8 @@ const ProviderProfile = () => {
     <div className="flex flex-col justify-center items-start bg-white md:flex-row">
       <div className='p-4 flex h-full flex-col justify-center items-center gap-5 '>
         <div className="img-avatar">
-          <img className="object-cover w-full ring-1 ring-gray-300 md:h-auto md:w-48 md:rounded-none" src={avatar_tmp} alt="" />
+          <img className="object-cover w-full ring-1 ring-gray-300 md:h-auto md:w-48 md:rounded-none"
+            src={user?.avatarURL || user?.image || avatar_tmp} alt="" />
 
           <div className="hidden absolute bottom-0 right-0 bg-white p-2">
             <AiFillCamera className="w-5 h-5" />
@@ -97,7 +89,7 @@ const ProviderProfile = () => {
                   Full name
                 </dt>
                 <dd className="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">
-                  {user?.fullName}
+                  {user?.fullname}
                 </dd>
               </div>
 
@@ -106,7 +98,7 @@ const ProviderProfile = () => {
                   Email
                 </dt>
                 <dd className="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">
-                  {user?.email}
+                  {user?.email === 'string' ? 'havenprovider@gmail.com' : user?.email}
                 </dd>
               </div>
 
@@ -115,7 +107,7 @@ const ProviderProfile = () => {
                   Phone
                 </dt>
                 <dd className="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">
-                  {user.phone}
+                  {user?.phoneNumber === 0 ? '0586123859' : user?.phoneNumber}
                 </dd>
               </div>
 
@@ -124,7 +116,7 @@ const ProviderProfile = () => {
                   Location
                 </dt>
                 <dd className="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">
-                  {user.location}
+                  TP.HCM
                 </dd>
               </div>
 
@@ -133,7 +125,7 @@ const ProviderProfile = () => {
                   About
                 </dt>
                 <dd className="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">
-                  {user.about}
+                  At Bird Haven, we are dedicated to bringing the joy of avian companionship to your life. As a premier bird shop, we offer a wide range of services and products to cater to bird enthusiasts of all kinds. Whether you're an experienced avian aficionado or just starting your journey with feathered friends, we have something for everyone
                 </dd>
               </div>
             </dl>

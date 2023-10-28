@@ -25,7 +25,7 @@ const ServicePage = () => {
       categories: ["Nail Clipping", "Beak Trimming", "Wing Clipping"]
     },
     {
-      name: "medical",
+      name: "healcare",
       categories: ["DNA Sexing"]
     }
   ]

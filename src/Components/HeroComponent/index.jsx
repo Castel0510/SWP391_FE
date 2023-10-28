@@ -31,7 +31,7 @@ const HeroComponent = () => {
                     transition={{ duration: 1, type: "string" }}
                     className="hero-left"
                 >
-                    {user?.roleName !== 'Provider'
+                    {user?.role !== 'Provider'
                         ?
                         <>
                             <div className="hero-title">
