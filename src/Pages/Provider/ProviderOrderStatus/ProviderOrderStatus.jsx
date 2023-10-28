@@ -70,7 +70,7 @@ const ProviderOrderStatus = () => {
             dateOrder: "01/01/2023",
             dateComplete: "02/01/2023",
             totalPrice: "100",
-            status: "Refuse",
+            status: "Waiting for payment",
             serviceTitle: "Hotel A",
             category: "Boarding",
             service: "Bird sitting",

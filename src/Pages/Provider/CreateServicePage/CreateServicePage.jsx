@@ -38,8 +38,6 @@ const CreateServicePage = () => {
                     <Formik
                         initialValues={{
                             ServiceTitle: "",
-                            email: "",
-                            phone: "",
                             picture: "",
                             video: "",
                             description: "",
@@ -67,41 +65,6 @@ const CreateServicePage = () => {
                                     />
                                     <ErrorMessage
                                         name="ServiceTitle"
-                                        component="div"
-                                        className="text-red-500"
-                                    />
-                                </div>
-
-                                <div className="flex flex-col mb-4">
-                                    <label
-                                        htmlFor="email"
-                                        className="font-bold mb-2">Email</label>
-                                    <Field
-                                        name="email"
-                                        id="email"
-                                        placeholder="mail@gmail.com"
-                                        type="email"
-                                        className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 "
-                                    />
-                                    <ErrorMessage
-                                        name="email"
-                                        component="div"
-                                        className="text-red-500"
-                                    />
-                                </div>
-                                <div className="flex flex-col mb-4">
-                                    <label
-                                        htmlFor="phone"
-                                        className="font-bold mb-2">Phone Number</label>
-                                    <Field
-                                        name="phone"
-                                        id="phone"
-                                        placeholder="Phone number"
-                                        type="tel"
-                                        className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 "
-                                    />
-                                    <ErrorMessage
-                                        name="phone"
                                         component="div"
                                         className="text-red-500"
                                     />
