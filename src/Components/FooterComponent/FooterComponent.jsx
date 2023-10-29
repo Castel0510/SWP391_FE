@@ -27,7 +27,7 @@ function FooterComponent() {
             <ul>
               <li><Link href="#">Boarding</Link></li>
               <li><Link href="#">Grooming</Link></li>
-              <li><Link href="#">Medical</Link></li>
+              <li><Link href="#">Healthcare</Link></li>
             </ul>
           </div>
           <div className="footer-col">

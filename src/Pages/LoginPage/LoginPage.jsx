@@ -9,16 +9,14 @@ import './style.scss';
 import { useNavigate, Link } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { loginUser } from '../../Store/userSlice';
-import { validateEmail } from '../../Utils';
-
 
 const LoginPage = () => {
   const [showForgotPasswordModal, setShowForgotPasswordModal] = useState(false);
 
   // State
-  const [email, setEmail] = useState('');
+  const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
-  const [errors, setErrors] = useState({ email: '', password: '' });
+  const [errors, setErrors] = useState({ username: '', password: '' });
 
   // Redux state
   const { loading, error } = useSelector((state) => state.user);
@@ -29,17 +27,14 @@ const LoginPage = () => {
     e.preventDefault();
 
     // Reset previous errors
-    setErrors({ email: '', password: '' });
+    setErrors({ username: '', password: '' });
 
     // Validation
     let hasErrors = false;
-    if (!email) {
-      setErrors((prevErrors) => ({ ...prevErrors, email: 'Please enter your email!' }));
+    if (!username) {
+      setErrors((prevErrors) => ({ ...prevErrors, username: 'Please enter your username!' }));
       hasErrors = true;
-    } else if (!validateEmail(email)) {
-      setErrors((prevErrors) => ({ ...prevErrors, email: 'Invalid email!' }));
-      hasErrors = true;
-    }
+    } 
 
     if (!password) {
       setErrors((prevErrors) => ({ ...prevErrors, password: 'Please enter your password!' }));
@@ -50,14 +45,14 @@ const LoginPage = () => {
       return;
     }
 
-    const userCredentials = { email, password };
+    const userCredentials = { username, password };
 
     dispatch(loginUser(userCredentials)).then((result) => {
       if (result.payload) {
-        setEmail('');
+        setUsername('');
         setPassword('');
 
-        switch (result.payload.roleName) {
+        switch (result.payload.role) {
           case 'Customer':
             navigate('/');
             break;
@@ -86,10 +81,10 @@ const LoginPage = () => {
             icon={BiAt}
             type="text"
             placeholder=" "
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-            label="Email address"
-            error={errors.email}
+            value={username}
+            onChange={(e) => setUsername(e.target.value)}
+            label="Username"
+            error={errors.username}
           />
 
           <InputField

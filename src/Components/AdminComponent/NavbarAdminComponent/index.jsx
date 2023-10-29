@@ -24,7 +24,7 @@ const NavbarAdminComponent = () => {
 
         <div className='flex gap-2 items-center justify-center'>
           <p>Hello admin, </p>
-          <DropdownUser fullName={user?.fullName} role={user?.roleName} resetUser={setUser} />
+          <DropdownUser id={user?.Id} role={user?.role} resetUser={setUser} />
         </div>
       </div>
     </nav>

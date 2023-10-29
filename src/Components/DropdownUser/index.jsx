@@ -1,13 +1,15 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import avatar_tmp from '../../Assets/Images/bird_hero.png'
 import { NavLink, Link, useNavigate } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
-import { logoutUser } from '../../Store/userSlice';
+import { logoutUser, getUserInfoInLocalStorage } from '../../Store/userSlice';
 
 const DropdownUser = (props) => {
-    const { fullName, role, resetUser } = props
+    const { id, role, resetUser } = props
     const [isOpen, setIsOpen] = useState(false);
     const dispatch = useDispatch();
+
+    const [user, setUser] = useState('');
 
     const toggleDropdown = () => {
         setIsOpen(!isOpen);
@@ -16,10 +18,6 @@ const DropdownUser = (props) => {
     const navigate = useNavigate();
 
     const customerDropdownList = [
-        {
-            path: '/withdraw-money',
-            display: 'Withdraw money',
-        },
         {
             path: '/profile',
             display: 'View profile',
@@ -32,21 +30,13 @@ const DropdownUser = (props) => {
             path: '/order',
             display: 'Order history',
         },
-        {
-            path: '/transaction',
-            display: 'History transaction',
-        },
     ]
 
     const providerDropdownList = [
-        // {
-        //     path: '/withdraw-money',
-        //     display: 'Withdraw money',
-        // },
-        // {
-        //     path: '/provider-profile',
-        //     display: 'View profile',
-        // },
+        {
+            path: '/profile',
+            display: 'View profile',
+        },
     ]
 
     let dropdownItems = [];
@@ -63,6 +53,11 @@ const DropdownUser = (props) => {
         navigate('/')
     }
 
+    useEffect(() => {
+        setUser(getUserInfoInLocalStorage())
+    }, []);
+
+
     return (
         <div className="relative inline-block text-left">
             <div>
@@ -76,13 +71,13 @@ const DropdownUser = (props) => {
                 >
                     <div className="w-8 h-8 rounded-full border border-solid border-black p-1">
                         <img
-                            src={avatar_tmp}
+                            src={user?.avatarURL || user?.image || avatar_tmp}
                             alt="User Avatar"
                             className="w-full h-full rounded-full"
                         />
                     </div>
 
-                    <p className="px-1">{fullName}</p>
+                    <p className="px-1">{user?.fullname}</p>
 
                     <svg className="-mr-1 h-5 w-5 text-gray-400" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
                         <path fillRule="evenodd" d="M5.23 7.21a.75.75 0 011.06.02L10 11.168l3.71-3.938a.75.75 0 111.08 1.04l-4.25 4.5a.75.75 0 01-1.08 0l-4.25-4.5a.75.75 0 01.02-1.06z" clipRule="evenodd" />
