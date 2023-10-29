@@ -17,7 +17,7 @@ const ItemGallery = ({ category, onItemClick, filters }) => {
   const services = useSelector(state => state.services.services); 
   const dispatch = useDispatch();
 
-
+console.log("category" ,category);
 
   useEffect(() => {
     dispatch(fetchServices());
