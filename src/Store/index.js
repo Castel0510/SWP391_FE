@@ -1,9 +1,11 @@
 import { configureStore } from "@reduxjs/toolkit";
 import useReducer from "./userSlice";
+import birdServiceReducer from "./birdServiceSlice";
 
 const store = configureStore({
   reducer: {
     user: useReducer,
+    birdService: birdServiceReducer,
   },
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware({

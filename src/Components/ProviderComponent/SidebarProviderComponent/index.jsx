@@ -15,11 +15,6 @@ const SidebarProviderComponent = () => {
     },
     {
       icon: <AiOutlineShop className='w-5 h-5' />,
-      path: '/provider-bird-type',
-      display: 'Bird Type',
-    },
-    {
-      icon: <AiOutlineShop className='w-5 h-5' />,
       path: '/my-shop',
       display: 'My Shop',
     },
