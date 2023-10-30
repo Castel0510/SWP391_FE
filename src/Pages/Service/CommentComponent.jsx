@@ -1,11 +1,26 @@
 import React, { useState, useEffect } from "react";
 import { useSelector } from "react-redux";
+import { getUser } from "../../Store/userSlice";
+import { logoutUser, getUserInfoInLocalStorage } from '../../Store/userSlice';
 
 const CommentsComponent = () => {
-  const user = useSelector((state) => state.user.user);
 
   const [comments, setComments] = useState([]);
   const [newComment, setNewComment] = useState([]);
+  // const [user, setUser] = useState('');
+  // const userID = user ? user.Id : null;
+
+  const user = useSelector(getUserInfoInLocalStorage);
+
+
+
+  // const dataUser = useSelector((state) => state.user);
+  // useEffect(() => {
+  //   setUser(getUser());
+
+  // }, [dataUser]);
+
+console.log(user);
 
   const apiUrlCommentGet =
     "https://apis20231023230305.azurewebsites.net/api/Comment/Get?pageIndex=0&pageSize=10";
@@ -26,7 +41,7 @@ const CommentsComponent = () => {
       });
   }, []);
 
-  
+
 
   const submitComment = () => {
     if (newComment) {
@@ -34,7 +49,7 @@ const CommentsComponent = () => {
       const commentText = `${fullName}: ${newComment}`;
       setComments([...comments, { commentContent: commentText }]);
       setNewComment("");
-    } 
+    }
   };
 
   return (

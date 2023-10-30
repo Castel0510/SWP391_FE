@@ -19,7 +19,6 @@ const HeaderComponent = () => {
     const [scrolled, setScrolled] = useState(false);
     const dataUser = useSelector((state) => state.user);
     const [user, setUser] = useState(null);
-
     const handleScroll = () => {
         if (window.scrollY > 0) {
             setScrolled(true);

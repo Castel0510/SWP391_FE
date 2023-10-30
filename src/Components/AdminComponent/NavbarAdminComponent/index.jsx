@@ -13,7 +13,7 @@ const NavbarAdminComponent = () => {
     setUser(getUser());
 
   }, [dataUser]);
-
+  console.log(dataUser);
   return (
     <nav className="bg-white border ring-1 navbar-bg-color fixed w-full z-20">
       <div className="flex flex-wrap items-center justify-between mx-auto p-4">

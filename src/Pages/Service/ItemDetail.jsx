@@ -7,6 +7,7 @@ import { useNavigate } from "react-router-dom";
 import { useSelector } from "react-redux";
 import ItemDetailGallery from "./ItemDetailGallery";
 import CommentsComponent from "./CommentComponent";
+import { getUser, getUserInfoInLocalStorage } from "../../Store/userSlice";
 
 const ItemDetailPage = () => {
   const [items, setItems] = useState([]);
@@ -14,10 +15,23 @@ const ItemDetailPage = () => {
 
   const { itemId } = useParams();
   const navigate = useNavigate();
-  const user = useSelector((state) => state.user.user);
-  const userID = user ? user.id : null;
   const [providerData, setProviderData] = useState(null);
   const [selectedItem, setSelectedItem] = useState(null);
+
+
+
+  const user = useSelector(getUserInfoInLocalStorage);
+  const userID = user ? user.id : null;
+
+
+
+  const dataUser = useSelector((state) => state.user);
+  // useEffect(() => {
+  //   setUser(getUser());
+
+  // }, [dataUser]);
+
+
   useEffect(() => {
     const apiUrl = "https://63692ab028cd16bba716cff0.mockapi.io/login";
 

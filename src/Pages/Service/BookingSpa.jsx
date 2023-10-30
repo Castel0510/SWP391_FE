@@ -6,16 +6,17 @@ import { useNavigate } from 'react-router-dom';
 import { format, differenceInDays, addDays } from 'date-fns';
 import { FaArrowLeft } from 'react-icons/fa';
 import { useSelector } from 'react-redux';
+import { getUserInfoInLocalStorage } from '../../Store/userSlice';
 
 
 
 const BookingSpa = () => {
   const [items1, setItems1] = useState([]);
-  const user = useSelector((state) => state.user.user);
+  const user = useSelector(getUserInfoInLocalStorage);
   const navigateTo = useNavigate();
   let [totalPrice, setTotalPrice] = useState(0);
   const { itemId } = useParams();
-  const userID = user.id;
+  const userID = user ? user.id : null;
   useEffect(() => {
     const apiUrl = "https://63692ab028cd16bba716cff0.mockapi.io/login";
 
