@@ -7,11 +7,12 @@ import * as Yup from 'yup';
 
 const CreateServicePage = () => {
     const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
-    
+
     const validationSchema = Yup.object().shape({
         birdServiceName: Yup.string().required('Service name is required'),
         imageURL: Yup.string().required('Picture is required'),
         videoURL: Yup.string().required('Video is required'),
+        location: Yup.string().required('location is required'),
         description: Yup.string().required('description is required'),
         prices: Yup.array()
             .min(1, 'At least one birdType must be added to Size Data')
@@ -28,14 +29,13 @@ const CreateServicePage = () => {
     });
 
     const location = [
-        { value: 0, label: 'none' },
-        { value: 1, label: 'none' },
-        { value: 2, label: 'none' },
-        { value: 3, label: 'none' },
-        { value: 4, label: 'none' },
-        { value: 5, label: 'none' },
-        { value: 6, label: 'none' },
-        { value: 7, label: 'none' },
+        { value: 1, label: 'Hà Nội' },
+        { value: 2, label: 'TP.HCM' },
+        { value: 3, label: 'Đà Nẵng' },
+        { value: 4, label: 'Cần thơ' },
+        { value: 5, label: 'Hải Phòng' },
+        { value: 6, label: 'Nghệ An' },
+        { value: 7, label: 'Huế' },
     ]
 
 
@@ -94,14 +94,15 @@ const CreateServicePage = () => {
                             description: "",
                             imageURL: "",
                             videoURL: "",
+                            location: Number,
                             prices: [],
                         }}
                         validationSchema={validationSchema}
                         onSubmit={async (values) => {
-                            // values.serviceType = parseInt(values.serviceType);
+                            values.location = Number(values.location);
                             await sleep(500);
-                            const { birdServiceName, description, imageURL, videoURL, prices } = values;
-                            console.log(JSON.stringify({ birdServiceName, description, imageURL, videoURL, prices }, null, 2));
+                            const { birdServiceName, description, imageURL, videoURL, location, prices } = values;
+                            console.log(JSON.stringify({ birdServiceName, description, imageURL, videoURL, location, prices }, null, 2));
                         }}
                     >
                         {({ isSubmitting, values, setFieldValue }) => (
@@ -153,6 +154,29 @@ const CreateServicePage = () => {
                                         component="div"
                                         className="text-red-500 mt-3"
                                     />
+                                </div>
+                                <div className="flex flex-col mb-4">
+                                    <label
+                                        htmlFor="location"
+                                        className="font-bold mb-2">
+                                        Location
+                                    </label>
+                                    <Field
+                                        as="select"
+                                        name="location"
+                                        id="location"
+                                        className=" bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 "
+                                    >
+                                        <option>Select location</option>
+                                        {location.map(({ value, label }, index) => (
+                                            <option
+                                                key={index}
+                                                value={Number(value)}
+                                            >
+                                                {label}
+                                            </option>
+                                        ))}
+                                    </Field>
                                 </div>
                                 <div className="flex flex-col mb-4">
                                     <label

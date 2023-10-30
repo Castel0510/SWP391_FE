@@ -193,7 +193,31 @@ const ProviderOrderStatusDetail = () => {
                                         {/*header*/}
                                         <div className="flex items-start justify-between p-5 border-b border-solid border-blueGray-200 rounded-t">
                                             <h3 className="text-3xl font-semibold">
-                                                Modal Title
+                                                {item.status === 'Waiting' && (
+                                                    <h3 className="text-3xl font-semibold">
+                                                        Accept order
+                                                    </h3>
+                                                )}
+                                                {item.status === 'Confirm' && (
+                                                    <h3 className="text-3xl font-semibold">
+                                                        Doing order
+                                                    </h3>
+                                                )}
+                                                {item.status === 'On going' && (
+                                                    <h3 className="text-3xl font-semibold">
+                                                        Done order
+                                                    </h3>
+                                                )}
+                                                {item.status === 'Waiting for payment' && (
+                                                    <h3 className="text-3xl font-semibold">
+                                                        Done order
+                                                    </h3>
+                                                )}
+                                                {item.status === 'Refuse' && (
+                                                    <h3 className="text-3xl font-semibold">
+                                                        Refuse order
+                                                    </h3>
+                                                )}
                                             </h3>
                                             <button
                                                 className="p-1 ml-auto bg-transparent border-0 text-black opacity-5 float-right text-3xl leading-none font-semibold outline-none focus:outline-none"
@@ -207,14 +231,31 @@ const ProviderOrderStatusDetail = () => {
                                         {/*body*/}
                                         <div className="relative p-6 flex-auto">
                                             <p className="my-4 text-blueGray-500 text-lg leading-relaxed">
-                                                Are you confirm to do that?
-                                                Are you confirm to do that?
-                                                Are you confirm to do that?
-                                                Are you confirm to do that?
-                                                Are you confirm to do that?
-                                                Are you confirm to do that?
-                                                Are you confirm to do that?
-                                                Are you confirm to do that?
+                                                {item.status === 'Waiting' && (
+                                                    <h3>
+                                                        Accept order #{item.id}?
+                                                    </h3>
+                                                )}
+                                                {item.status === 'Confirm' && (
+                                                    <h3>
+                                                        Doing order #{item.id}?
+                                                    </h3>
+                                                )}
+                                                {item.status === 'On going' && (
+                                                    <h3>
+                                                        Done order #{item.id}?
+                                                    </h3>
+                                                )}
+                                                {item.status === 'Waiting for payment' && (
+                                                    <h3>
+                                                        Done order #{item.id}?
+                                                    </h3>
+                                                )}
+                                                {item.status === 'Refuse' && (
+                                                    <h3>
+                                                        Refuse order #{item.id}?
+                                                    </h3>
+                                                )}
                                             </p>
                                         </div>
                                         {/*footer*/}
@@ -236,7 +277,7 @@ const ProviderOrderStatusDetail = () => {
                                 </div>
                             </div>
                             <div className="opacity-25 fixed inset-0 z-40 bg-black"></div>
-                            
+
                         </div>
                     </Modal>
 

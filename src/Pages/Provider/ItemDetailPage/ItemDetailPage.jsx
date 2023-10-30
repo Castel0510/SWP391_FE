@@ -129,7 +129,7 @@ const ItemDetailPage = () => {
     <>
       <div className="w-full flex justify-center ">
         <div className="w-fit ring-1 p-4">
-          <h1 className="font-bold mb-7 text-center text-2xl">ADD NEW SERVICE</h1>
+          <h1 className="font-bold mb-7 text-center text-2xl">Edit SERVICE</h1>
           <Formik
             initialValues={{
               birdServiceName: data.birdServiceName,
