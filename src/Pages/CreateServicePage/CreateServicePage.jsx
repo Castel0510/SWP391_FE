@@ -44,7 +44,7 @@ const CreateServicePage = () => {
             { value: "breaktrimming", label: "BREAK TRIMMING" },
             { value: "wingclipping", label: "WING CLIPPING" }
         ];
-    } else if (selectedService === "Healcare") {
+    } else if (selectedService === "medical") {
         serviceTypeOptions = [
             { value: "dnasexing", label: "DNA Sexing" }
         ];
@@ -158,7 +158,7 @@ const CreateServicePage = () => {
                             </option>
                             <option value="boarding">BOARDING</option>
                             <option value="grooming">GROOMING</option>
-                            <option value="healcare">HEALCARE</option>
+                            <option value="medical">MEDICAL</option>
                         </select>
 
                         <select

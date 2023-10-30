@@ -35,7 +35,14 @@ const ProviderProfile = () => {
       <div className='p-4 flex h-full flex-col justify-center items-center gap-5 '>
         <div className="img-avatar">
           <img className="object-cover w-full ring-1 ring-gray-300 md:h-auto md:w-48 md:rounded-none"
-            src={user?.avatarURL || user?.image || avatar_tmp} alt="" />
+            src={
+              user?.avatarURL && user.avatarURL !== "string"
+                ? user.avatarURL
+                : user?.image && user.image !== "string"
+                  ? user.image
+                  : avatar_tmp
+            }
+            alt="" />
 
           <div className="hidden absolute bottom-0 right-0 bg-white p-2">
             <AiFillCamera className="w-5 h-5" />
@@ -116,7 +123,7 @@ const ProviderProfile = () => {
                   Location
                 </dt>
                 <dd className="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">
-                  TP.HCM
+                  {user?.destination || 'TP.HCM'}
                 </dd>
               </div>
 

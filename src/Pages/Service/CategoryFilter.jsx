@@ -31,9 +31,9 @@ const CategoryFilter = ({ onCategoryChange }) => {
                     Spa
                 </button>
                 <button
-                    onClick={() => handleCategoryClick('Healcare')}
+                    onClick={() => handleCategoryClick('Medical')}
                     className={`category-button ${
-                        selectedCategory === 'Healcare' ? 'active' : ''
+                        selectedCategory === 'Medical' ? 'active' : ''
                     }`}
                 >
                     Medical

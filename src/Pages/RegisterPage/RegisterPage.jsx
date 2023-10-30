@@ -7,7 +7,7 @@ import { RiLockPasswordFill } from "react-icons/ri"
 import { IoPersonCircleSharp } from "react-icons/io5"
 import { useNavigate, Link } from 'react-router-dom'
 import { useDispatch, useSelector } from 'react-redux';
-import { createUser, loginUser } from '../../Store/userSlice';
+import { loginUser, createCustomer, createProvider } from '../../Store/userSlice';
 
 const RegisterPage = () => {
   const [fullName, setFullName] = useState('');
@@ -86,26 +86,54 @@ const RegisterPage = () => {
       return;
     }
 
-    const userCredentials = {
-      avatarURL: "https://static.vecteezy.com/system/resources/previews/000/585/470/non_2x/bird-and-wing-logo-vector-template.jpg",
-      fullname: fullName,
-      username,
-      password,
-      email : "string",
-      dob: "2023-10-24T15:32:59.180Z",
-      phoneNumber: 0,
-      // createdAt: "2023-10-27T01:49:10.663Z",
-      gender: "string",
-      image: "string",
-      role: parseInt(role)
+    const customerCredentials = {
+      customerName: fullName,
+      user: {
+        avatarURL: "https://static.vecteezy.com/system/resources/previews/000/585/470/non_2x/bird-and-wing-logo-vector-template.jpg",
+        fullname: fullName,
+        username,
+        password,
+        email: "string",
+        dob: "2023-10-24T15:32:59.180Z",
+        phoneNumber: 0,
+        // createdAt: "2023-10-27T01:49:10.663Z",
+        gender: "string",
+        image: "string",
+        role: 0
+      }
     };
 
-    dispatch(createUser(userCredentials))
+    const providerCredentials = {
+      providerName: fullName,
+      rating: 0,
+      destination: "string",
+      description: "string",
+      user: {
+        avatarURL: "https://static.vecteezy.com/system/resources/previews/000/585/470/non_2x/bird-and-wing-logo-vector-template.jpg",
+        fullname: fullName,
+        username,
+        password,
+        email: "string",
+        dob: "2023-10-24T15:32:59.180Z",
+        phoneNumber: 0,
+        gender: "string",
+        image: "string",
+        role: 1
+      }
+    }
+
+    const userCredentials = {
+      username,
+      password
+    }
+
+    const userToCreate = parseInt(role) === 0 ? customerCredentials : providerCredentials;
+
+    dispatch(parseInt(role) === 0 ? createCustomer(userToCreate) : createProvider(userToCreate))
       .unwrap()
       .then((result) => {
-        // console.log(result)
         if (result?.status === 200 || result?.status === 201) {
-          dispatch(loginUser(userCredentials)).then(() => {
+          dispatch(loginUser(userCredentials)).then((resultLogin) => {
             navigate('/');
           });
         }
@@ -165,14 +193,6 @@ const RegisterPage = () => {
           </div>
 
           {errors.role && <span className="text-red-600">{errors.role}</span>}
-
-          <div className='password-feature'>
-            <div className='remember'>
-              <input type='checkbox' id="agree"></input>
-              <label htmlFor="agree">I agree with <span className="text-swap">Terms</span> and <span className="text-swap">Privacy</span></label>
-            </div>
-
-          </div>
 
           {error && (
             <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 w-full mt-1 rounded relative" role="alert">

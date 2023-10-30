@@ -7,24 +7,24 @@ import ModalChangeStatusAccount from '../../../Components/Shared/ModalChangeStat
 const AccountManagementPage = () => {
   const [data, setData] = useState([
     {
-      fullName: "Nguyen Van A",
+      fullName: "Nguyen Van An",
       role: "Provider",
-      email: "abc@gmail.com",
-      phone: "0123238xxxx",
+      email: "annv_123@gmail.com",
+      phone: "0123123122",
       activeStatus: true,
     },
     {
-      fullName: "Pham Thi B",
+      fullName: "Dang Thi Thu Thao",
       role: "Customer",
-      email: "abc@gmail.com",
-      phone: "0123238xxxx",
+      email: "dangthithuthao2209@gmail.com",
+      phone: "0839124879",
       activeStatus: false,
     },
     {
-      fullName: "Dang Van C",
+      fullName: "Phan Anh Khoi",
       role: "Customer",
-      email: "abc@gmail.com",
-      phone: "0123238xxxx",
+      email: "phananhkhoi983@gmail.com",
+      phone: "0586492921",
       activeStatus: true,
     },
   ]);
