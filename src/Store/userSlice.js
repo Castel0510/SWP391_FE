@@ -64,29 +64,44 @@ export const loginUser = createAsyncThunk(
   }
 );
 
-export const createUser = createAsyncThunk(
-  "user/createUser",
-  async (userCredentials) => {
+// export const createUser = createAsyncThunk(
+//   "user/createUser",
+//   async (userCredentials) => {
 
-    console.log(userCredentials)
-    try {
-      const response = await axios.post(
-        `${LINK_API}/api/User/Register`,
-        userCredentials
-      );
-      return response;
-    } catch (err) {
-      console.log(err);
-    }
+//     console.log(userCredentials)
+//     try {
+//       const response = await axios.post(
+//         `${LINK_API}/api/User/Register`,
+//         userCredentials
+//       );
+//       return response;
+//     } catch (err) {
+//       console.log(err);
+//     }
+//   }
+// );
+
+export const createCustomer = createAsyncThunk(
+  "user/createCustomer",
+  async (customerCredentials) => {
+    const response = await axios.post(
+      `${LINK_API}/api/Customer/Create`,
+      customerCredentials
+    );
+    return response;
   }
 );
 
-// export const getUserInfo = createAsyncThunk("user/getUserInfo", async (id) => {
-//   const response = await axios.get(`${LINK_API}/api/User/Info?id=${id}`);
-//   saveUserInfoToLocalStorage(response?.data.result);
-//   console.log(response);
-//   return response;
-// });
+export const createProvider = createAsyncThunk(
+  "user/createUser",
+  async (providerCredentials) => {
+    const response = await axios.post(
+      `${LINK_API}/api/Provider/Create`,
+      providerCredentials
+    );
+    return response;
+  }
+);
 
 const userSlice = createSlice({
   name: "user",
@@ -122,17 +137,38 @@ const userSlice = createSlice({
           state.error = action.error.message;
         }
       })
+
       //create user
-      .addCase(createUser.pending, (state) => {
+      // .addCase(createUser.pending, (state) => {
+      //   state.loading = true;
+      //   state.error = null;
+      // })
+      // .addCase(createUser.fulfilled, (state, action) => {
+      //   state.loading = false;
+      //   state.user = action.payload;
+      //   state.error = null;
+      // })
+      // .addCase(createUser.rejected, (state, action) => {
+      //   state.loading = false;
+      //   state.user = null;
+      //   if (action.error.message === "Request failed with status code 400") {
+      //     state.error = "Access Denied! Your email is already existed";
+      //   } else {
+      //     state.error = action.error.message;
+      //   }
+      // })
+
+      //create customer
+      .addCase(createCustomer.pending, (state) => {
         state.loading = true;
         state.error = null;
       })
-      .addCase(createUser.fulfilled, (state, action) => {
+      .addCase(createCustomer.fulfilled, (state, action) => {
         state.loading = false;
         state.user = action.payload;
         state.error = null;
       })
-      .addCase(createUser.rejected, (state, action) => {
+      .addCase(createCustomer.rejected, (state, action) => {
         state.loading = false;
         state.user = null;
         if (action.error.message === "Request failed with status code 400") {
@@ -141,21 +177,26 @@ const userSlice = createSlice({
           state.error = action.error.message;
         }
       })
-      //get user info
-      // .addCase(getUserInfo.pending, (state) => {
-      //   state.loading = true;
-      //   state.error = null;
-      // })
-      // .addCase(getUserInfo.fulfilled, (state, action) => {
-      //   state.loading = false;
-      //   state.user = action.payload;
-      //   state.error = null;
-      // })
-      // .addCase(getUserInfo.rejected, (state, action) => {
-      //   state.loading = false;
-      //   state.user = null;
-      //   state.error = action.error.message;
-      // });
+
+      //create provider
+      .addCase(createProvider.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+      })
+      .addCase(createProvider.fulfilled, (state, action) => {
+        state.loading = false;
+        state.user = action.payload;
+        state.error = null;
+      })
+      .addCase(createProvider.rejected, (state, action) => {
+        state.loading = false;
+        state.user = null;
+        if (action.error.message === "Request failed with status code 400") {
+          state.error = "Access Denied! Your email is already existed";
+        } else {
+          state.error = action.error.message;
+        }
+      });
   },
   reducers: {
     logoutUser: (state) => {

@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { BiDetail } from 'react-icons/bi';
 import { MdOutlineAccountCircle } from 'react-icons/md';
 import ModalChangeStatusAccount from '../../../Components/Shared/ModalChangeStatusAccount';
+import { Link } from 'react-router-dom';
 
 const DataRow = ({ item, index, openModal, handleChangeStatus }) => {
   const handleClickAction = (action) => {
@@ -40,21 +41,21 @@ const DataRow = ({ item, index, openModal, handleChangeStatus }) => {
 const ProviderManagementPage = () => {
   const [data, setData] = useState([
     {
-      fullName: "Store A",
-      email: "abc@gmail.com",
-      phone: "0123238xxxx",
+      fullName: "Haven provider",
+      email: "havenprovider@gmail.com",
+      phone: "0586490555",
       confirmStatus: true,
     },
     {
-      fullName: "Store B",
-      email: "abc@gmail.com",
-      phone: "0123238xxxx",
+      fullName: "Petland provider",
+      email: "petland@gmail.com",
+      phone: "0827132836",
       confirmStatus: false,
     },
     {
-      fullName: "Store C",
-      email: "abc@gmail.com",
-      phone: "0123238xxxx",
+      fullName: "provider",
+      email: "provider@gmail.com",
+      phone: "0123238989",
       confirmStatus: true,
     },
   ]);
@@ -131,14 +132,14 @@ const ProviderManagementPage = () => {
         </div>
 
         {/* search */}
-        <label for="table-search" class="sr-only">Search</label>
-        <div class="relative">
-          <div class="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
-            <svg class="w-4 h-4 text-gray-500 " aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 20 20">
-              <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m19 19-4-4m0-7A7 7 0 1 1 1 8a7 7 0 0 1 14 0Z" />
+        <label for="table-search" className="sr-only">Search</label>
+        <div className="relative">
+          <div className="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
+            <svg className="w-4 h-4 text-gray-500 " aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 20 20">
+              <path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="m19 19-4-4m0-7A7 7 0 1 1 1 8a7 7 0 0 1 14 0Z" />
             </svg>
           </div>
-          <input type="text" id="table-search-users" class="block p-2 pl-10 text-sm text-gray-900 border border-gray-300 rounded-lg w-80 bg-gray-50 focus:ring-blue-500 focus:border-blue-50" placeholder="Search for users" />
+          <input type="text" id="table-search-users" className="block p-2 pl-10 text-sm text-gray-900 border border-gray-300 rounded-lg w-80 bg-gray-50 focus:ring-blue-500 focus:border-blue-50" placeholder="Search for users" />
         </div>
       </div>
 

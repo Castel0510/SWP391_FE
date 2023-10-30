@@ -114,6 +114,7 @@ const DropdownUser = (props) => {
                             tabIndex="-1"
                             id="menu-item-2"
                             onClick={handleLogout}
+                            style={{width: '100%', textAlign: 'start'}}
                         >
                             Sign out
                         </button>
