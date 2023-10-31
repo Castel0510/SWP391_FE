@@ -162,12 +162,14 @@
   // min-width: 500px;
   border-radius: 20px;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-  margin-right: 200px;
+  margin-right: 100px;
   // margin-top: 50px;
 
 }
 
-.image-img {}
+.image-img {
+  min-width:  500px;
+}
 
 .item-detail h2 {
   display: flex;

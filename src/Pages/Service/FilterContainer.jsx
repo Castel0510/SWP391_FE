@@ -132,6 +132,11 @@ const FilterContainer = ({ onFilterChange, selectedCategory }) => {
           <option value="Ha Noi">Hà Nội</option>
           <option value="Ho Chi Minh">Hồ Chí Minh</option>
           <option value="Da Nang">Đà Nẵng</option>
+          <option value="Can Tho">Cần thơ</option>
+          <option value="Hai Phong">Hải Phòng</option>
+          <option value="Nghe An">Nghệ An</option>
+          <option value="Hue">Huế</option>
+
 
         </select>
       </div>
