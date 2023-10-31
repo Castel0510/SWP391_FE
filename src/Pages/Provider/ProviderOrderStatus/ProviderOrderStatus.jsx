@@ -51,8 +51,8 @@ const ProviderOrderStatus = () => {
     const TABLE_ROWS = [
         {
             id: '1',
-            customer: "Lương Duyên Đức",
-            email: "ducld@gmail.com",
+            customer: "Nguyễn Văn A",
+            email: "ANV@gmail.com",
             phone: "0916480235",
             dateOrder: "01/01/2023",
             dateComplete: "02/01/2023",
