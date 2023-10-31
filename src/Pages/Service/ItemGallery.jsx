@@ -45,8 +45,11 @@ console.log("category" ,category);
       });
   }, [category, filters]);
 <<<<<<< HEAD
+<<<<<<< HEAD
 
   
+=======
+>>>>>>> parent of c391240 (a)
 =======
 >>>>>>> parent of c391240 (a)
   useEffect(() => {
