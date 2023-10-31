@@ -43,7 +43,7 @@ const ItemGallery = ({ category, onItemClick, filters }) => {
       });
   }, [category, filters]);
 
-
+  
   useEffect(() => {
     setCurrentPage(1);
   }, [category]);
