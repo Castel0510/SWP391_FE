@@ -132,7 +132,7 @@ const PaymentComponent = () => {
 
         <div className="done-button">
         <PaymentButton dataToSend={dataToSend} />
-        <button onClick={handleDoneClick}>Done</button>
+        {/* <button onClick={handleDoneClick}>Done</button> */}
         </div>
       </div>
     </div>

@@ -132,17 +132,17 @@
 }
 
 .detail-content {
-  box-shadow: 0px 6px 12px rgba(0, 0, 0, 0.4);
-  max-width:1000px;
+  // box-shadow: 0px 6px 12px rgba(0, 0, 0, 0.4);
+  max-width:100px;
   min-width: 1300px;
   display: flex;
   flex-direction: column;
   align-items: center;
   // text-align: center;
   padding: 20px;
-  background-color: #eeffe9;
+  // background-color: #eeffe9;
   // border-radius: 8px;
-  // box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
   // max-width: 60%;
 }
 
@@ -157,12 +157,12 @@
 }
 
 .item-detail img {
-  max-width: 500px;
-  height: 500px;
+  // max-width: 1000px;
+  // height: 500px;
   // min-width: 500px;
-  border-radius: 8px;
+  border-radius: 20px;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-  margin-right: 50px;
+  margin-right: 200px;
   // margin-top: 50px;
 
 }
@@ -961,6 +961,8 @@ form button[type="submit"]:hover {
   border-radius: 5px;
   padding: 30px;
   box-shadow: 0px 6px 12px rgba(0, 0, 0, 0.4);
+  min-width: 500px;
+  max-width: 500px;
 }
 
 .item-description-label {

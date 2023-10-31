@@ -53,7 +53,6 @@ const FilterContainer = ({ onFilterChange, selectedCategory }) => {
   }, []);
 
   useEffect(() => {
-    // Fetch data and set serviceOptions based on selectedCategory
     const apiUrl = "https://63692ab028cd16bba716cff0.mockapi.io/login";
 
     fetch(apiUrl)
@@ -80,6 +79,7 @@ const FilterContainer = ({ onFilterChange, selectedCategory }) => {
         setLoading(false);
       });
   }, [selectedCategory]);
+
   const handlePriceSortChange = (sort) => {
     setSelectedPriceSort(sort);
     onFilterChange({ priceSort: sort, rating: selectedRating, address: selectedAddress });
@@ -129,8 +129,10 @@ const FilterContainer = ({ onFilterChange, selectedCategory }) => {
         <label>Location:</label>
         <select onChange={(e) => handleAddressChange(e.target.value)}>
           <option value="">Any</option>
-          <option value="Ha Noi">Ha Noi</option>
-          <option value="Ho Chi Minh">Ho Chi Minh</option>
+          <option value="Ha Noi">Hà Nội</option>
+          <option value="Ho Chi Minh">Hồ Chí Minh</option>
+          <option value="Da Nang">Đà Nẵng</option>
+
         </select>
       </div>
       <div className="filter-option">

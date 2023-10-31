@@ -164,7 +164,7 @@ const BookingMedical = () => {
     const selectedOptionPrice = parseFloat(selectedOption);
     const checkboxPrices = selectedCheckboxes.map((checkbox) => checkbox.price);
     const checkboxTotalPrice = checkboxPrices.reduce((acc, price) => acc + price, 0);
-    const newTotalPrice = days * selectedItemPrice + days * selectedOptionPrice + checkboxTotalPrice;
+    const newTotalPrice =  selectedItemPrice +  selectedOptionPrice + checkboxTotalPrice;
     const newServiceName = selectedItem2.name;
     const categoryData = selectedItem2.category;
     const updatedFormData = {
