@@ -71,13 +71,17 @@ const DropdownUser = (props) => {
                 >
                     <div className="w-8 h-8 rounded-full border border-solid border-black p-1">
                         <img
-                            src={user?.avatarURL || user?.image || avatar_tmp}
+                            src={user?.user?.avatarURL && user?.user?.avatarURL !== "string"
+                                ? user.user?.avatarURL
+                                : user?.user?.image && user?.user?.image !== "string"
+                                    ? user?.user?.image
+                                    : avatar_tmp}
                             alt="User Avatar"
                             className="w-full h-full rounded-full"
                         />
                     </div>
 
-                    <p className="px-1">{user?.fullname}</p>
+                    <p className="px-1">{user?.providerName || user?.user?.fullname || user?.fullname}</p>
 
                     <svg className="-mr-1 h-5 w-5 text-gray-400" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
                         <path fillRule="evenodd" d="M5.23 7.21a.75.75 0 011.06.02L10 11.168l3.71-3.938a.75.75 0 111.08 1.04l-4.25 4.5a.75.75 0 01-1.08 0l-4.25-4.5a.75.75 0 01.02-1.06z" clipRule="evenodd" />
@@ -114,7 +118,7 @@ const DropdownUser = (props) => {
                             tabIndex="-1"
                             id="menu-item-2"
                             onClick={handleLogout}
-                            style={{width: '100%', textAlign: 'start'}}
+                            style={{ width: '100%', textAlign: 'start' }}
                         >
                             Sign out
                         </button>
