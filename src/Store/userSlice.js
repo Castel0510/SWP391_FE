@@ -50,6 +50,7 @@ export const loginUser = createAsyncThunk(
 
     const token = response.data.result;
     const user = jwt_decode(token);
+    console.log("token",user);
     saveUserToLocalStorage(user);
 
     if (response.status === 200) {

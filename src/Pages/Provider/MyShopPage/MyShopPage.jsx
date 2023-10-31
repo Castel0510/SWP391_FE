@@ -13,9 +13,9 @@ const MyShopPage = () => {
 
 
     const items = JSON.parse(localStorage.getItem('user'));
-    console.log("check", items);
+    // console.log("check", items);
 
-    const GetByProviderId = `https://apis20231023230305.azurewebsites.net/api/BirdService/GetByProviderId?id=${items.Id}`;
+    const GetByProviderId = `https://apis20231023230305.azurewebsites.net/api/BirdService/GetByProviderId?id=${12}`;
 
     const fetchData = async () => {
         try {
@@ -30,7 +30,7 @@ const MyShopPage = () => {
             setIsLoading(false);
         }
     };
-    console.log(data);
+    // console.log(data);
 
     useEffect(() => {
         fetchData();

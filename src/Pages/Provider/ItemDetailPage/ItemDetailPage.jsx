@@ -10,16 +10,32 @@ const ItemDetailPage = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState(null);
   const [data, setData] = useState([]);
+  const [serviceCateList, setServiceCateList] = useState([]);
 
   const location = useLocation();
   const item = location.state?.item.id;
+  // console.log("item:", item);
 
   const fetchData = async () => {
     try {
       setIsLoading(true);
 
       const response = await axios.get(`https://apis20231023230305.azurewebsites.net/api/BirdService/GetById?id=${item}`);
-      setData(response.data.result);
+      setData(response?.data?.result);
+
+      setIsLoading(false);
+    } catch (error) {
+      setError(error.message);
+      setIsLoading(false);
+    }
+  };
+
+  const serviceCate = async () => {
+    try {
+      setIsLoading(true);
+
+      const response = await axios.get(`https://apis20231023230305.azurewebsites.net/api/ServiceCategory/Get?pageIndex=0&pageSize=9999`);
+      setServiceCateList(response?.data?.result?.items);
 
       setIsLoading(false);
     } catch (error) {
@@ -30,9 +46,10 @@ const ItemDetailPage = () => {
 
   useEffect(() => {
     fetchData();
+    serviceCate();
   }, []);
 
-  console.log(data);
+  // console.log("serviceCateList: ", serviceCateList);
 
   if (isLoading) {
     return (
@@ -55,10 +72,6 @@ const ItemDetailPage = () => {
   }
 
 
-
-
-
-
   const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
 
   const validationSchema = Yup.object().shape({
@@ -71,7 +84,7 @@ const ItemDetailPage = () => {
       .of(
         Yup.object().shape({
           serviceType: Yup.string().required('serviceType is required'),
-          service: Yup.string().required('service Price is required'),
+          priceName: Yup.string().required('priceName Price is required'),
           birdSize: Yup.string().required('birdSize Price is required'),
           birdType: Yup.string().required('birdType Price is required'),
           priceAmount: Yup.string().required('priceAmount Price is required'),
@@ -123,20 +136,35 @@ const ItemDetailPage = () => {
 
   ];
 
+  // console.log(">>>>",serviceCategory[data?.serviceType].label);
+
+  // console.log(">>>>", data?.prices?.map(item => item));
+  // console.log("priceName", data?.prices?.map(item => item.priceName));
+
+  const priceMap = (data?.prices && data?.prices?.map(item => (
+    {
+      serviceType: item.serviceType,
+      priceName: item.priceName,
+      birdSize: item.birdSize,
+      birdType: item.birdType,
+      priceAmount: item.priceAmount,
+      priceType: item.priceType,
+    }
+  )))
 
 
   return (
     <>
-      <div className="w-full flex justify-center ">
-        <div className="w-fit ring-1 p-4">
+      <div className="w-full flex justify-center my-8">
+        <div className="w-fit ring-2 p-6 rounded-md">
           <h1 className="font-bold mb-7 text-center text-2xl">Edit SERVICE</h1>
           <Formik
             initialValues={{
-              birdServiceName: data.birdServiceName,
-              description: data.description,
-              imageURL: data.imageURL,
-              videoURL: data.videoURL,
-              prices: [prices],
+              birdServiceName: data?.birdServiceName,
+              description: data?.description,
+              imageURL: data?.imageURL,
+              videoURL: data?.videoURL,
+              prices: priceMap,
             }}
             validationSchema={validationSchema}
             onSubmit={async (values) => {
@@ -205,7 +233,7 @@ const ItemDetailPage = () => {
                     name="description"
                     id="description"
                     placeholder="Write your description here"
-                    className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 "
+                    className="min-h-[8rem] bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 "
                   />
                   <ErrorMessage
                     name="description"
@@ -242,32 +270,25 @@ const ItemDetailPage = () => {
                           </div>
 
                           <div className="flex flex-col mb-4 mr-4 min-w-fit">
-                            <label htmlFor="service" className="font-bold mb-2">
-                              Select service
+                            <label htmlFor="priceName" className="font-bold mb-2">
+                              Select priceName
                             </label>
                             <Field
                               as="select"
-                              name="service"
-                              id="service"
+                              name="priceName"
+                              id="priceName"
                               className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 "
                             >
-                              <option value="">Select service</option>
-                              {values.serviceType === "0" && (
-                                <option value="bird-sitting">Bird sitting</option>
-                              )}
-                              {values.serviceType === "1" && (
-                                <>
-                                  <option value="nail-clipping">Nail clipping</option>
-                                  <option value="wing-clipping">Wing clipping</option>
-                                  <option value="beak-trimming">Beak trimming</option>
-                                </>
-                              )}
-                              {values.serviceType === "2" && (
-                                <option value="dna-sexing">DNA Sexing</option>
-                              )}
+                              <option value="">Select</option>
+                              {serviceCateList?.map && serviceCateList?.map((item, index) => (
+                                values?.serviceType === String(item?.serviceType) && (  // Add this condition
+                                  <option key={index} value={item.categoryName}>
+                                    {item.categoryName}
+                                  </option>
+                                )
+                              ))}
                             </Field>
                           </div>
-
 
                           <div className="flex flex-col mb-4 mr-4 min-w-fit">
                             <label htmlFor="birdSize" className="font-bold mb-2">
@@ -350,9 +371,9 @@ const ItemDetailPage = () => {
                             onClick={() => {
                               const exists = values.prices.some((data) => data.birdType === values.birdType);
                               if (!exists) {
-                                push({ serviceType: Number(values.serviceType), service: values.service, birdSize: Number(values.birdSize), birdType: Number(values.birdType), priceAmount: Number(values.priceAmount), priceType: Number(values.priceType) });
+                                push({ serviceType: Number(values.serviceType), priceName: values.priceName, birdSize: Number(values.birdSize), birdType: Number(values.birdType), priceAmount: Number(values.priceAmount), priceType: Number(values.priceType) });
                                 setFieldValue("serviceType", "");
-                                setFieldValue("service", "");
+                                setFieldValue("priceName", "");
                                 setFieldValue("birdSize", "");
                                 setFieldValue("birdType", "");
                                 setFieldValue("priceAmount", "0");
@@ -369,12 +390,12 @@ const ItemDetailPage = () => {
                           component="div"
                           className="text-red-500 mt-3"
                         />
-                        {values.prices.map((data, index) => (
+                        {values?.prices && values?.prices?.map((data, index) => (
                           <div key={index} className="overflow-hidden flex my-7">
                             <div className="flex flex-col mb-4 mr-4 max-w-[100px]">
                               <Field
                                 name={`prices.${index}.serviceType`}
-                                value={serviceCategory[data.serviceType].label}
+                                value={serviceCategory[data.serviceType]?.label}
                                 className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block  p-2.5"
                                 readOnly
                               />
@@ -382,8 +403,8 @@ const ItemDetailPage = () => {
                             </div>
                             <div className="flex flex-col mb-4 mr-4 max-w-[100px]">
                               <Field
-                                name={`prices.${index}.service`}
-                                value={data.service}
+                                name={`prices.${index}.priceName`}
+                                value={data.priceName}
                                 className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
                                 readOnly
                               />
@@ -391,7 +412,7 @@ const ItemDetailPage = () => {
                             <div className="flex flex-col mb-4 mr-4 max-w-[110px]">
                               <Field
                                 name={`prices.${index}.birdSize`}
-                                value={birdSize[data.birdSize].label}
+                                value={birdSize[data.birdSize]?.label}
                                 className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
                                 readOnly
                               />
@@ -399,7 +420,7 @@ const ItemDetailPage = () => {
                             <div className="flex flex-col mb-4 mr-4 max-w-[130px]">
                               <Field
                                 name={`prices.${index}.birdType`}
-                                value={birdType[data.birdType].label}
+                                value={birdType[data.birdType]?.label}
                                 className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
                                 readOnly
                               />
@@ -415,7 +436,7 @@ const ItemDetailPage = () => {
                             <div className="flex flex-col mb-4 mr-4 max-w-[100px]">
                               <Field
                                 name={`prices.${index}.priceType`}
-                                value={priceType[data.priceType].label}
+                                value={priceType[data.priceType]?.label}
                                 className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block  p-2.5"
                                 readOnly
                               />
