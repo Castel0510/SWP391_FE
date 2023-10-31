@@ -1,12 +1,10 @@
 import React, { useState, useEffect } from 'react';
-import { Link, useNavigate, useParams } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
 import './OrderDetailPage.scss';
 import { FaArrowLeft } from 'react-icons/fa';
-import LoadingSpinner from '../Service/LoadingSpinner';
 
 const OrderDetailPage = () => {
   const { orderId } = useParams();
-  const navigate = useNavigate();
 
   const [order, setOrder] = useState(null);
 
@@ -24,17 +22,8 @@ const OrderDetailPage = () => {
   }, [orderId]);
 
   if (!order) {
-    return <LoadingSpinner />
-      ;
+    return <div>Loading...</div>;
   }
-
-
-  const handlePaymentClick = () => {
-    if (order) {
-      const orderId = order.id;
-      navigate('/payment',{ state: { order },});
-    }
-  };
 
   return (
     <div className={`order-detail`}>
@@ -52,17 +41,14 @@ const OrderDetailPage = () => {
       <p><strong>Detail:</strong> {order.note}</p>
       <p><strong>Email:</strong> {order.email}</p>
       <p><strong>Phone:</strong> {order.phone}</p>
-
+      {/* <p><strong>Reason:</strong> {order.reason}</p> */}
       <p><strong>Bird Size:</strong> {order.size.toUpperCase()}</p>
       <p><strong>Price:</strong> {order.price}</p>
       <p><strong>Status:</strong> {order.status}</p>
-      <p><strong>Id:</strong> {order.id}</p>
 
       {order.status === 'CANCEL' && (
         <p className="status-CANCEL"><strong>Reason for Cancellation:</strong> {order.reason}</p>
       )}
-      <button onClick={handlePaymentClick}>Proceed to Payment</button>
-
     </div>
   );
 };

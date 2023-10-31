@@ -5,9 +5,8 @@
   import { useNavigate } from 'react-router-dom';
   import { format, differenceInDays, addDays } from 'date-fns';
   import { FaArrowLeft } from 'react-icons/fa';
-  import { useDispatch, useSelector } from 'react-redux';
+  import { useSelector } from 'react-redux';
 import { getUserInfoInLocalStorage } from '../../Store/userSlice';
-import { fetchServices } from '../../Store/serviceSlice';
 
 
 
@@ -25,14 +24,16 @@ import { fetchServices } from '../../Store/serviceSlice';
         .then((response) => response.json())
         .then((data) => {
           setItems1(data);
+          // setLoading(false);
         })
         .catch((error) => {
           console.error("Error fetching data:", error);
+          // setLoading(false);
         });
     }, []);
+    // console.log("item 1", items);
 
-
-  
+    // console.log("2items1", items1);
 
 
     const [selectedSize, setSelectedSize] = useState('');

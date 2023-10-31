@@ -10,40 +10,6 @@ import CommentsComponent from "./CommentComponent";
 import { getUser, getUserInfoInLocalStorage } from "../../Store/userSlice";
 
 const ItemDetailPage = () => {
-  const birdSize = [
-    { value: 0, label: 'Chim cảnh' },
-    { value: 1, label: 'Chào Mào' },
-    { value: 2, label: 'Cu Gáy' },
-    { value: 3, label: 'Bồ câu' },
-    { value: 4, label: 'Sơn Ca' },
-    { value: 5, label: 'Yến Phụng' },
-    { value: 6, label: 'Họa Mi' },
-    { value: 7, label: 'Vành Khuyên' },
-    { value: 8, label: 'Chim Ưng' },
-    { value: 9, label: 'Vẹt' },
-    { value: 10, label: 'Công' },
-    { value: 11, label: 'Quạ' },
-    { value: 12, label: 'Chim Sẻ' },
-    { value: 13, label: 'Chích Chòe' },
-  ]
-
-  const birdType = [
-
-    { value: 0, label: 'less than 1kg' },
-    { value: 1, label: 'From 1kg to 2kg' },
-    { value: 2, label: 'From 3kg to 5kg' },
-    { value: 2, label: 'Greater than 5kg' },
-
-  ];
-
-  const priceType = [
-
-    { value: 0, label: 'Per hour' },
-    { value: 1, label: 'Per day' },
-    { value: 2, label: 'Per month' },
-
-  ];
-  
   const [items, setItems] = useState([]);
   const [loading, setLoading] = useState(true);
 
@@ -183,7 +149,7 @@ const ItemDetailPage = () => {
               </div>
             </div>
             <div class="gallery">
-
+              
               <ItemDetailGallery providerId={selectedItem.providerID} />
             </div>
           </div>
@@ -256,7 +222,7 @@ const ItemDetailPage = () => {
           )}
         </div>
       )}
-      <CommentsComponent />
+         <CommentsComponent />
     </div>
   );
 };

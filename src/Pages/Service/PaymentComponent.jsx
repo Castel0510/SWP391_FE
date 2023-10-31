@@ -6,58 +6,31 @@ const PaymentComponent = () => {
   const location = useLocation();
   const dataToSend = location.state?.dataToSend;
   const navigate = useNavigate();
+
   const handleDoneClick = () => {
-    // Assuming you're searching for order by serviceName and email
-    const { serviceName, email } = dataToSend;
+    const orderId = dataToSend.orderId; 
+    const updatedOrder = { ...dataToSend, status: 'DONE' }; 
   
-    if (!serviceName || !email) {
-      console.error('Error: Insufficient data to identify the order');
-      return;
-    }
-  
-    fetch(`https://64b1e204062767bc4826ae59.mockapi.io/da/Nhasx?serviceName=${serviceName}&email=${email}`)
+    fetch(`https://64b1e204062767bc4826ae59.mockapi.io/da/Nhasx/${orderId}`, {
+      method: 'PUT',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(updatedOrder),
+    })
       .then((response) => {
         if (response.ok) {
           return response.json();
         }
-        throw new Error('Failed to retrieve order details');
+        throw new Error('Failed to update order status');
       })
-      .then((orders) => {
-        const foundOrder = orders[0]; 
-  
-        if (!foundOrder) {
-          console.error('Error: Order not found');
-          return;
-        }
-  
-        const orderId = foundOrder.id;
-        const updatedOrder = { ...foundOrder, status: 'DONE' };
-  
-        fetch(`https://64b1e204062767bc4826ae59.mockapi.io/da/Nhasx`, {
-          method: 'PUT',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify(updatedOrder),
-        })
-          .then((response) => {
-            if (response.ok) {
-              return response.json();
-            }
-            throw new Error('Failed to update order status');
-          })
-          .then(() => {
-            navigate('/order');
-          })
-          .catch((error) => {
-            console.error('Error updating order status:', error);
-          });
+      .then(() => {
+        navigate('/order');
       })
       .catch((error) => {
-        console.error('Error retrieving order details:', error);
+        console.error('Error updating order status:', error);
       });
   };
-  
 
   if (!dataToSend) {
     return (
