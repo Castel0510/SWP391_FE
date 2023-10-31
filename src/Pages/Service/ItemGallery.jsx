@@ -44,8 +44,11 @@ console.log("category" ,category);
         setLoading(false); 
       });
   }, [category, filters]);
+<<<<<<< HEAD
 
   
+=======
+>>>>>>> parent of c391240 (a)
   useEffect(() => {
     setCurrentPage(1);
   }, [category]);
