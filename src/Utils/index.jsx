@@ -33,3 +33,13 @@ export const renderRatingStars = (rating) => {
 
   return stars;
 }
+
+export const truncateString = (str, maxLength) => {
+  const lorem = 'Lorem ipsum dolor sit amet consectetur, adipisicing elit. Ab inventore saepe harum ipsam error! Accusamus, error, delectus quo maiores in architecto officiis impedit harum repellat, iste cupiditate ipsam quia asperiores.'
+  if (str?.length > maxLength) {
+    return str?.substring(0, maxLength) + '...';
+  } else if (str === 'string') {
+    return lorem.substring(0, maxLength) + '...';
+  }
+  return str;
+}

@@ -2,17 +2,21 @@ import React, { useState } from 'react'
 import Modal from '../../../Components/Shared/Modal';
 import { toast } from 'react-toastify';
 import { Tooltip } from 'react-tooltip'
+import { updateProvider } from '../../../Store/userSlice';
+import { useDispatch } from 'react-redux';
 
 const ProviderUpdateProfile = (props) => {
 
     const { user, updateUser, onClose } = props;
-    const [fullname, setFullname] = useState(user.fullname);
-    const [email, setEmail] = useState(user.email);
-    const [phoneNumber, setPhoneNumber] = useState(user.phoneNumber);
-    const [location, setLocation] = useState(user.location);
-    const [about, setAbout] = useState(user.about);
+    const [fullname, setFullname] = useState(user?.providerName);
+    const [email, setEmail] = useState(user?.user?.email);
+    const [phoneNumber, setPhoneNumber] = useState(user?.user?.phoneNumber);
+    const [location, setLocation] = useState(user?.destination);
+    const [about, setAbout] = useState(user?.description);
 
     const [openModalConfirm, setOpenModalConfirm] = useState(false);
+
+    const dispatch = useDispatch();
 
     const handleOpenModal = () => {
         setOpenModalConfirm(true)
@@ -25,14 +29,46 @@ const ProviderUpdateProfile = (props) => {
     const handleUpdateProfile = () => {
         const updatedUser = {
             ...user,
-            fullname,
-            email,
-            phoneNumber,
-            location,
-            about
+            providerName: fullname,
+            user: {
+                ...user.user,
+                email: email,
+                phoneNumber: phoneNumber,
+            },
+            destination: location,
+            description: about
         };
+
+        const providerCredentials = {
+            providerName: fullname,
+            rating: user?.rating,
+            destination: location,
+            description: about,
+            createdAt: user.createdAt,
+            user: {
+                avatarURL: user.user.avatarURL,
+                fullname: fullname,
+                username: user.user.username,
+                password: user.user.password,
+                email: email,
+                dob: user.user.dob,
+                phoneNumber: phoneNumber,
+                createdAt: user.createdAt,
+                gender: user.user.gender,
+                status: user.user.status,
+                image: user.user.image,
+                role: user.user.role
+            }
+        }
+
+        console.log(providerCredentials)
+
+        dispatch(updateProvider({id: user.id, providerCredentials})).then((result) => {
+            console.log(result)
+        })
+
         updateUser(updatedUser);
-        toast.success('Update profile successfully!')
+        // toast.success('Update profile successfully!')
 
     }
 
@@ -86,9 +122,6 @@ const ProviderUpdateProfile = (props) => {
                                         type="text"
                                         value={email}
                                         onChange={(e) => setEmail(e.target.value)}
-                                        disabled
-                                        data-tooltip-id='warning-email'
-                                        data-tooltip-content="You can't change email!"
                                     />
 
                                     <Tooltip id="warning-email" />

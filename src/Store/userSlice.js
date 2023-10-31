@@ -4,30 +4,32 @@ import { LINK_API } from "../Constants";
 import jwt_decode from "jwt-decode";
 
 //xử lý ở local
+//user login
 const saveUserToLocalStorage = (user) => {
-  localStorage.setItem("user", JSON.stringify(user));
+  localStorage.setItem("userLogin", JSON.stringify(user));
 };
 
 const removeUserFromLocalStorage = () => {
-  localStorage.removeItem("user");
-};
-
-const saveUserInfoToLocalStorage = (user) => {
-  localStorage.setItem("userInfo", JSON.stringify(user));
-};
-
-const removeUserInfoFromLocalStorage = () => {
-  localStorage.removeItem("userInfo");
+  localStorage.removeItem("userLogin");
 };
 
 export const getUser = () => {
-  let user = localStorage.getItem("user");
+  let user = localStorage.getItem("userLogin");
   if (user) {
     user = JSON.parse(user);
   } else {
     user = null;
   }
   return user;
+};
+
+//user info
+const saveUserInfoToLocalStorage = (user) => {
+  localStorage.setItem("userInfo", JSON.stringify(user));
+};
+
+const removeUserInfoFromLocalStorage = () => {
+  localStorage.removeItem("userInfo");
 };
 
 export const getUserInfoInLocalStorage = () => {
@@ -57,7 +59,20 @@ export const loginUser = createAsyncThunk(
       const infoResponse = await axios.get(
         `${LINK_API}/api/User/Info?id=${id}`
       );
-      saveUserInfoToLocalStorage(infoResponse?.data.result);
+
+      if (
+        infoResponse?.data?.result?.role === 1 &&
+        infoResponse?.data?.result?.provider
+      ) {
+        saveUserInfoToLocalStorage(infoResponse.data.result?.provider);
+      } else if (
+        infoResponse?.data?.result?.role === 0 &&
+        infoResponse?.data?.result?.customer
+      ) {
+        saveUserInfoToLocalStorage(infoResponse.data.result?.customer);
+      } else {
+        saveUserInfoToLocalStorage(infoResponse.data.result);
+      }
     }
 
     return user;
@@ -100,6 +115,23 @@ export const createProvider = createAsyncThunk(
       providerCredentials
     );
     return response;
+  }
+);
+
+//update profile profile
+export const updateProvider = createAsyncThunk(
+  "user/updateProvider",
+  async ({id, providerCredentials}) => {
+
+    try {
+      const response = await axios.put(
+        `${LINK_API}/api/Provider/Update?id=${id}`,
+        providerCredentials
+      );
+      return response;
+    } catch (err) {
+      console.log(err);
+    }
   }
 );
 
@@ -196,6 +228,22 @@ const userSlice = createSlice({
         } else {
           state.error = action.error.message;
         }
+      })
+
+      //update profile provider
+      .addCase(updateProvider.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+      })
+      .addCase(updateProvider.fulfilled, (state, action) => {
+        state.loading = false;
+        state.user = action.payload;
+        state.error = null;
+      })
+      .addCase(updateProvider.rejected, (state, action) => {
+        state.loading = false;
+        state.user = null;
+        state.error = action.error.message;
       });
   },
   reducers: {
