@@ -11,18 +11,23 @@ const ItemDetailPage = () => {
   const [error, setError] = useState(null);
   const [data, setData] = useState([]);
   const [serviceCateList, setServiceCateList] = useState([]);
+  const [serviceCateId, setServiceCateId] = useState(null);
+  const [proId, setProId] = useState();
 
   const location = useLocation();
-  const item = location.state?.item.id;
-  // console.log("item:", item);
+  const itemId = location?.state?.item?.id
+  console.log("itemId", itemId);
+
+  const itemLocal = JSON.parse(localStorage.getItem("userInfo"));
+
 
   const fetchData = async () => {
     try {
       setIsLoading(true);
 
-      const response = await axios.get(`https://apis20231023230305.azurewebsites.net/api/BirdService/GetById?id=${item}`);
+      const response = await axios.get(`https://apis20231023230305.azurewebsites.net/api/BirdService/GetById?id=${itemId}`);
       setData(response?.data?.result);
-
+      console.log(data);
       setIsLoading(false);
     } catch (error) {
       setError(error.message);
@@ -44,9 +49,33 @@ const ItemDetailPage = () => {
     }
   };
 
+  const updateService = async (data) => {
+    try {
+      const headers = {
+        'accept': 'text/plain',
+        'Content-Type': 'application/json'
+      };
+      console.log(data);
+
+      setIsLoading(true);
+
+      const response = await axios.put(`https://apis20231023230305.azurewebsites.net/api/BirdService/Update?id=${itemId}`, data, { headers });
+
+      // Handle the response according to your requirements
+      console.log(response.data);
+
+      setIsLoading(false);
+    } catch (error) {
+      setError(error.message);
+      setIsLoading(false);
+    }
+  };
+
   useEffect(() => {
     fetchData();
     serviceCate();
+    // updateService();
+    setProId(itemLocal.id)
   }, []);
 
   // console.log("serviceCateList: ", serviceCateList);
@@ -67,8 +96,13 @@ const ItemDetailPage = () => {
     return <p>Error: {error}</p>;
   }
 
-  if (!item) {
+  if (!itemId) {
     return <div>Item not founds</div>;
+  }
+
+  const handleTakeServiceCateId = (value) => {
+    setServiceCateId(() => value);
+    console.log('serviceCateId: ', serviceCateId);
   }
 
 
@@ -136,11 +170,6 @@ const ItemDetailPage = () => {
 
   ];
 
-  // console.log(">>>>",serviceCategory[data?.serviceType].label);
-
-  // console.log(">>>>", data?.prices?.map(item => item));
-  // console.log("priceName", data?.prices?.map(item => item.priceName));
-
   const priceMap = (data?.prices && data?.prices?.map(item => (
     {
       serviceType: item.serviceType,
@@ -155,23 +184,31 @@ const ItemDetailPage = () => {
 
   return (
     <>
-      <div className="w-full flex justify-center my-8">
-        <div className="w-fit ring-2 p-6 rounded-md">
-          <h1 className="font-bold mb-7 text-center text-2xl">Edit SERVICE</h1>
+      <div className="w-full flex justify-center ">
+        <div className="w-fit ring-1 p-4">
+          <h1 className="font-bold mb-7 text-center text-2xl">EDIT SERVICE</h1>
           <Formik
             initialValues={{
               birdServiceName: data?.birdServiceName,
               description: data?.description,
               imageURL: data?.imageURL,
               videoURL: data?.videoURL,
+              serviceCategoryId: serviceCateId,
+              providerId: proId,
               prices: priceMap,
             }}
             validationSchema={validationSchema}
             onSubmit={async (values) => {
-              // values.serviceType = parseInt(values.serviceType);
               await sleep(500);
+              console.log(values);
               const { birdServiceName, description, imageURL, videoURL, prices } = values;
-              console.log(JSON.stringify({ birdServiceName, description, imageURL, videoURL, prices }, null, 2));
+              const newObj = { birdServiceName, description, imageURL, videoURL, serviceCategoryId: serviceCateId, providerId: proId, prices };
+              // console.log(newObj)
+              console.log(JSON.stringify({ newObj }, null, 2));
+
+              const test = { ...newObj };
+              // updateService(test);
+
             }}
           >
             {({ isSubmitting, values, setFieldValue }) => (
@@ -233,7 +270,7 @@ const ItemDetailPage = () => {
                     name="description"
                     id="description"
                     placeholder="Write your description here"
-                    className="min-h-[8rem] bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 "
+                    className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 "
                   />
                   <ErrorMessage
                     name="description"
@@ -279,16 +316,18 @@ const ItemDetailPage = () => {
                               id="priceName"
                               className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 "
                             >
-                              <option value="">Select</option>
+                              <option value="">Select priceName</option>
                               {serviceCateList?.map && serviceCateList?.map((item, index) => (
                                 values?.serviceType === String(item?.serviceType) && (  // Add this condition
-                                  <option key={index} value={item.categoryName}>
+                                  <option key={index} value={item.categoryName} onChange={handleTakeServiceCateId(item.id)}>
                                     {item.categoryName}
                                   </option>
                                 )
+
                               ))}
                             </Field>
                           </div>
+
 
                           <div className="flex flex-col mb-4 mr-4 min-w-fit">
                             <label htmlFor="birdSize" className="font-bold mb-2">
@@ -334,7 +373,7 @@ const ItemDetailPage = () => {
                           <div className="overflow-hidden mx-4 max-w-[100px]">
                             <div className="flex flex-col mb-4">
                               <label htmlFor="priceAmount" className="font-bold mb-2">
-                                Price
+                                Price($)
                               </label>
                               <Field
                                 name="priceAmount"
@@ -390,7 +429,7 @@ const ItemDetailPage = () => {
                           component="div"
                           className="text-red-500 mt-3"
                         />
-                        {values?.prices && values?.prices?.map((data, index) => (
+                        {values?.prices?.map((data, index) => (
                           <div key={index} className="overflow-hidden flex my-7">
                             <div className="flex flex-col mb-4 mr-4 max-w-[100px]">
                               <Field
@@ -401,7 +440,7 @@ const ItemDetailPage = () => {
                               />
 
                             </div>
-                            <div className="flex flex-col mb-4 mr-4 max-w-[100px]">
+                            <div className="flex flex-col mb-4 mr-4 max-w-[110px]">
                               <Field
                                 name={`prices.${index}.priceName`}
                                 value={data.priceName}

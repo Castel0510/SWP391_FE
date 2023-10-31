@@ -12,7 +12,29 @@ const CreateServicePage = () => {
     const [error, setError] = useState(null);
     const [serviceCateList, setServiceCateList] = useState([]);
     const [serviceCateId, setServiceCateId] = useState(null);
+    const [proId, setProId] = useState();
 
+
+    const items = JSON.parse(localStorage.getItem("userInfo"));
+
+
+    const createService = async (data) => {
+        try {
+            console.log(data);
+
+            setIsLoading(true);
+
+            const response = await axios.post("https://apis20231023230305.azurewebsites.net/api/BirdService/Create", data);
+
+            // Handle the response according to your requirements
+            console.log(response.data);
+
+            setIsLoading(false);
+        } catch (error) {
+            setError(error.message);
+            setIsLoading(false);
+        }
+    };
 
 
     const serviceCate = async () => {
@@ -31,6 +53,7 @@ const CreateServicePage = () => {
 
     useEffect(() => {
         serviceCate();
+        setProId(items.id)
     }, []);
 
     if (isLoading) {
@@ -62,14 +85,13 @@ const CreateServicePage = () => {
         birdServiceName: Yup.string().required('Service name is required'),
         imageURL: Yup.string().required('Picture is required'),
         videoURL: Yup.string().required('Video is required'),
-        location: Yup.string().required('location is required'),
         description: Yup.string().required('description is required'),
         prices: Yup.array()
             .min(1, 'At least one birdType must be added to Size Data')
             .of(
                 Yup.object().shape({
                     serviceType: Yup.string().required('serviceType is required'),
-                    service: Yup.string().required('service Price is required'),
+                    priceName: Yup.string().required('priceName Price is required'),
                     birdSize: Yup.string().required('birdSize Price is required'),
                     birdType: Yup.string().required('birdType Price is required'),
                     priceAmount: Yup.string().required('priceAmount Price is required'),
@@ -78,15 +100,7 @@ const CreateServicePage = () => {
             ),
     });
 
-    const location = [
-        { value: 1, label: 'Hà Nội' },
-        { value: 2, label: 'TP.HCM' },
-        { value: 3, label: 'Đà Nẵng' },
-        { value: 4, label: 'Cần thơ' },
-        { value: 5, label: 'Hải Phòng' },
-        { value: 6, label: 'Nghệ An' },
-        { value: 7, label: 'Huế' },
-    ]
+    
 
 
     const serviceCategory = [
@@ -144,19 +158,22 @@ const CreateServicePage = () => {
                             description: "",
                             imageURL: "",
                             videoURL: "",
-                            location: Number,
                             serviceCategoryId: serviceCateId,
+                            providerId: proId,
                             prices: [],
                         }}
                         validationSchema={validationSchema}
                         onSubmit={async (values) => {
-                            values.location = Number(values.location);
                             await sleep(500);
                             console.log(values);
-                            const { birdServiceName, description, imageURL, videoURL, location, prices } = values;
-                            const newObj = { birdServiceName, description, imageURL, videoURL, location, serviceCategoryId: serviceCateId, prices };
+                            const { birdServiceName, description, imageURL, videoURL, prices } = values;
+                            const newObj = { birdServiceName, description, imageURL, videoURL, serviceCategoryId: serviceCateId, providerId: proId, prices };
                             // console.log(newObj)
-                            console.log(JSON.stringify(newObj, null, 2));
+                            console.log(JSON.stringify({ newObj }, null, 2));
+
+                            const test = { ...newObj };
+                            createService(test);
+
                         }}
                     >
                         {({ isSubmitting, values, setFieldValue }) => (
@@ -211,29 +228,6 @@ const CreateServicePage = () => {
                                 </div>
                                 <div className="flex flex-col mb-4">
                                     <label
-                                        htmlFor="location"
-                                        className="font-bold mb-2">
-                                        Location
-                                    </label>
-                                    <Field
-                                        as="select"
-                                        name="location"
-                                        id="location"
-                                        className=" bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 "
-                                    >
-                                        <option>Select location</option>
-                                        {location.map(({ value, label }, index) => (
-                                            <option
-                                                key={index}
-                                                value={Number(value)}
-                                            >
-                                                {label}
-                                            </option>
-                                        ))}
-                                    </Field>
-                                </div>
-                                <div className="flex flex-col mb-4">
-                                    <label
                                         htmlFor="description"
                                         className="font-bold mb-2">Description</label>
                                     <Field
@@ -278,19 +272,19 @@ const CreateServicePage = () => {
                                                     </div>
 
                                                     <div className="flex flex-col mb-4 mr-4 min-w-fit">
-                                                        <label htmlFor="service" className="font-bold mb-2">
-                                                            Select service
+                                                        <label htmlFor="priceName" className="font-bold mb-2">
+                                                            Select priceName
                                                         </label>
                                                         <Field
                                                             as="select"
-                                                            name="service"
-                                                            id="service"
+                                                            name="priceName"
+                                                            id="priceName"
                                                             className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 "
                                                         >
-                                                            <option value="">Select service</option>
+                                                            <option value="">Select priceName</option>
                                                             {serviceCateList?.map && serviceCateList?.map((item, index) => (
                                                                 values?.serviceType === String(item?.serviceType) && (  // Add this condition
-                                                                    <option key={index} value={item.categoryName} onChange={handleTakeServiceCateId(item.serviceType)}>
+                                                                    <option key={index} value={item.categoryName} onChange={handleTakeServiceCateId(item.id)}>
                                                                         {item.categoryName}
                                                                     </option>
                                                                 )
@@ -381,9 +375,9 @@ const CreateServicePage = () => {
                                                         onClick={() => {
                                                             const exists = values.prices.some((data) => data.birdType === values.birdType);
                                                             if (!exists) {
-                                                                push({ serviceType: Number(values.serviceType), service: values.service, birdSize: Number(values.birdSize), birdType: Number(values.birdType), priceAmount: Number(values.priceAmount), priceType: Number(values.priceType) });
+                                                                push({ serviceType: Number(values.serviceType), priceName: values.priceName, birdSize: Number(values.birdSize), birdType: Number(values.birdType), priceAmount: Number(values.priceAmount), priceType: Number(values.priceType) });
                                                                 setFieldValue("serviceType", "");
-                                                                setFieldValue("service", "");
+                                                                setFieldValue("priceName", "");
                                                                 setFieldValue("birdSize", "");
                                                                 setFieldValue("birdType", "");
                                                                 setFieldValue("priceAmount", "0");
@@ -413,8 +407,8 @@ const CreateServicePage = () => {
                                                         </div>
                                                         <div className="flex flex-col mb-4 mr-4 max-w-[110px]">
                                                             <Field
-                                                                name={`prices.${index}.service`}
-                                                                value={data.service}
+                                                                name={`prices.${index}.priceName`}
+                                                                value={data.priceName}
                                                                 className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
                                                                 readOnly
                                                             />

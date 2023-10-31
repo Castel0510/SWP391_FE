@@ -12,10 +12,10 @@ const MyShopPage = () => {
     const [currentPage, setCurrentPage] = useState(1); // Current page number
 
 
-    const items = JSON.parse(localStorage.getItem('user'));
-    // console.log("check", items);
+    const items = JSON.parse(localStorage.getItem("userInfo"));
+    // console.log("check id: ", items?.id);
 
-    const GetByProviderId = `https://apis20231023230305.azurewebsites.net/api/BirdService/GetByProviderId?id=${12}`;
+    const GetByProviderId = `https://apis20231023230305.azurewebsites.net/api/BirdService/GetByProviderId?id=${items?.id}`;
 
     const fetchData = async () => {
         try {
@@ -94,16 +94,16 @@ const MyShopPage = () => {
                             className="max-w-sm bg-white border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700"
                         >
                             <div>
-                                <img className="rounded-t-lg min-w-full max-h-[240px]" src={item.imageURL} alt="" />
+                                <img className="rounded-t-lg w-[350px] h-[240px]" src={item.imageURL} alt="" />
                             </div>
                             <div className="p-5 ">
                                 <div>
                                     <h5 className="mb-2 text-2xl font-bold tracking-tight text-gray-900 dark:text-white">{item.birdServiceName}</h5>
                                 </div>
                                 <p className="mb-3 font-normal text-gray-700 dark:text-gray-400 line-clamp-2 leading-5">{item.description}</p>
-                                <div className='flex my-4'>
-                                    {renderRatingStars(item.avgRating)}
-                                    {/* <span className="bg-blue-100 text-blue-800 text-xs font-semibold mr-2 px-2.5 py-0.5 rounded dark:bg-blue-200 dark:text-blue-800 ml-3">{item.rating.toFixed(1)}</span> */}
+                                <div className='flex my-4' key={item.id}>
+                                    {renderRatingStars(parseInt(item.avgRating))}
+                                    <span className="bg-blue-100 text-blue-800 text-xs font-semibold mr-2 px-2.5 py-0.5 rounded dark:bg-blue-200 dark:text-blue-800 ml-3">{item?.rating?.toFixed(1)}</span>
                                 </div>
                                 <div className='font-bold my-4'>{item.pricePerDay}$</div>
                                 <div className="float-right inline-flex items-center px-3 py-2 mb-10 text-sm font-medium text-center text-white bg-blue-700 rounded-lg hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">
