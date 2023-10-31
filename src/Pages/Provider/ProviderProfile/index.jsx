@@ -10,14 +10,11 @@ import { getUserInfoInLocalStorage } from '../../../Store/userSlice';
 const ProviderProfile = () => {
 
   const [user, setUser] = useState('')
-
-  const dataUser = useSelector((state) => state.user);
-
   const [showUpdateProfile, setShowUpdateProfile] = useState(false);
 
   useEffect(() => {
     setUser(getUserInfoInLocalStorage());
-  }, [dataUser]);
+  }, []);
 
   const updateUser = (newUserData) => {
 
@@ -35,7 +32,12 @@ const ProviderProfile = () => {
       <div className='p-4 flex h-full flex-col justify-center items-center gap-5 '>
         <div className="img-avatar">
           <img className="object-cover w-full ring-1 ring-gray-300 md:h-auto md:w-48 md:rounded-none"
-            src={user?.avatarURL || user?.image || avatar_tmp} alt="" />
+            src={user?.user?.avatarURL && user?.user?.avatarURL !== "string"
+              ? user.user?.avatarURL
+              : user?.user?.image && user?.user?.image !== "string"
+                ? user?.user?.image
+                : avatar_tmp}
+            alt="" />
 
           <div className="hidden absolute bottom-0 right-0 bg-white p-2">
             <AiFillCamera className="w-5 h-5" />
@@ -76,6 +78,7 @@ const ProviderProfile = () => {
                 user={user}
                 updateUser={updateUser}
                 onClose={() => setShowUpdateProfile(false)}
+                onUpdate={updateUser}
               />
             }
 
@@ -89,7 +92,7 @@ const ProviderProfile = () => {
                   Full name
                 </dt>
                 <dd className="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">
-                  {user?.fullname}
+                  {user?.providerName}
                 </dd>
               </div>
 
@@ -98,7 +101,7 @@ const ProviderProfile = () => {
                   Email
                 </dt>
                 <dd className="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">
-                  {user?.email === 'string' ? 'havenprovider@gmail.com' : user?.email}
+                  {user?.user?.email === 'string' ? 'havenprovider@gmail.com' : user?.user?.email}
                 </dd>
               </div>
 
@@ -107,7 +110,7 @@ const ProviderProfile = () => {
                   Phone
                 </dt>
                 <dd className="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">
-                  {user?.phoneNumber === 0 ? '0586123859' : user?.phoneNumber}
+                  {user?.user?.phoneNumber === 0 ? '0586123859' : user?.user?.phoneNumber}
                 </dd>
               </div>
 
@@ -116,16 +119,21 @@ const ProviderProfile = () => {
                   Location
                 </dt>
                 <dd className="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">
-                  TP.HCM
+                  {user?.destination && user?.destination !== 'string' ? user?.destination : 'TP.HCM'}
                 </dd>
               </div>
 
-              <div className="bg-gray-200 px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
+              <div className="bg-gray-200 px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6" style={{ minWidth: '640px' }}>
                 <dt className="text-sm font-medium text-gray-500">
                   About
                 </dt>
                 <dd className="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">
-                  At Bird Haven, we are dedicated to bringing the joy of avian companionship to your life. As a premier bird shop, we offer a wide range of services and products to cater to bird enthusiasts of all kinds. Whether you're an experienced avian aficionado or just starting your journey with feathered friends, we have something for everyone
+                  {user?.description && user?.description !== 'string'
+                    ?
+                    user?.description
+                    :
+                    "At Bird Haven, we are dedicated to bringing the joy of avian companionship to your life. As a premier bird shop, we offer a wide range of services and products to cater to bird enthusiasts of all kinds. Whether you're an experienced avian aficionado or just starting your journey with feathered friends, we have something for everyone"
+                  }
                 </dd>
               </div>
             </dl>

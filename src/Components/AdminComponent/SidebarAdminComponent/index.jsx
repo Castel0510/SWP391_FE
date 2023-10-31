@@ -15,7 +15,7 @@ const SidebarAdminComponent = () => {
     {
       icon: <MdManageAccounts className='w-5 h-5' />,
       path: '/admin-account-management',
-      display: 'Account Management',
+      display: 'User Management',
     },
     {
       icon: <HiOutlineBuildingStorefront className='w-5 h-5' />,

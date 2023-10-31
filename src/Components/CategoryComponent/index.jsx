@@ -32,7 +32,7 @@ const CategoryComponent = () => {
         {
             duration: '4500',
             icon: <AiOutlineMedicineBox className='icon' />,
-            name: 'healcare',
+            name: 'healthcare',
             description: 'Specializing in providing top medical services for pet birds.'
         },
     ]

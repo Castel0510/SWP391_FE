@@ -4,16 +4,7 @@ import logo from '../../Assets/Images/logo.png';
 import './style.scss';
 import DropdownUser from '../DropdownUser'
 import { useSelector } from 'react-redux';
-
-function getUser() {
-    let user = localStorage.getItem('user');
-    if (user) {
-        user = JSON.parse(user);
-    } else {
-        user = null;
-    }
-    return user;
-}
+import { getUser } from '../../Store/userSlice';
 
 const HeaderComponent = () => {
     const [scrolled, setScrolled] = useState(false);

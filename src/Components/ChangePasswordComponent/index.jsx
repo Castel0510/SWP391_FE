@@ -67,34 +67,34 @@ const ChangePasswordComponent = () => {
       <div className='w-1/2 ring-1 p-4'>
         <h1 className='mb-2 text-4xl'>Change your password</h1>
         <form>
-          <div class="mb-6">
-            <label for="old-password" class="block mb-2 text-sm font-medium text-gray-900 ">Old password</label>
+          <div className="mb-6">
+            <label for="old-password" className="block mb-2 text-sm font-medium text-gray-900 ">Old password</label>
             <input
               type="password"
               id="old-password"
-              class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 "
+              className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 "
               onChange={handleOldPasswordChange}
               value={oldPassword}
               required />
           </div>
 
-          <div class="mb-6">
-            <label for="password" class="block mb-2 text-sm font-medium text-gray-900 ">New password</label>
+          <div className="mb-6">
+            <label for="password" className="block mb-2 text-sm font-medium text-gray-900 ">New password</label>
             <input
               type="password"
               id="password"
-              class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 "
+              className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 "
               onChange={handlePasswordChange}
               value={password}
               required />
           </div>
 
-          <div class="mb-6">
-            <label for="confirm-password" class="block mb-2 text-sm font-medium text-gray-900 ">Confirm new password</label>
+          <div className="mb-6">
+            <label for="confirm-password" className="block mb-2 text-sm font-medium text-gray-900 ">Confirm new password</label>
             <input
               type="password"
               id="confirm-password"
-              class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 "
+              className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 "
               onChange={handleConfirmPasswordChange}
               value={confirmPassword}
               required />
