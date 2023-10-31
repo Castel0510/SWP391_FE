@@ -4,9 +4,10 @@ import { useSelector } from 'react-redux';
 import OrderDetailPage from './OrderDetailPage';
 import { Navigate, useNavigate, } from 'react-router-dom';
 import { FaArrowLeft } from 'react-icons/fa';
+import { getUserInfoInLocalStorage } from '../../Store/userSlice';
 
 const OrderHistoryPage = () => {
-  const user = useSelector((state) => state.user.user);
+  const user = useSelector(getUserInfoInLocalStorage);
   const navigate = useNavigate();
   const [isPaymentPopupOpen, setPaymentPopupOpen] = useState(false);
 
@@ -14,6 +15,9 @@ const OrderHistoryPage = () => {
   const [selectedStatus, setSelectedStatus] = useState('ALL');
   const [data, setData] = useState([]);
   const [selectedOrder, setSelectedOrder] = useState(null);
+
+
+
   useEffect(() => {
     const apiUrl = 'https://64b1e204062767bc4826ae59.mockapi.io/da/Nhasx';
 

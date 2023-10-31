@@ -14,24 +14,22 @@ const ItemGallery = ({ category, onItemClick, filters }) => {
   const [currentPage, setCurrentPage] = useState(1);
   const [searchQuery, setSearchQuery] = useState("");
   const itemsPerPage = 10;
-  const services = useSelector(state => state.services.services); 
+  const services = useSelector((state) => state.services.services);
   const dispatch = useDispatch();
 
-console.log("category" ,category);
-
-  useEffect(() => {
-    dispatch(fetchServices());
-  }, [dispatch]);
+  // useEffect(() => {
+  //   dispatch(fetchServices());
+  // }, [dispatch]);
 
 
-  useEffect(() => {
-    console.log("Services from Redux:", services);
-  }, [services]);
+  // useEffect(() => {
+  //   console.log("Services from Redux:", services);
+  // }, [services]);
 
   useEffect(() => {
     const apiUrl = 'https://63692ab028cd16bba716cff0.mockapi.io/login';
 
-    setLoading(true); 
+    setLoading(true);
 
     fetch(apiUrl)
       .then((response) => response.json())
@@ -41,7 +39,7 @@ console.log("category" ,category);
       })
       .catch((error) => {
         console.error('Error fetching data:', error);
-        setLoading(false); 
+        setLoading(false);
       });
   }, [category, filters]);
 <<<<<<< HEAD
@@ -85,7 +83,7 @@ console.log("category" ,category);
       filteredItems = filteredItems.filter(
         (item) => item.selectedService.some((service) => service.label === filters.service)
       );
-    }``
+    } ``
 
     return filteredItems;
   };
