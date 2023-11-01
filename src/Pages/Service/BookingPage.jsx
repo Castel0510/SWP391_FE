@@ -439,7 +439,7 @@ const BookingPage = () => {
           <button
             type="button"
             onClick={(e) => handleConfirmation(e)}
-            className="form-submit-button bg-green-500"
+            className="bg-green-500 form-submit-button"
           >
             SUBMIT
           </button>

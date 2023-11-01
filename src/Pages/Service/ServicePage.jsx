@@ -11,6 +11,9 @@ import { ColorRing } from 'react-loader-spinner';
 import { formatCurrency } from '../../Utils/string.helper';
 import { Link } from 'react-router-dom';
 import clsx from 'clsx';
+import ReactPaginate from 'react-paginate';
+import { ArrowLongLeftIcon, ArrowLongRightIcon } from '@heroicons/react/20/solid';
+import Pagination from '@mui/material/Pagination';
 
 const plans = [
     { id: 0, name: 'Boarding' },
@@ -25,10 +28,13 @@ const orderBy = [
 
 const ServicePage = () => {
     const [page, setPage] = useState(1);
-    const [pageSize, setPageSize] = useState(10);
+    const [pageSize, setPageSize] = useState(9);
     const [categoryIds, setCategoryIds] = useState([]);
     const [searchQuery, setSearchQuery] = useState('');
     const [selectedOrder, setSelectedOrder] = useState(0);
+    const [totalPage, setTotalPage] = useState(1);
+    const [serviceLocations, setServiceLocations] = useState([]);
+    const [serviceLocationOptions, setServiceLocationOptions] = useState([]);
 
     // const [selectedCategory, setSelectedCategory] = useState(null);
     // const [selectedFilters, setSelectedFilters] = useState({
@@ -49,10 +55,17 @@ const ServicePage = () => {
     //     console.log(`Item clicked: ${item.birdServiceName}`);
     // };
     const serviceQuery = useQuery(
-        ['service', page, pageSize, categoryIds, searchQuery, `order-${selectedOrder}`],
+        ['service', page, pageSize, categoryIds, searchQuery, `order-${selectedOrder}`, serviceLocations],
         async () => {
             const res = await axios.get('https://apis20231023230305.azurewebsites.net/api/BirdService/GetAllService');
 
+            setTotalPage(Math.ceil(res.data.result.length / pageSize));
+            const serviceLocationOptions = res.data.result
+                .map((item) => item.serviceLocation)
+                .filter((v, i, a) => a.indexOf(v) === i)
+                .filter((item) => item);
+
+            setServiceLocationOptions(serviceLocationOptions);
             return res.data.result
 
                 .filter((item) => {
@@ -81,6 +94,13 @@ const ServicePage = () => {
                             a.prices.sort((a, b) => a.priceAmount - b.priceAmount)[0].priceAmount
                         );
                     }
+                })
+                .filter((item) => {
+                    if (serviceLocations.length === 0) {
+                        return true;
+                    }
+
+                    return serviceLocations.includes(item.serviceLocation);
                 })
                 .slice((page - 1) * pageSize, page * pageSize);
         },
@@ -154,6 +174,34 @@ const ServicePage = () => {
                                 </select>
                             </div>
                         </div>
+                        <div>
+                            <div className="mt-4 text-sm font-medium text-gray-600">Service Location</div>
+                            <div className="flex flex-col gap-2 mt-4">
+                                {serviceLocationOptions.map((serviceLocation) => (
+                                    <div
+                                        className={clsx(' font-medium duration-300', {
+                                            'text-green-600 !font-bold': serviceLocations.includes(serviceLocation),
+                                        })}
+                                        key={serviceLocation}
+                                        onClick={() => {
+                                            const newServiceLocations = [...serviceLocations];
+
+                                            if (serviceLocations.includes(serviceLocation)) {
+                                                newServiceLocations.splice(
+                                                    newServiceLocations.indexOf(serviceLocation),
+                                                    1
+                                                );
+                                            } else {
+                                                newServiceLocations.push(serviceLocation);
+                                            }
+                                            setServiceLocations(newServiceLocations);
+                                        }}
+                                    >
+                                        {serviceLocation}
+                                    </div>
+                                ))}
+                            </div>
+                        </div>
                     </div>
                 </div>
 
@@ -207,6 +255,17 @@ const ServicePage = () => {
                             </div>
                         </div>
                     ))}
+                    {totalPage > 1 && (
+                        <div className="col-span-4">
+                            <Pagination
+                                count={totalPage}
+                                page={page}
+                                onChange={(e, value) => {
+                                    setPage(value);
+                                }}
+                            />
+                        </div>
+                    )}
                 </div>
             </div>
             {/* <div className="min-h-screen">
