@@ -28,7 +28,7 @@ export const getAllService = createAsyncThunk(
     "birdservice/getAllService",
     async () => {
         try {
-            const response = await axios.get(`${LINK_API}/api/BirdService/GetAllService?pageIndex=0&pageSize=9999`);
+            const response = await axios.get(`${LINK_API}/apis20231023230305.azurewebsites.net/api/BirdService/GetAllService`);
             return response;
         } catch (err) { }
     });

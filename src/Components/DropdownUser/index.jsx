@@ -10,13 +10,10 @@ const DropdownUser = (props) => {
     const dispatch = useDispatch();
 
     const [user, setUser] = useState('');
-
     const toggleDropdown = () => {
         setIsOpen(!isOpen);
     };
-
     const navigate = useNavigate();
-
     const customerDropdownList = [
         {
             path: '/profile',

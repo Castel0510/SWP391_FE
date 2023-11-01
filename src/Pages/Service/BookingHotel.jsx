@@ -5,52 +5,51 @@ import 'react-toastify/dist/ReactToastify.css';
 import { useNavigate } from 'react-router-dom';
 import { format, differenceInDays, addDays } from 'date-fns';
 import { FaArrowLeft } from 'react-icons/fa';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
+import { getUserInfoInLocalStorage } from '../../Store/userSlice';
+import { fetchServices } from '../../Store/serviceSlice';
 
 
 
-const BookingPage = () => {
+const BookingHotel = () => {
   const [items1, setItems1] = useState([]);
-  const user = useSelector((state) => state.user.user);
+  const user = useSelector(getUserInfoInLocalStorage);
   const navigateTo = useNavigate();
   let [totalPrice, setTotalPrice] = useState(0);
+  const userID = user ? user.id : null;
+  const [services, setServices] = useState([]);
   const { itemId } = useParams();
-  const userID = user.id;
+
   useEffect(() => {
-    const apiUrl = "https://63692ab028cd16bba716cff0.mockapi.io/login";
+    const fetchData = async () => {
+      try {
+        const response = await fetch(`https://apis20231023230305.azurewebsites.net/api/BirdService/GetById?id=${itemId}`);
+        if (!response.ok) {
+          throw new Error('Failed to fetch data');
+        }
+        const data = await response.json();
+        setServices(data.result);
+      } catch (error) {
+        console.error('Error fetching data:', error);
+      }
+    };
 
-    fetch(apiUrl)
-      .then((response) => response.json())
-      .then((data) => {
-        setItems1(data);
-        // setLoading(false);
-      })
-      .catch((error) => {
-        console.error("Error fetching data:", error);
-        // setLoading(false);
-      });
-  }, []);
-  // console.log("item 1", items);
+    fetchData();
+  }, [itemId]);
+  console.log('====================================');
+  console.log(services);
+  console.log('====================================');
 
-  // console.log("2items1", items1);
+
 
 
   const [selectedSize, setSelectedSize] = useState('');
   const [selectedOption, setSelectedOption] = useState('');
   const [checkInError, setCheckInError] = useState(null);
   const [checkOutError, setCheckOutError] = useState(null);
+
   const [selectedCheckboxes, setSelectedCheckboxes] = useState([]);
-  // const selectedItem = items.find((item) => item.id === parseInt(itemId, 10));
-
   const selectedItem2 = items1.find((item) => item.id === parseInt(itemId, 10));
-
-  // console.log("selectedItem",selectedItem2);
-
-  // if (selectedItem2) {
-  //   console.log("selectedItem2 name", selectedItem2.name);
-  // } else {
-  //   console.log("selectedItem2 is not defined or does not have a name property");
-  // }
   const [formData, setFormData] = useState({
     userID: userID,
     username: '',
@@ -65,29 +64,34 @@ const BookingPage = () => {
     selectedOption: selectedOption,
     selectedCheckboxes: [],
     category: selectedItem2 ? selectedItem2.category : '',
+    status: 'WAIT',
   });
 
   const options = [];
 
   if (selectedItem2) {
-    options.push({ name: 'small', label: `SMALL SIZE(5-20cm)/${selectedItem2.price}$/bird`, price: selectedItem2.price });
-  } else {
-    options.push({ name: 'small', label: 'SMALL SIZE(5-20cm)/$', price: 0 });
+    selectedItem2.size.forEach((size) => {
+      options.push({
+        name: size.name,
+        label: `${size.label}/${size.price}$/bird`,
+        price: size.price,
+      });
+    });
   }
 
-  options.push(
-    { name: 'medium', label: 'MEDIUM SIZE (20-30cm)/(200$/bird)', price: 200 },
-    { name: 'big', label: 'BIG SIZE(>30cm)/(300$/bird)', price: 300 }
-  );
+  const checkboxOptions = [];
 
-  const checkboxOptions = [
-    { id: '1', label: 'Nail($200)', price: 200 },
-    { id: '2', label: 'Beak Trimming($300)', price: 300 },
-    { id: '3', label: 'Wing Clipping($400)', price: 400 },
+  if (selectedItem2) {
+    selectedItem2.selectedService.forEach((service) => {
+      checkboxOptions.push({
+        id: service.serviceID,
+        label: `${service.label}/$${service.price}`,
+        price: service.price,
+      });
+    });
+  }
 
-    // { id: '4', label: 'Wings($500)', price: 500 },
 
-  ];
   useEffect(() => {
     if (user && user.id) {
       setFormData((prevData) => ({
@@ -119,10 +123,10 @@ const BookingPage = () => {
         setCheckOutError('Check-out date cannot be in the past');
       } else if (selectedDate > currentDate && selectedDate <= addDays(currentDate, 30)) {
         setCheckOutError(null);
-      }else {
+      } else {
         setCheckOutError('Check-out date must be within 30 days from today');
       }
-    } 
+    }
 
     setFormData({
       ...formData,
@@ -140,7 +144,7 @@ const BookingPage = () => {
       const days = differenceInDays(checkOutDate, checkInDate);
 
       if (selectedItem2) {
-        const selectedItemPrice = parseFloat(selectedItem2.price);
+        const selectedItemPrice = parseFloat(services.prices);
         const selectedOptionPrice = parseFloat(selectedOption);
         const checkboxPrices = selectedCheckboxes.map((checkbox) => parseFloat(checkbox.price));
         const checkboxTotalPrice = checkboxPrices.reduce((acc, price) => acc + price, 0);
@@ -182,13 +186,13 @@ const BookingPage = () => {
     const checkOutDate = new Date(formData.checkOutDate);
     const days = differenceInDays(checkOutDate, checkInDate);
 
-    const selectedItemPrice = parseFloat(selectedItem2.price);
+    const selectedItemPrice = parseFloat(services.prices);
     const selectedOptionPrice = parseFloat(selectedOption);
     const checkboxPrices = selectedCheckboxes.map((checkbox) => checkbox.price);
     const checkboxTotalPrice = checkboxPrices.reduce((acc, price) => acc + price, 0);
     const newTotalPrice = days * selectedItemPrice + days * selectedOptionPrice + checkboxTotalPrice;
-    const newServiceName = selectedItem2.name;
-    const categoryData = selectedItem2.category;
+    const newServiceName = services.birdServiceName;
+    const categoryData = services.serviceCategory.categoryName;
     const updatedFormData = {
       ...formData,
       price: newTotalPrice,
@@ -215,13 +219,13 @@ const BookingPage = () => {
     const dataToSend = updatedFormData;
 
     if (checkInError || checkOutError) {
-      
+
       toast.error('Please check your information again');
       return;
     }
     console.log(categoryData);
 
-    
+
 
     fetch('https://64b1e204062767bc4826ae59.mockapi.io/da/Nhasx', {
       method: 'POST',
@@ -247,7 +251,7 @@ const BookingPage = () => {
         });
 
         setTimeout(() => {
-          navigateTo('/order');
+          navigateTo('/payment', { state: { dataToSend }, });
         }, 3000);
       })
       .catch((error) => {
@@ -259,24 +263,18 @@ const BookingPage = () => {
 
   //SIZE
 
-
-
   const handleDropdownChange = (e) => {
-    const selectedValue = parseFloat(e.target.value);
+    const selectedValue = e.target.value;
     setSelectedOption(selectedValue);
 
-    const selectedSizeName = options.find((option) => option.price === selectedValue)?.name || '';
-
-    setSelectedSize(selectedSizeName);
-
+    // Update other fields in the form as necessary
     setFormData({
       ...formData,
       selectedOption: selectedValue,
-      size: selectedSizeName,
+      size: selectedSize, // Update this as per your requirement
+      // ... other form fields
     });
   };
-
-
   //checkbox
 
 
@@ -296,7 +294,7 @@ const BookingPage = () => {
   const handleConfirmation = (e) => {
     e.preventDefault();
 
-    const isConfirmed = window.confirm(`Are you sure you want to book ${selectedItem2.name}?`);
+    const isConfirmed = window.confirm(`Are you sure you want to book ${services.birdServiceName}?`);
 
     if (isConfirmed) {
       handleSubmit(e);
@@ -306,28 +304,26 @@ const BookingPage = () => {
     }
   };
 
+  console.log(formData);
+  const dropdownOptions = services && services.prices ? services.prices.map((priceItem) => {
+    return {
+      name: priceItem.priceName,
+      label: `${priceItem.priceName} ($${priceItem.priceAmount})`,
+      value: priceItem.priceAmount,
+    };
+  }) : [];
 
-  // console.log("formdata", formData);
-  // console.log(userID);
-  // console.log("selectedItem2", selectedItem2.category);
 
+
+  console.log('====================================');
+  console.log(services.prices);
+  console.log('====================================');
   return (
     <div className="form-container">
-      {/* <div className="user-info">
-        <h3>User Information:</h3>
-        {user ? (
-          <div>
-            <p>Name: {user.fullName}</p>
-            <p>Email: {user.email}</p>
-          </div>
-        ) : (
-          <p>User information not available</p>
-        )}
-      </div> */}
       <button onClick={() => window.history.back()} className="back-button">
         <FaArrowLeft />
       </button>
-      <h2 className="form-header">Booking Form for: {selectedItem2 ? selectedItem2.name : 'No item selected'}</h2>
+      <h2 className="form-header">Booking Form for: {services ? services.birdServiceName : 'No item selected'}</h2>
       <form onSubmit={handleSubmit}>
         <div className="form-input">
           <label>Full Name</label>
@@ -409,29 +405,20 @@ const BookingPage = () => {
             required
             className="select-dropdown"
           >
-            <option value="" disabled>Select an option</option>
-            {options.map((option) => (
-              <option key={option.name} value={option.price}>
+            <option value="" disabled>
+              Select an option
+            </option>
+            {dropdownOptions.map((option) => (
+              <option key={option.name} value={option.value}>
                 {option.label}
               </option>
             ))}
           </select>
+
+
         </div>
-        <div className="form-input">
-          <label>Select Additional Services:</label>
-          {checkboxOptions.map((checkbox) => (
-            <label key={checkbox.id} className="checkbox-label">
-              <input
-                type="checkbox"
-                id={checkbox.id}
-                onChange={handleCheckboxChange}
-                checked={selectedCheckboxes.some((item) => item.id === checkbox.id)}
-                className="checkbox-input"
-              />
-              {checkbox.label}
-            </label>
-          ))}
-        </div>
+
+
         <div className='item-price'>
           Total Price: {isNaN(totalPrice) ? '0' : `$${totalPrice}`}
         </div>
@@ -452,4 +439,4 @@ const BookingPage = () => {
   );
 };
 
-export default BookingPage;
+export default BookingHotel;

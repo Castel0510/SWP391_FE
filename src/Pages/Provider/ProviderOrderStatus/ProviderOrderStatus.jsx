@@ -406,5 +406,3 @@ const ProviderOrderStatus = () => {
 };
 
 export default ProviderOrderStatus
-
-

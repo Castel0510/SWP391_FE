@@ -9,7 +9,7 @@ const LayoutProviderComponent = ({ children }) => {
 
       <div>  
         <SidebarProviderComponent />
-        <div className="p-4 sm:ml-64 pt-24 bg-[#F8FAFC]">
+        <div className="p-4 sm:ml-64 pt-24">
           {children}
         </div>
       </div>

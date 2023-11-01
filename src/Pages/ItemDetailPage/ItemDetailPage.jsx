@@ -1,10 +1,9 @@
-import { React, useState, useEffect } from 'react'
+import React from 'react';
 import { useLocation } from 'react-router-dom';
 import { Link } from "react-router-dom";
 import { BsTrash, BsPlusCircle } from "react-icons/bs";
 import { Formik, Field, Form, ErrorMessage, FieldArray } from "formik";
 import * as Yup from 'yup';
-import axios from 'axios';
 
 const ItemDetailPage = () => {
   const [isLoading, setIsLoading] = useState(false);
@@ -99,6 +98,10 @@ const ItemDetailPage = () => {
   if (!itemId) {
     return <div>Item not founds</div>;
   }
+  const sizeData = item.sizeData.map((sizeItem) => ({
+    size: sizeItem.size,
+    sizePrice: sizeItem.sizePrice,
+  }));
 
   const handleTakeServiceCateId = (value) => {
     setServiceCateId(() => value);
@@ -224,7 +227,25 @@ const ItemDetailPage = () => {
                     className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 "
                   />
                   <ErrorMessage
-                    name="birdServiceName"
+                    name="ServiceTitle"
+                    component="div"
+                    className="text-red-500"
+                  />
+                </div>
+
+                <div className="flex flex-col mb-4">
+                  <label
+                    htmlFor="email"
+                    className="font-bold mb-2">Email</label>
+                  <Field
+                    name="email"
+                    id="email"
+                    placeholder="mail@gmail.com"
+                    type="email"
+                    className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 "
+                  />
+                  <ErrorMessage
+                    name="email"
                     component="div"
                     className="text-red-500 mt-3"
                   />
@@ -263,8 +284,8 @@ const ItemDetailPage = () => {
                 </div>
                 <div className="flex flex-col mb-4">
                   <label
-                    htmlFor="description"
-                    className="font-bold mb-2">Description</label>
+                    htmlFor="phone"
+                    className="font-bold mb-2">Phone Number</label>
                   <Field
                     as="textarea"
                     name="description"
