@@ -1,56 +1,181 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
+import "./service.scss";
+import { Link } from "react-router-dom";
+import Rating from "./Rating";
+import LoadingSpinner from "./LoadingSpinner";
+import '../Service/service.scss';
 
-import "./service.scss"
-import { Link } from 'react-router-dom';
+
+const ItemGallery = ({ category, onItemClick, filters }) => {
+  const [items, setItems] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [searchQuery, setSearchQuery] = useState("");
+  const itemsPerPage = 10;
 
 
-const ItemGallery = ({ category, onItemClick }) => {
+  
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const response = await fetch('https://apis20231023230305.azurewebsites.net/api/BirdService/GetAllService');
+        if (response.ok) {
+          const data = await response.json();
 
-  const items = {
-    Hotel: [
-      { id: 1, name: 'Hotel  1', description: 'Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industrys standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum', price: 100 },
-      { id: 2, name: 'Hotel  2', description: 'Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industrys standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum', price: 120 },
-    ],
-    Spa: [
-      { id: 3, name: 'Spa 1', description: 'Description for Spa1', price: 50 },
-      { id: 4, name: 'Spa  2', description: 'Description for Spa 2', price: 70 },
-    ],
-    Medical: [
-      { id: 5, name: 'Medical 1', description: 'Description for Medical 1', price: 200 },
-      { id: 6, name: 'Medical 2', description: 'Description for Medical2', price: 250 },
-    ],
-    Cage: [
-      { id: 7, name: 'Cage 1', description: 'Description for Cage1', price: 30 },
-      { id: 8, name: 'Cage2', description: 'Description for Cage 2', price: 40 },
-    ],
+          const transformedItems = data.result.map(item => ({
+            ...item,
+            serviceCategory: {
+              id: item.serviceCategory.serviceType,
+              categoryName: item.serviceCategory.categoryName,
+              serviceType: item.serviceCategory.serviceType
+            }
+          }));
+      
+          setItems(transformedItems);
+          setLoading(false);
+        } else {
+          console.log('Request failed with status:', response.status);
+          setLoading(false);
+        }
+      } catch (error) {
+        console.error('Error fetching data:', error);
+        setLoading(false);
+      }
+    };
+
+    fetchData();
+  }, [category, filters]);
+
+  
+  const applyFilters = (items) => {
+    let filteredItems = items;
+  
+    if (filters.address) {
+      filteredItems = filteredItems.filter((item) =>
+        item.address.includes(filters.address)
+      );
+    }
+  
+    if (filters.priceSort === 'increase') {
+      filteredItems.sort((a, b) => a.price - b.price);
+    } else if (filters.priceSort === 'decrease') {
+      filteredItems.sort((a, b) => b.price - a.price);
+    }
+  
+    if (filters.rating > 0) {
+      filteredItems = filteredItems.filter(
+        (item) => item.avgRating === filters.rating
+      );
+    }
+  
+    if (searchQuery) {
+      filteredItems = filteredItems.filter((item) =>
+        item.birdServiceName.toLowerCase().includes(searchQuery.toLowerCase())
+      );
+    }
+  
+    if (filters.service) {
+      filteredItems = filteredItems.filter(
+        (item) =>
+          item.serviceCategory.categoryName.toLowerCase() === filters.service.toLowerCase()
+      );
+    }
+    if (category !== null) {
+      filteredItems = filteredItems.filter((item) => {
+        return item.serviceCategory.id === category;
+      });
+    }
+  
+    return filteredItems;
+  };
+  
+
+  const filteredItems = applyFilters(
+    category ? items.filter((item) => item.serviceCategory.id === category) : items
+  );
+  
+
+  const totalPages = Math.ceil(filteredItems.length / itemsPerPage);
+  const startIndex = (currentPage - 1) * itemsPerPage;
+  const endIndex = startIndex + itemsPerPage;
+
+  const handlePageChange = (newPage) => {
+    if (newPage >= 1 && newPage <= totalPages) {
+      setCurrentPage(newPage);
+    }
   };
 
-  let categoryItems = [];
-
-  if (category === 'All' || !category) {
-    categoryItems = Object.values(items).flat();
-  } else {
-    categoryItems = items[category] || [];
+  if (loading) {
+    return <LoadingSpinner />;
   }
 
+  const displayedItems = filteredItems.slice(startIndex, endIndex);
+
   return (
-    <div className="item-gallery">
-      {categoryItems.map((item) => (
-        <div
-          key={item.id}
-          className="item"
-          onClick={() => onItemClick(item)}
-        >
-          <div className="item-name">{item.name}</div>
-          <div className="item-description">{item.description}</div>
-          <div className='flex justify-between mt-5'>
-            <div className="item-price">${item.price}</div>
-            <Link to={`/detail/${item.id}`}>
-              <button className="book-now-button">BOOK NOW</button>
-            </Link>
+    <div>
+      <div className="searchBox">
+        <input
+          className="search"
+          type="text"
+          placeholder="Search by item name"
+          value={searchQuery}
+          onChange={(e) => setSearchQuery(e.target.value)}
+        />
+      </div>
+
+      <div className="item-gallery">
+        {displayedItems.map((item) => (
+          <div
+            key={item.id}
+            className={`item ${currentPage === 1 ? "show" : ""}`}
+            onClick={() => onItemClick(item)}
+          >
+            <div className="item-content">
+              <div className="item-image">
+                <img src={item.imageURL} alt={item.imageURL} />
+              </div>
+              <div className="item-name">{item.birdServiceName}</div>
+
+              <div className="item-description">
+                {item.description.length > 50
+                  ? item.description.slice(0, 65) + "..."
+                  : item.description}
+              </div>
+
+              <div className="item-rating">
+                <Rating rating={item.avgRating} />
+              </div>
+              <div className="flex justify-between">
+                <div className="item-price-detail">${item.prices[0].priceAmount}/Day</div>
+                <Link to={`/detail/${item.id}`} state={{ selectedItem: item }}>
+                  <button className="book-now-button">BOOK NOW</button>
+                </Link>
+              </div>
+              <div className="item-address">{item.address}</div>
+            </div>
           </div>
-        </div>
-      ))}
+        ))}
+      </div>
+
+      <div className="pagination-container">
+        <button
+          onClick={() => handlePageChange(currentPage - 1)}
+          disabled={currentPage === 1}
+          className="pagination-button"
+        >
+          Previous
+        </button>
+        <span>
+          {currentPage} / {totalPages}
+        </span>
+        <button
+          onClick={() => handlePageChange(currentPage + 1)}
+          disabled={currentPage === totalPages}
+          className="pagination-button"
+        >
+          Next
+        </button>
+      </div>
     </div>
   );
 };

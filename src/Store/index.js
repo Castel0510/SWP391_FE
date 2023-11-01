@@ -1,11 +1,15 @@
 import { configureStore } from "@reduxjs/toolkit";
 import useReducer from "./userSlice";
-import birdServiceReducer from "./birdServiceSlice";
+import commentReducer from "./commentSlice";
+import customerReducer from "./customerSlice";
+import serviceReducer from "./serviceSlice";
 
 const store = configureStore({
   reducer: {
     user: useReducer,
-    birdService: birdServiceReducer,
+    comments: commentReducer,
+    customers: customerReducer, 
+    services : serviceReducer,
   },
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware({
