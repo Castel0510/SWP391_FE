@@ -10,8 +10,8 @@ import RegisterPage from "../Pages/RegisterPage/RegisterPage";
 import BookingPage from "../Pages/Service/BookingPage";
 import TransactionHistoryPage from "../Pages/TransactionHistoryPage/TransactionHistoryPage";
 import ServicePage from "../Pages/Service/ServicePage";
-import MyShopPage from "../Pages/MyShopPage/MyShopPage";
-import CreateServicePage from "../Pages/CreateServicePage/CreateServicePage";
+
+
 import ItemDetailPage from "../Pages/Service/ItemDetail";
 import ProviderPage from "../Pages/Provider/ProviderPage";
 import ProviderProfile from "../Pages/Provider/ProviderProfile";
@@ -32,6 +32,9 @@ import BookingPageMedical from "../Pages/Service/BookingMedical";
 import Payment from "../Pages/Service/PaymentComponent"
 
 import OrderDetailPage from "../Pages/OrderHistoryPage/OrderDetailPage";
+import MyShopPage from "../Pages/Provider/MyShopPage/MyShopPage";
+import CreateServicePage from "../Pages/Provider/CreateServicePage/CreateServicePage";
+import ProviderOrderStatusDetail from "../Pages/Provider/ProviderOrderStatusDetail/ProviderOrderStatusDetail";
 
 
 export const routes = [
@@ -76,52 +79,52 @@ export const routes = [
         isShowHeaderFooter: true
     },
     {
-      path: "/order",
-      page: OrderHistoryPage,
-      isShowHeaderFooter: true,
+        path: "/order",
+        page: OrderHistoryPage,
+        isShowHeaderFooter: true,
     },
     {
-      path: "/detail/:itemId",
-      page: ItemDetailPage,
-      isShowHeaderFooter: true,
+        path: "/detail/:itemId",
+        page: ItemDetailPage,
+        isShowHeaderFooter: true,
     },
     {
-      path: "/detail/:id",
-      page: BookingPage,
-      isShowHeaderFooter: true,
+        path: "/detail/:id",
+        page: BookingPage,
+        isShowHeaderFooter: true,
     },
-  
+
     {
-      path: "/item-detail-page/:id",
-      page: ItemDetailPage,
-      isShowHeaderFooter: true,
-    },
-    {
-      path: "/order-detail/:orderId",
-      page: OrderDetailPage,
-      isShowHeaderFooter: true,
+        path: "/item-detail-page/:id",
+        page: ItemDetailPage,
+        isShowHeaderFooter: true,
     },
     {
-      path: "/booking/boarding/:itemId",
-      page: BookingPageHotel,
-      isShowHeaderFooter: true,
+        path: "/order-detail/:orderId",
+        page: OrderDetailPage,
+        isShowHeaderFooter: true,
     },
     {
-      path: "/booking/grooming/:itemId",
-      page: BookingPageSpa,
-      isShowHeaderFooter: true,
+        path: "/booking/boarding/:itemId",
+        page: BookingPageHotel,
+        isShowHeaderFooter: true,
     },
     {
-      path: "/booking/healcare/:itemId",
-      page: BookingPageMedical,
-      isShowHeaderFooter: true,
+        path: "/booking/grooming/:itemId",
+        page: BookingPageSpa,
+        isShowHeaderFooter: true,
+    },
+    {
+        path: "/booking/healcare/:itemId",
+        page: BookingPageMedical,
+        isShowHeaderFooter: true,
     },
     {
         path: "/payment",
         page: Payment,
         isShowHeaderFooter: true,
-      },
-  
+    },
+
 
     // provider
     {
@@ -140,8 +143,8 @@ export const routes = [
         isShowSidebarProvider: true
     },
     {
-        path: '/item-detail-page-provider/:id',
-        page: ItemDetailPageProvider,
+        path: '/item-detail-page/:id',
+        page: ItemDetailPage,
         isShowSidebarProvider: true
     },
     {
@@ -149,12 +152,15 @@ export const routes = [
         page: CreateServicePage,
         isShowSidebarProvider: true
     },
-    
     {
-        // path: '/order-provider',
-        // page: OrderHistoryPage,
         path: '/order-status',
         page: ProviderOrderStatus,
+        isShowSidebarProvider: true
+    },
+
+    {
+        path: '/order-status-detail/:id',
+        page: ProviderOrderStatusDetail,
         isShowSidebarProvider: true
     },
     {
@@ -162,7 +168,6 @@ export const routes = [
         page: ProviderProfile,
         isShowSidebarProvider: true
     },
-    
     {
         path: '/provider-change-password',
         page: ProviderSecurity,
@@ -190,5 +195,5 @@ export const routes = [
         isShowAdmin: true
     },
 
-    
+
 ]

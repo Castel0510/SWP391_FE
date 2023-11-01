@@ -12,4 +12,3 @@ module.exports = withMT({
   },
   plugins: [],
 });
-

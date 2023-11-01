@@ -34,7 +34,7 @@ const LoginPage = () => {
     if (!username) {
       setErrors((prevErrors) => ({ ...prevErrors, username: 'Please enter your username!' }));
       hasErrors = true;
-    } 
+    }
 
     if (!password) {
       setErrors((prevErrors) => ({ ...prevErrors, password: 'Please enter your password!' }));
