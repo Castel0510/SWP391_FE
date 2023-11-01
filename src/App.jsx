@@ -1,52 +1,59 @@
-import { Fragment, useState } from 'react'
-import { Routes, Route } from 'react-router-dom'
-import { routes } from './Routes/Routes'
-import DefaultComponent from './Components/DefaultComponent/DefaultComponent'
-import LayoutProviderComponent from './Components/ProviderComponent/LayoutProviderComponent'
-import LayoutAdminComponent from './Components/AdminComponent/LayoutAdminComponent'
-import { ToastContainer } from "react-toastify";
+import { Fragment } from 'react';
+import { QueryClient, QueryClientProvider } from 'react-query';
+import { Route, Routes } from 'react-router-dom';
+import { ToastContainer } from 'react-toastify';
+import LayoutAdminComponent from './Components/AdminComponent/LayoutAdminComponent';
+import DefaultComponent from './Components/DefaultComponent/DefaultComponent';
+import LayoutProviderComponent from './Components/ProviderComponent/LayoutProviderComponent';
+import { routes } from './Routes/Routes';
+
+const queryClient = new QueryClient();
 
 function App() {
+    return (
+        <>
+            <QueryClientProvider client={queryClient}>
+                <div>
+                    <Routes>
+                        {routes.map((route, index) => {
+                            const Page = route.page;
+                            const Layout = route.isShowHeaderFooter ? DefaultComponent : Fragment;
+                            const LayoutProvider = route.isShowSidebarProvider ? LayoutProviderComponent : Fragment;
+                            const LayoutAdmin = route.isShowAdmin ? LayoutAdminComponent : Fragment;
 
-  return (
-    <>
-      <div>
-        <Routes>
-          {routes.map((route, index) => {
-            const Page = route.page
-            const Layout = route.isShowHeaderFooter ? DefaultComponent : Fragment
-            const LayoutProvider = route.isShowSidebarProvider ? LayoutProviderComponent : Fragment
-            const LayoutAdmin = route.isShowAdmin ? LayoutAdminComponent : Fragment
-
-            return (
-              <Route path={route.path} key={index} element={
-                <LayoutAdmin>
-                  <LayoutProvider>
-                    <Layout>
-                      <Page />
-                      <ToastContainer
-                        position="bottom-right"
-                        autoClose={3000}
-                        hideProgressBar={false}
-                        newestOnTop={false}
-                        closeOnClick
-                        rtl={false}
-                        pauseOnFocusLoss
-                        draggable
-                        pauseOnHover
-                        theme="light"
-                      />
-                    </Layout>
-                  </LayoutProvider>
-                </LayoutAdmin>
-              } />
-            )
-          })}
-
-        </Routes>
-      </div>
-    </>
-  )
+                            return (
+                                <Route
+                                    path={route.path}
+                                    key={index}
+                                    element={
+                                        <LayoutAdmin>
+                                            <LayoutProvider>
+                                                <Layout>
+                                                    <Page />
+                                                    <ToastContainer
+                                                        position="bottom-right"
+                                                        autoClose={3000}
+                                                        hideProgressBar={false}
+                                                        newestOnTop={false}
+                                                        closeOnClick
+                                                        rtl={false}
+                                                        pauseOnFocusLoss
+                                                        draggable
+                                                        pauseOnHover
+                                                        theme="light"
+                                                    />
+                                                </Layout>
+                                            </LayoutProvider>
+                                        </LayoutAdmin>
+                                    }
+                                />
+                            );
+                        })}
+                    </Routes>
+                </div>
+            </QueryClientProvider>
+        </>
+    );
 }
 
-export default App
+export default App;

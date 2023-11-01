@@ -51,7 +51,7 @@ const ItemDetailGallery = ({ providerId }) => {
                 <img src={item.image} alt={item.name} />
               </div>
               <div className="item-name-detail">{item.name}</div>
-              <div className="item-description-detail leading-5">
+              <div className="leading-5 item-description-detail">
                 {item.description.length > 50
                   ? item.description.slice(0, 50) + "..."
                   : item.description}
