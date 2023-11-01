@@ -61,46 +61,46 @@ const ServicePage = () => {
 
             setTotalPage(Math.ceil(res.data.result.length / pageSize));
             const serviceLocationOptions = res.data.result
-                .map((item) => item.serviceLocation)
+                .map((item) => item?.serviceLocation)
                 .filter((v, i, a) => a.indexOf(v) === i)
                 .filter((item) => item);
 
             setServiceLocationOptions(serviceLocationOptions);
-            return res.data.result
+            return res.data?.result
 
                 .filter((item) => {
-                    if (categoryIds.length === 0) {
+                    if (categoryIds?.length === 0) {
                         return true;
                     }
 
-                    return categoryIds.includes(item.serviceCategory.serviceType);
+                    return categoryIds.includes(item.serviceCategory?.serviceType);
                 })
                 .filter((item) => {
                     if (searchQuery === '') {
                         return true;
                     }
 
-                    return item.birdServiceName.toLowerCase().includes(searchQuery.toLowerCase());
+                    return item?.birdServiceName?.toLowerCase().includes(searchQuery?.toLowerCase());
                 })
                 .sort((a, b) => {
                     if (selectedOrder === 0) {
                         return (
-                            a.prices.sort((a, b) => a.priceAmount - b.priceAmount)[0].priceAmount -
-                            b.prices.sort((a, b) => a.priceAmount - b.priceAmount)[0].priceAmount
+                            a.prices.sort((a, b) => a?.priceAmount - b?.priceAmount)[0]?.priceAmount -
+                            b.prices.sort((a, b) => a?.priceAmount - b?.priceAmount)[0]?.priceAmount
                         );
                     } else {
                         return (
-                            b.prices.sort((a, b) => a.priceAmount - b.priceAmount)[0].priceAmount -
-                            a.prices.sort((a, b) => a.priceAmount - b.priceAmount)[0].priceAmount
+                            b.prices.sort((a, b) => a?.priceAmount - b?.priceAmount)[0]?.priceAmount -
+                            a.prices.sort((a, b) => a?.priceAmount - b?.priceAmount)[0]?.priceAmount
                         );
                     }
                 })
                 .filter((item) => {
-                    if (serviceLocations.length === 0) {
+                    if (serviceLocations?.length === 0) {
                         return true;
                     }
 
-                    return serviceLocations.includes(item.serviceLocation);
+                    return serviceLocations?.includes(item?.serviceLocation);
                 })
                 .slice((page - 1) * pageSize, page * pageSize);
         },
@@ -219,28 +219,28 @@ const ServicePage = () => {
                             />
                         </div>
                     )}
-                    {serviceQuery.data.length === 0 && (
+                    {serviceQuery.data?.length === 0 && (
                         <div className="col-span-4">
                             <div className="flex flex-col w-full h-full gap-4">
                                 <div className="text-2xl font-semibold text-gray-600">No results found</div>
                             </div>
                         </div>
                     )}
-                    {serviceQuery.data.map((item) => (
-                        <div key={item.id} className="relative group fade-in">
+                    {serviceQuery.data?.map((item) => (
+                        <div key={item?.id} className="relative group fade-in">
                             <div className="w-full overflow-hidden bg-gray-200 border-2 border-green-100 border-solid rounded-md aspect-h-1 aspect-w-1 lg:aspect-none group-hover:opacity-75 lg:h-80">
                                 <img
-                                    src={item.imageURL}
-                                    alt={item.birdServiceName}
+                                    src={item?.imageURL}
+                                    alt={item?.birdServiceName}
                                     className="object-cover object-center w-full h-full lg:h-full lg:w-full"
                                 />
                             </div>
                             <div className="flex flex-col mt-4">
                                 <div>
                                     <h3 className="text-2xl font-semibold text-green-700">
-                                        <Link to={`/detail/${item.id}`} state={{ selectedItem: item }}>
+                                        <Link to={`/detail/${item?.id}`} state={{ selectedItem: item }}>
                                             <span aria-hidden="true" className="absolute inset-0" />
-                                            {item.birdServiceName}
+                                            {item?.birdServiceName}
                                         </Link>
                                     </h3>
                                 </div>
@@ -248,7 +248,7 @@ const ServicePage = () => {
                                     <div>From:</div>
                                     <div className="text-lg font-bold">
                                         {formatCurrency(
-                                            item.prices.sort((a, b) => a.priceAmount - b.priceAmount)[0].priceAmount
+                                            item.prices.sort((a, b) => a?.priceAmount - b?.priceAmount)[0]?.priceAmount
                                         )}
                                     </div>
                                 </div>
