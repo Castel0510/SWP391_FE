@@ -8,11 +8,11 @@ import './style.scss';
 
 const SidebarProviderComponent = () => {
   const providerMenu = [
-    {
-      icon: <LuLayoutDashboard className='w-5 h-5' />,
-      path: '/provider-dashboard',
-      display: 'Dashboard',
-    },
+    // {
+    //   icon: <LuLayoutDashboard className='w-5 h-5' />,
+    //   path: '/provider-dashboard',
+    //   display: 'Dashboard',
+    // },
     {
       icon: <AiOutlineShop className='w-5 h-5' />,
       path: '/my-shop',

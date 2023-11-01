@@ -17,8 +17,8 @@ const ProviderOrderStatusDetail = () => {
     const [data, setData] = useState([]);
 
     const location = useLocation();
-    const filteredRows = location?.state?.id;
-    // console.log("id fil: ", filteredRows);
+    const filteredRows = location?.state;
+    console.log("id fil: ", filteredRows);
 
 
 
@@ -27,7 +27,7 @@ const ProviderOrderStatusDetail = () => {
         try {
             setIsLoading(true);
 
-            const response = await axios.get(`https://apis20231023230305.azurewebsites.net/api/BirdServiceBooking/GetBookingInfoById?id=${filteredRows}`);
+            const response = await axios.get(`https://apis20231023230305.azurewebsites.net/api/BirdServiceBooking/GetBookingInfoById?id=${filteredRows.id}`);
             setData(response?.data?.result);
 
             setIsLoading(false);
@@ -88,7 +88,7 @@ const ProviderOrderStatusDetail = () => {
             
                 <>
                     <div className=' text-2xl'>
-                        Order detail #{data.id} - <span className='font-bold'>{data.serviceWorkingStatus}</span>
+                        Order detail #{filteredRows.id} - <span className='font-bold'>{filteredRows.serviceWorkingStatus}</span>
                     </div>
                     <div className='flex justify-center gap-7 mb-10'>
                         <Card className="mt-6 w-[450px] p-6 shadow-xl">
@@ -97,14 +97,14 @@ const ProviderOrderStatusDetail = () => {
                                     Customer information
                                 </Typography>
                                 <Typography variant="h6" color="blue-gray" className="mb-2">
-                                    Customer Name: <span className='font-normal'>{data.customer}</span>
+                                    Customer Name: <span className='font-normal'>{filteredRows.customer}</span>
+                                </Typography>
+                                {/* <Typography variant="h6" color="blue-gray" className="mb-2">
+                                    Email: <span className='font-normal'>{filteredRows.email}</span>
                                 </Typography>
                                 <Typography variant="h6" color="blue-gray" className="mb-2">
-                                    Email: <span className='font-normal'>{data.email}</span>
-                                </Typography>
-                                <Typography variant="h6" color="blue-gray" className="mb-2">
-                                    Phone: <span className='font-normal'>{data.phone}</span>
-                                </Typography>
+                                    Phone: <span className='font-normal'>{filteredRows.phone}</span>
+                                </Typography> */}
                             </CardBody>
                         </Card>
                         <Card className="mt-6 w-[450px] p-6 shadow-xl">
@@ -113,10 +113,10 @@ const ProviderOrderStatusDetail = () => {
                                     Time
                                 </Typography>
                                 <Typography variant="h6" color="blue-gray" className="mb-2">
-                                    Date order: <span className='font-normal'>{data.dateOrder}</span>
+                                    Date order: <span className='font-normal'>{filteredRows.dateOrder}</span>
                                 </Typography>
                                 <Typography variant="h6" color="blue-gray" className="mb-2">
-                                    Date complete: <span className='font-normal'>{data.dateComplete}</span>
+                                    Date complete: <span className='font-normal'>{filteredRows.dateComplete}</span>
                                 </Typography>
                             </CardBody>
                         </Card>
@@ -151,12 +151,12 @@ const ProviderOrderStatusDetail = () => {
                                                 </thead>
                                                 <tbody>
                                                     <tr className="border-b">
-                                                        <td className="whitespace-nowrap px-6 py-4">{data.serviceTitle}</td>
-                                                        <td className="whitespace-nowrap px-6 py-4">{data.category}</td>
-                                                        <td className="whitespace-nowrap px-6 py-4">{data.service}</td>
-                                                        <td className="whitespace-nowrap px-8 py-4">{data.price}$</td>
-                                                        <td className="whitespace-nowrap px-10 py-4">{data.amount}</td>
-                                                        <td className="whitespace-nowrap px-10 py-4">{data.totalPrice}$</td>
+                                                        <td className="whitespace-nowrap px-6 py-4">{filteredRows.serviceTitle}</td>
+                                                        <td className="whitespace-nowrap px-6 py-4">{filteredRows.category}</td>
+                                                        <td className="whitespace-nowrap px-6 py-4">{filteredRows.service}</td>
+                                                        <td className="whitespace-nowrap px-8 py-4">{filteredRows.price}$</td>
+                                                        <td className="whitespace-nowrap px-10 py-4">{filteredRows.amount}</td>
+                                                        <td className="whitespace-nowrap px-10 py-4">{filteredRows.totalPrice}$</td>
                                                     </tr>
                                                 </tbody>
                                             </table>

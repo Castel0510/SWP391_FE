@@ -30,10 +30,35 @@ const MyShopPage = () => {
             setIsLoading(false);
         }
     };
+
+
+
     // console.log(data);
+
+
+
+    const handleDelete = async (id) => {
+        try {
+            setIsLoading(true);
+
+            const response = await axios.delete(`https://apis20231023230305.azurewebsites.net/api/BirdService/Delete?id=${id}`);
+
+            console.log('Delete response:', response.data);
+
+            fetchData();
+
+            setIsLoading(false);
+        } catch (error) {
+            console.error('Delete error:', error);
+            setIsLoading(false);
+        }
+    };
+
+
 
     useEffect(() => {
         fetchData();
+        handleDelete();
     }, []);
 
 
@@ -86,13 +111,8 @@ const MyShopPage = () => {
                 </div>
 
                 <div className='flex flex-wrap justify-center gap-8 mx-auto'>
-                    {currentItems.map(item => (
-                        <Link
-                            key={item.id}
-                            to={{ pathname: `/item-detail-page/${item.id}` }}
-                            state={{ item }}
-                            className="max-w-sm bg-white border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700"
-                        >
+                    {currentItems.map((item, index) => (
+                        <div key={index} className="max-w-sm bg-white border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700">
                             <div>
                                 <img className="rounded-t-lg w-[350px] h-[240px]" src={item.imageURL} alt="" />
                             </div>
@@ -106,18 +126,24 @@ const MyShopPage = () => {
                                     <span className="bg-blue-100 text-blue-800 text-xs font-semibold mr-2 px-2.5 py-0.5 rounded dark:bg-blue-200 dark:text-blue-800 ml-3">{item?.rating?.toFixed(1)}</span>
                                 </div>
                                 <div className='font-bold my-4'>{item.pricePerDay}$</div>
-                                <div className="float-right inline-flex items-center px-3 py-2 mb-10 text-sm font-medium text-center text-white bg-blue-700 rounded-lg hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">
-                                    Edit
-                                    <svg className="w-3.5 h-3.5 ml-2" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 14 10">
-                                        <path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M1 5h12m0 0L9 1m4 4L9 9" />
-                                    </svg>
+                                <div className='flex justify-end'>
+                                    <Link
+                                        to={{ pathname: `/item-detail-page/${item.id}` }}
+                                        state={{ item }}
+                                        className="mr-4 inline-flex items-center px-3 py-2 mb-10 text-sm font-medium text-center text-white bg-blue-700 rounded-lg hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">
+                                        Edit
+                                    </Link>
+                                    <div className="cursor-pointer inline-flex items-center px-3 py-2 mb-10 text-sm font-medium text-center text-white bg-red-700 rounded-lg hover:bg-red-800 focus:ring-4 focus:outline-none focus:ring-red-300 dark:bg-red-600 dark:hover:bg-red-700 dark:focus:ring-red-800"
+                                        onClick={() => handleDelete(item.id)}>
+                                        Delete
+                                    </div>
                                 </div>
                                 <div className='pb-5 clear-both'>
                                     <span className='font-bold'>Location: </span>
 
                                 </div>
                             </div>
-                        </Link>
+                        </div>
                     ))}
                 </div>
                 {/* Pagination */}

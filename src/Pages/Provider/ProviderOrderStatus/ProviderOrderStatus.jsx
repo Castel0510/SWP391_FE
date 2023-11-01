@@ -45,23 +45,39 @@ const ProviderOrderStatus = () => {
 
             const response = await axios.get(`https://apis20231023230305.azurewebsites.net/api/BirdServiceBooking/GetByProviderId?id=${proId}&pageIndex=0&pageSize=100`);
             setData(response?.data?.result?.items);
- 
+
+            const cusId = await axios.get(`https://apis20231023230305.azurewebsites.net/api/Customer/Get?pageIndex=0&pageSize=999`);
+
+            const allCus = cusId?.data?.result?.items;
             const allItems = response?.data?.result?.items;
+
+            console.log("allCus: ", allCus);
+            console.log("allItems: ", allItems);
+
+            const customerIdToNameMap = allCus.reduce((map, item) => {
+                map[item.id] = item.customerName;
+                return map;
+            }, {});
+
+            console.log("customerIdToNameMap", customerIdToNameMap);
+
             const newItems = allItems.map(item => ({
                 id: item.id,
-                customer: "Nguyễn Văn A",
-                email: "ANV@gmail.com",
-                phone: "0916480235",
+                customer: customerIdToNameMap[item.customerId],
+                // email: "ANV@gmail.com",
+                // phone: "0916480235",
                 dateOrder: item.serviceStartDate,
                 dateComplete: item.serviceEndDate,
                 totalPrice: item.totalPrice,
-                status: item.serviceWorkingStatus,
+                status: item.bookingStatus,
                 serviceTitle: "Hotel A",
                 category: "Boarding",
                 service: "Bird sitting",
                 price: "50",
                 amount: "2"
             }));
+
+            console.log("newItems", allItems);
 
             setTable(prevTable => {
                 // Filter out any new items that are already in the table
@@ -143,7 +159,7 @@ const ProviderOrderStatus = () => {
         },
     ];
 
-    const TABLE_HEAD = ["Id", "Customer", "Phone", "Date order", "Date complete", "Total price", "Status", ""];
+    const TABLE_HEAD = ["Id", "Customer", "Date order", "Date complete", "Total price", "Status", ""];
 
 
 
@@ -160,19 +176,19 @@ const ProviderOrderStatus = () => {
 
     const filteredRows = table.filter((row) => {
         if (selectedTab === "waiting") {
-            return row.status === "Waiting";
+            return row.status === 0;
         } else if (selectedTab === "confirm") {
-            return row.status === "Confirm";
+            return row.status === 1;
         } else if (selectedTab === "refuse") {
-            return row.status === "Refuse";
+            return row.status === 2;
         } else if (selectedTab === "onGoing") {
-            return row.status === "On going";
+            return row.status === 3;
         } else if (selectedTab === "waiting for payment") {
-            return row.status === "Waiting for payment";
+            return row.status === 4;
         } else if (selectedTab === "done") {
-            return row.status === "Done";
+            return row.status === 5;
         } else if (selectedTab === "cancel") {
-            return row.status === "Cancel";
+            return row.status === 6;
         } else {
             return true; // Show all rows for "all" tab
         }
@@ -251,7 +267,7 @@ const ProviderOrderStatus = () => {
                         </thead>
                         <tbody>
                             {filteredRows.map(
-                                ({ id, email, customer, phone, dateOrder, dateComplete, totalPrice, status }, index) => {
+                                ({ id, email, customer, dateOrder, dateComplete, totalPrice, status }, index) => {
                                     const isLast = index === table.length - 1;
                                     const classes = isLast
                                         ? "p-4"
@@ -291,16 +307,16 @@ const ProviderOrderStatus = () => {
                                                     >
                                                         {customer}
                                                     </Typography>
-                                                    <Typography
+                                                    {/* <Typography
                                                         variant="small"
                                                         color="blue-gray"
                                                         className="font-normal opacity-70"
                                                     >
                                                         {email}
-                                                    </Typography>
+                                                    </Typography> */}
                                                 </div>
                                             </td>
-                                            <td className={classes}>
+                                            {/* <td className={classes}>
                                                 <Typography
                                                     variant="small"
                                                     color="blue-gray"
@@ -308,7 +324,7 @@ const ProviderOrderStatus = () => {
                                                 >
                                                     {phone}
                                                 </Typography>
-                                            </td>
+                                            </td> */}
 
                                             <td className={classes}>
                                                 <Typography
@@ -353,7 +369,7 @@ const ProviderOrderStatus = () => {
                                                     <IconButton variant="text">
                                                         <Link
                                                             to={{ pathname: `/order-status-detail/${id}`, }}
-                                                            state={{ id }}
+                                                            state={{ id, customer, dateOrder, dateComplete, totalPrice, status }}
                                                         >
                                                             <EyeIcon className="h-4 w-4" />
                                                         </Link>
@@ -390,3 +406,5 @@ const ProviderOrderStatus = () => {
 };
 
 export default ProviderOrderStatus
+
+
