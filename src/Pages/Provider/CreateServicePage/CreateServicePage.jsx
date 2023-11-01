@@ -100,7 +100,7 @@ const CreateServicePage = () => {
             ),
     });
 
-    
+
 
 
     const serviceCategory = [
