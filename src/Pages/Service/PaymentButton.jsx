@@ -7,7 +7,7 @@ const PaymentPopup = ({ dataToSend, onClose }) => {
     <div className="payment-popup">
       <div className="popup-content">
         <h2>Scan QR Code for Payment</h2>
-        <QRCode value={dataToSend.qrCodeData} size={128} />
+        <QRCode value={dataToSend.qrCodeData} size={300} className='qr-code'/>
         <button onClick={onClose}>Close</button>
       </div>
     </div>

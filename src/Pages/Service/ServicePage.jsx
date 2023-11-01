@@ -22,12 +22,12 @@ const ServicePage = () => {
   };
 
   const onItemClick = (item) => {
-    console.log(`Item clicked: ${item.name}`);
+    console.log(`Item clicked: ${item.birdServiceName}`);
   };
+  
 
   return (
     <div>
-      {/* <HeroComponent /> */}
       <div className='h-fit'>
         <div className='flex-filter  category'>
           <CategoryFilter onCategoryChange={handleCategoryChange} />

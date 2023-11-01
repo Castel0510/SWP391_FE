@@ -11,21 +11,8 @@ const FilterContainer = ({ onFilterChange, selectedCategory }) => {
   const [loading, setLoading] = useState(true);
   const [serviceOptions, setServiceOptions] = useState([]);
   const [selectedService, setSelectedService] = useState('');
-  useEffect(() => {
-    const apiUrl = "https://apis20231023230305.azurewebsites.net/api/BirdService/GetAllService?pageIndex=0&pageSize=10";
-  
-    fetch(apiUrl)
-      .then((response) => response.json())
-      .then((data) => {
-        setItems3(data);
-        setLoading(false);
-      })
-      .catch((error) => {
-        console.error("Error fetching data:", error);
-        setLoading(false);
-      });
-  }, []);
 
+  
   useEffect(() => {
     const apiUrl = "https://63692ab028cd16bba716cff0.mockapi.io/login";
 

@@ -20,7 +20,6 @@ const CommentsComponent = () => {
 
   // }, [dataUser]);
 
-console.log(user);
 
   const apiUrlCommentGet =
     "https://apis20231023230305.azurewebsites.net/api/Comment/Get?pageIndex=0&pageSize=10";

@@ -36,7 +36,7 @@
   padding-left: 1rem;
   padding-right: 1rem;
   border-radius: 1rem;
-  width: 150px;
+  width: 170px;
   height: 50px;
   font-family: serif;
   margin-bottom: 0.5rem;
@@ -148,7 +148,7 @@
 
 .item-info {
   margin-top: 20px;
-  width: 700px;
+  
 }
 
 .item-description-label p {
@@ -160,6 +160,7 @@
   // max-width: 1000px;
   // height: 500px;
   // min-width: 500px;
+  margin-top: 50px;
   border-radius: 20px;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
   margin-right: 100px;
@@ -958,15 +959,22 @@ form button[type="submit"]:hover {
 }
 
 .item-info {
-  background-color: #f5f5f5;
+  // background-color: #f5f5f5;
   padding: 20px;
   border-radius: 5px;
   padding: 30px;
-  box-shadow: 0px 6px 12px rgba(0, 0, 0, 0.4);
+  // box-shadow: 0px 6px 12px rgba(0, 0, 0, 0.4);
   min-width: 500px;
   max-width: 500px;
+  height: 600px;
 }
-
+.youtube-container {
+  /* Define styles for the YouTube video container */
+  width: 100%; /* Adjust the width as needed */
+  border: 1px solid #ccc; /* Example border styling */
+  border-radius: 8px; /* Example border radius */
+  overflow: hidden; /* Ensure the video fits within the container */
+}
 .item-description-label {
   margin-bottom: 10px;
 }
@@ -1281,39 +1289,52 @@ textarea {
 }
 
 .payment-information {
-  max-width: 400px;
+  min-width: 800px;
   background-color: #f5f5f5;
   padding: 20px;
   border-radius: 8px;
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  min-height: 800px;
 }
 
 .payment-information h2 {
+  text-align: center;
+
   font-size: 24px;
   margin-bottom: 16px;
 }
 
 .payment-information p {
+  
   font-size: 16px;
   margin: 8px 0;
 }
 
 .payment-method {
+  
   margin-top: 16px;
 }
 
 .payment-method h3 {
+  margin: 0 auto;
+
   font-size: 20px;
   margin-bottom: 12px;
 }
 
 .payment-method label {
+  
   display: block;
   font-size: 16px;
   margin-bottom: 8px;
 }
-
+.popup-content{
+  .qr-code{
+    margin: 0 auto;
+  }
+}
 .payment-method input {
+  
   width: 100%;
   padding: 8px;
   margin-bottom: 12px;
@@ -1322,6 +1343,8 @@ textarea {
 }
 
 .done-button {
+  text-align: center;
+
   margin-top: 16px;
 }
 

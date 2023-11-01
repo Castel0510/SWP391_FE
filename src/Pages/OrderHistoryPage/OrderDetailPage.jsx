@@ -61,7 +61,7 @@ const OrderDetailPage = () => {
       {order.status === 'CANCEL' && (
         <p className="status-CANCEL"><strong>Reason for Cancellation:</strong> {order.reason}</p>
       )}
-      <button onClick={handlePaymentClick}>Proceed to Payment</button>
+      {/* <button onClick={handlePaymentClick}>Proceed to Payment</button> */}
 
     </div>
   );

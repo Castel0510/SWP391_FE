@@ -4,8 +4,6 @@ import { Link } from "react-router-dom";
 import Rating from "./Rating";
 import LoadingSpinner from "./LoadingSpinner";
 import '../Service/service.scss';
-import { useDispatch, useSelector } from 'react-redux';
-import { fetchServices } from '../../Store/serviceSlice';
 
 
 const ItemGallery = ({ category, onItemClick, filters }) => {
@@ -14,76 +12,88 @@ const ItemGallery = ({ category, onItemClick, filters }) => {
   const [currentPage, setCurrentPage] = useState(1);
   const [searchQuery, setSearchQuery] = useState("");
   const itemsPerPage = 10;
-  const services = useSelector((state) => state.services.services);
-  const dispatch = useDispatch();
-
-  // useEffect(() => {
-  //   dispatch(fetchServices());
-  // }, [dispatch]);
 
 
-  // useEffect(() => {
-  //   console.log("Services from Redux:", services);
-  // }, [services]);
-
+  
   useEffect(() => {
-    const apiUrl = 'https://63692ab028cd16bba716cff0.mockapi.io/login';
+    const fetchData = async () => {
+      try {
+        const response = await fetch('https://apis20231023230305.azurewebsites.net/api/BirdService/GetAllService');
+        if (response.ok) {
+          const data = await response.json();
 
-    setLoading(true);
-
-    fetch(apiUrl)
-      .then((response) => response.json())
-      .then((data) => {
-        setItems(data);
-        setLoading(false);
-      })
-      .catch((error) => {
+          const transformedItems = data.result.map(item => ({
+            ...item,
+            serviceCategory: {
+              id: item.serviceCategory.serviceType,
+              categoryName: item.serviceCategory.categoryName,
+              serviceType: item.serviceCategory.serviceType
+            }
+          }));
+      
+          setItems(transformedItems);
+          setLoading(false);
+        } else {
+          console.log('Request failed with status:', response.status);
+          setLoading(false);
+        }
+      } catch (error) {
         console.error('Error fetching data:', error);
         setLoading(false);
-      });
+      }
+    };
+
+    fetchData();
   }, [category, filters]);
 
-  useEffect(() => {
-    setCurrentPage(1);
-  }, [category]);
+  
   const applyFilters = (items) => {
     let filteredItems = items;
-
+  
     if (filters.address) {
       filteredItems = filteredItems.filter((item) =>
         item.address.includes(filters.address)
       );
     }
-
-    if (filters.priceSort === "increase") {
+  
+    if (filters.priceSort === 'increase') {
       filteredItems.sort((a, b) => a.price - b.price);
-    } else if (filters.priceSort === "decrease") {
+    } else if (filters.priceSort === 'decrease') {
       filteredItems.sort((a, b) => b.price - a.price);
     }
-
+  
     if (filters.rating > 0) {
       filteredItems = filteredItems.filter(
-        (item) => item.rating === filters.rating
+        (item) => item.avgRating === filters.rating
       );
     }
-
+  
     if (searchQuery) {
       filteredItems = filteredItems.filter((item) =>
-        item.name.toLowerCase().includes(searchQuery.toLowerCase())
+        item.birdServiceName.toLowerCase().includes(searchQuery.toLowerCase())
       );
     }
+  
     if (filters.service) {
       filteredItems = filteredItems.filter(
-        (item) => item.selectedService.some((service) => service.label === filters.service)
+        (item) =>
+          item.serviceCategory.categoryName.toLowerCase() === filters.service.toLowerCase()
       );
-    } ``
-
+    }
+    if (category !== null) {
+      filteredItems = filteredItems.filter((item) => {
+        return item.serviceCategory.id === category;
+      });
+    }
+  
     return filteredItems;
   };
+  
 
   const filteredItems = applyFilters(
-    category ? items.filter((item) => item.category === category) : items
+    category ? items.filter((item) => item.serviceCategory.id === category) : items
   );
+  
 
   const totalPages = Math.ceil(filteredItems.length / itemsPerPage);
   const startIndex = (currentPage - 1) * itemsPerPage;
@@ -122,9 +132,9 @@ const ItemGallery = ({ category, onItemClick, filters }) => {
           >
             <div className="item-content">
               <div className="item-image">
-                <img src={item.image} alt={item.name} />
+                <img src={item.imageURL} alt={item.imageURL} />
               </div>
-              <div className="item-name">{item.name}</div>
+              <div className="item-name">{item.birdServiceName}</div>
 
               <div className="item-description">
                 {item.description.length > 50
@@ -133,10 +143,10 @@ const ItemGallery = ({ category, onItemClick, filters }) => {
               </div>
 
               <div className="item-rating">
-                <Rating rating={item.rating} />
+                <Rating rating={item.avgRating} />
               </div>
               <div className="flex justify-between">
-                <div className="item-price-detail">${item.price}/Day</div>
+                <div className="item-price-detail">${item.prices[0].priceAmount}/Day</div>
                 <Link to={`/detail/${item.id}`} state={{ selectedItem: item }}>
                   <button className="book-now-button">BOOK NOW</button>
                 </Link>

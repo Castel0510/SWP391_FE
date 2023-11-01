@@ -5,102 +5,33 @@ import YouTube from "react-youtube";
 import LoadingSpinner from "./LoadingSpinner";
 import { useNavigate } from "react-router-dom";
 import { useSelector } from "react-redux";
-import ItemDetailGallery from "./ItemDetailGallery";
-import CommentsComponent from "./CommentComponent";
 import { getUser, getUserInfoInLocalStorage } from "../../Store/userSlice";
+import CommentsComponent from "./CommentComponent";
 
 const ItemDetailPage = () => {
-  const birdSize = [
-    { value: 0, label: 'Chim cảnh' },
-    { value: 1, label: 'Chào Mào' },
-    { value: 2, label: 'Cu Gáy' },
-    { value: 3, label: 'Bồ câu' },
-    { value: 4, label: 'Sơn Ca' },
-    { value: 5, label: 'Yến Phụng' },
-    { value: 6, label: 'Họa Mi' },
-    { value: 7, label: 'Vành Khuyên' },
-    { value: 8, label: 'Chim Ưng' },
-    { value: 9, label: 'Vẹt' },
-    { value: 10, label: 'Công' },
-    { value: 11, label: 'Quạ' },
-    { value: 12, label: 'Chim Sẻ' },
-    { value: 13, label: 'Chích Chòe' },
-  ]
-
-  const birdType = [
-
-    { value: 0, label: 'less than 1kg' },
-    { value: 1, label: 'From 1kg to 2kg' },
-    { value: 2, label: 'From 3kg to 5kg' },
-    { value: 2, label: 'Greater than 5kg' },
-
-  ];
-
-  const priceType = [
-
-    { value: 0, label: 'Per hour' },
-    { value: 1, label: 'Per day' },
-    { value: 2, label: 'Per month' },
-
-  ];
-  
-  const [items, setItems] = useState([]);
-  const [loading, setLoading] = useState(true);
-
+  const [selectedItem, setSelectedItem] = useState(null);
+  const [providerData, setProviderData] = useState(null);
   const { itemId } = useParams();
   const navigate = useNavigate();
-  const [providerData, setProviderData] = useState(null);
-  const [selectedItem, setSelectedItem] = useState(null);
-
-
 
   const user = useSelector(getUserInfoInLocalStorage);
   const userID = user ? user.id : null;
-
-
-
-  const dataUser = useSelector((state) => state.user);
-  // useEffect(() => {
-  //   setUser(getUser());
-
-  // }, [dataUser]);
-
-
   useEffect(() => {
-    const apiUrl = "https://63692ab028cd16bba716cff0.mockapi.io/login";
-
-    fetch(apiUrl)
-      .then((response) => response.json())
-      .then((data) => {
-        setItems(data);
-        setLoading(false);
-      })
-      .catch((error) => {
-        console.error("Error fetching data:", error);
-        setLoading(false);
-      });
-  }, []);
-
-  useEffect(() => {
-    const fetchData = async () => {
+    const fetchItemData = async () => {
       try {
-        const response = await fetch(
-          "https://63692ab028cd16bba716cff0.mockapi.io/login"
-        );
+        const response = await fetch(`https://apis20231023230305.azurewebsites.net/api/BirdService/GetById?id=${itemId}`);
         if (!response.ok) {
           throw new Error("Failed to fetch item data");
         }
         const data = await response.json();
-        const item = data.find((item) => item.id === parseInt(itemId, 10));
-        setSelectedItem(item);
+        setSelectedItem(data.result);
       } catch (error) {
         console.error("Error fetching item data:", error);
       }
     };
 
-    fetchData();
-  }, [itemId, user, navigate]);
-
+    fetchItemData();
+  }, [itemId, navigate]);
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -126,28 +57,36 @@ const ItemDetailPage = () => {
     }
   }, [providerData, selectedItem]);
 
-  useEffect(() => {
-    if (providerData && selectedItem && selectedItem.providerID) {
-      const itemsWithSameProviderID = providerData.filter(
-        (item) => item.id === selectedItem.providerID
-      );
-
-    }
-  }, [providerData, selectedItem]);
-
   const handleBookNow = () => {
     if (!userID) {
       navigate("/login");
     } else {
-      const { category, id } = selectedItem;
-      const routeMap = {
-        Hotel: `/booking/hotel/${id}`,
-        Spa: `/booking/spa/${id}`,
-        Medical: `/booking/medical/${id}`,
-      };
-      navigate(routeMap[category]);
+      if (selectedItem && selectedItem.serviceCategory) {
+        const { serviceCategory } = selectedItem.serviceCategory;
+        const category = selectedItem.serviceCategory.serviceType;
+        const { id } = selectedItem;
+        
+        const routeMap = {
+          0: `/booking/boarding/${id}`,
+          1: `/booking/grooming/${id}`,
+          2: `/booking/healcare/${id}`,
+        };
+  
+        if (category in routeMap) {
+          navigate(routeMap[category]);
+        } else {
+          console.error("Category not found in routeMap:", category);
+        }
+      } else {
+        console.error("Invalid selectedItem or serviceCategory is null");
+      }
     }
   };
+  
+    // console.log('====================================');
+    // console.log(selectedItem.serviceCategory.id);
+    // console.log('====================================');
+  
   const renderProviderData = () => {
     if (selectedItem && providerData) {
       const provider = providerData.find((item) => item.id === selectedItem.providerID);
@@ -205,10 +144,11 @@ const ItemDetailPage = () => {
               <button onClick={() => navigate('/service')} className="back-button">
                 <FaArrowLeft />
               </button>
-              <img src={selectedItem.image} alt={selectedItem.name} className="image-img" />
+              <img src={selectedItem.imageURL} alt={selectedItem.birdServiceName} className="image-img" />
+              
             </div>
             <div className="item-info">
-              <h2>{selectedItem.name}</h2>
+              <h2>{selectedItem.birdServiceName}</h2>
               {selectedItem ? (
                 <>
                   {[
@@ -216,20 +156,22 @@ const ItemDetailPage = () => {
                     { label: "Phone", value: selectedItem.phone },
                     { label: "Address", value: selectedItem.address },
                     { label: "Provider", value: selectedItem.provider },
-                    { label: "Price", value: `$${selectedItem.price}` },
+                    { label: "Price", value: `$${selectedItem.pricePerDay}` },
                   ].map((item, index) => (
                     <div key={index} className="item-description-label">
                       <p className="item-label">{item.label}:</p>
                       <p className="item-detail-text">{item.value}</p>
                     </div>
                   ))}
-                  <YouTube videoId={selectedItem.videoId} className="youtube-container" />
                 </>
               ) : (
                 <div>Item not found</div>
               )}
             </div>
+            
           </div>
+          <YouTube videoId={selectedItem.videoURL}  className="youtube-container" />
+
           <div className="bottom-button">
             <button className="book-now-button-2" onClick={handleBookNow}>
               BOOK NOW

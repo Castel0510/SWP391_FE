@@ -102,17 +102,17 @@ export const routes = [
       isShowHeaderFooter: true,
     },
     {
-      path: "/booking/hotel/:itemId",
+      path: "/booking/boarding/:itemId",
       page: BookingPageHotel,
       isShowHeaderFooter: true,
     },
     {
-      path: "/booking/spa/:itemId",
+      path: "/booking/grooming/:itemId",
       page: BookingPageSpa,
       isShowHeaderFooter: true,
     },
     {
-      path: "/booking/medical/:itemId",
+      path: "/booking/healcare/:itemId",
       page: BookingPageMedical,
       isShowHeaderFooter: true,
     },
