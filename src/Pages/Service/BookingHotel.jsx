@@ -12,10 +12,9 @@ import { fetchServices } from '../../Store/serviceSlice';
 
 
 const BookingHotel = () => {
-  const [items1, setItems1] = useState([]);
   const user = useSelector(getUserInfoInLocalStorage);
   const navigateTo = useNavigate();
-  let [totalPrice, setTotalPrice] = useState(0);
+  const [totalPrice, setTotalPrice] = useState(0);
   const userID = user ? user.id : null;
   const [services, setServices] = useState([]);
   const { itemId } = useParams();
@@ -49,11 +48,10 @@ const BookingHotel = () => {
   const [checkOutError, setCheckOutError] = useState(null);
 
   const [selectedCheckboxes, setSelectedCheckboxes] = useState([]);
-  const selectedItem2 = items1.find((item) => item.id === parseInt(itemId, 10));
   const [formData, setFormData] = useState({
     userID: userID,
     username: '',
-    serviceName: selectedItem2 ? selectedItem2.name : '',
+    serviceName: services ? services.birdServiceName : '',
     email: user.email,
     phone: '',
     checkInDate: '',
@@ -63,33 +61,33 @@ const BookingHotel = () => {
     size: selectedSize,
     selectedOption: selectedOption,
     selectedCheckboxes: [],
-    category: selectedItem2 ? selectedItem2.category : '',
+    category: services ? services.serviceCategory : '',
     status: 'WAIT',
   });
 
   const options = [];
 
-  if (selectedItem2) {
-    selectedItem2.size.forEach((size) => {
-      options.push({
-        name: size.name,
-        label: `${size.label}/${size.price}$/bird`,
-        price: size.price,
-      });
-    });
-  }
+  // if (selectedItem2) {
+  //   selectedItem2.size.forEach((size) => {
+  //     options.push({
+  //       name: size.name,
+  //       label: `${size.label}/${size.price}$/bird`,
+  //       price: size.price,
+  //     });
+  //   });
+  // }
 
   const checkboxOptions = [];
 
-  if (selectedItem2) {
-    selectedItem2.selectedService.forEach((service) => {
-      checkboxOptions.push({
-        id: service.serviceID,
-        label: `${service.label}/$${service.price}`,
-        price: service.price,
-      });
-    });
-  }
+  // if (selectedItem2) {
+  //   selectedItem2.selectedService.forEach((service) => {
+  //     checkboxOptions.push({
+  //       id: service.serviceID,
+  //       label: `${service.label}/$${service.price}`,
+  //       price: service.price,
+  //     });
+  //   });
+  // }
 
 
   useEffect(() => {
@@ -134,45 +132,35 @@ const BookingHotel = () => {
     });
     console.log('inputchangedata', formData);
   };
-
-
-
   useEffect(() => {
     const calculateTotalPrice = () => {
       const checkInDate = new Date(formData.checkInDate);
       const checkOutDate = new Date(formData.checkOutDate);
       const days = differenceInDays(checkOutDate, checkInDate);
 
-      if (selectedItem2) {
-        const selectedItemPrice = parseFloat(services.prices);
-        const selectedOptionPrice = parseFloat(selectedOption);
-        const checkboxPrices = selectedCheckboxes.map((checkbox) => parseFloat(checkbox.price));
-        const checkboxTotalPrice = checkboxPrices.reduce((acc, price) => acc + price, 0);
-        const newTotalPrice = days * selectedItemPrice + days * selectedOptionPrice + checkboxTotalPrice;
-        setTotalPrice(newTotalPrice);
+      if (services && services.prices && selectedOption) {
+        const selectedPriceItem = services.prices.find((priceItem) => priceItem.priceName === selectedOption);
 
-        const selectedSizeName = options.find((option) => option.price === selectedOption)?.name || '';
-        setSelectedSize(selectedSizeName);
+        if (selectedPriceItem) {
+          const selectedOptionPrice = selectedPriceItem.priceAmount;
+          const checkboxPrices = selectedCheckboxes.map((checkbox) => parseFloat(checkbox.price));
+          const checkboxTotalPrice = checkboxPrices.reduce((acc, price) => acc + price, 0);
+          const newTotalPrice = days * selectedOptionPrice + checkboxTotalPrice;
+          setTotalPrice(newTotalPrice);
+
+
+          const selectedSizeName = options.find((option) => option.price === selectedOption)?.name || '';
+          setSelectedSize(selectedSizeName);
+        }
       }
-
     };
-
-
 
     calculateTotalPrice();
+  
+  }, [formData, selectedOption, selectedCheckboxes, services, options]);
 
-    const checkInDateInput = document.querySelector('[name="checkInDate"]');
-    const checkOutDateInput = document.querySelector('[name="checkOutDate"]');
 
-    checkInDateInput.addEventListener('change', calculateTotalPrice);
-    checkOutDateInput.addEventListener('change', calculateTotalPrice);
-
-    return () => {
-      checkInDateInput.removeEventListener('change', calculateTotalPrice);
-      checkOutDateInput.removeEventListener('change', calculateTotalPrice);
-    };
-  }, [formData, selectedItem2, selectedOption, selectedCheckboxes, options, totalPrice]);
-
+  console.log('Total Price:', totalPrice); 
   const isCheckOutAfterCheckIn = (checkInDate, checkOutDate) => {
     const checkIn = new Date(checkInDate);
     const checkOut = new Date(checkOutDate);
@@ -190,7 +178,7 @@ const BookingHotel = () => {
     const selectedOptionPrice = parseFloat(selectedOption);
     const checkboxPrices = selectedCheckboxes.map((checkbox) => checkbox.price);
     const checkboxTotalPrice = checkboxPrices.reduce((acc, price) => acc + price, 0);
-    const newTotalPrice = days * selectedItemPrice + days * selectedOptionPrice + checkboxTotalPrice;
+    const newTotalPrice = days * selectedOptionPrice + checkboxTotalPrice;
     const newServiceName = services.birdServiceName;
     const categoryData = services.serviceCategory.categoryName;
     const updatedFormData = {
@@ -422,6 +410,9 @@ const BookingHotel = () => {
         <div className='item-price'>
           Total Price: {isNaN(totalPrice) ? '0' : `$${totalPrice}`}
         </div>
+
+
+
         <div className="flex">
           <button
             type="button"

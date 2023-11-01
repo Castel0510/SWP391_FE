@@ -791,7 +791,7 @@ const BookingSpa = () => {
           />
           {checkInError && <p className="error-message">{checkInError}</p>}
         </div>
-        <div className="form-input">
+        <div className="form-input ">
           <label>Check-Out Date:</label>
           <input
             type="date"

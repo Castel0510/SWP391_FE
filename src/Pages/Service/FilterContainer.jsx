@@ -14,7 +14,7 @@ const FilterContainer = ({ onFilterChange, selectedCategory }) => {
 
   
   useEffect(() => {
-    const apiUrl = "https://63692ab028cd16bba716cff0.mockapi.io/login";
+    const apiUrl = "https://apis20231023230305.azurewebsites.net/api/BirdService/GetAllService";
 
     fetch(apiUrl)
       .then((response) => response.json())
@@ -40,16 +40,16 @@ const FilterContainer = ({ onFilterChange, selectedCategory }) => {
   }, []);
 
   useEffect(() => {
-    const apiUrl = "https://63692ab028cd16bba716cff0.mockapi.io/login";
+    const apiUrl = "https://apis20231023230305.azurewebsites.net/api/BirdService/GetAllService";
 
     fetch(apiUrl)
       .then((response) => response.json())
       .then((data) => {
-        setItems2(data);
+        setItems2(data.result);
 
         const uniqueServiceLabels = new Set();
         data.forEach((item) => {
-          if (!selectedCategory || item.category === selectedCategory) {
+          if (!selectedCategory || item.serviceCategory.serviceType === selectedCategory) {
             if (item.selectedService && Array.isArray(item.selectedService)) {
               item.selectedService.forEach((service) => {
                 uniqueServiceLabels.add(service.label);

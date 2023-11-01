@@ -156,7 +156,7 @@ const ItemDetailPage = () => {
                     { label: "Phone", value: selectedItem.phone },
                     { label: "Address", value: selectedItem.address },
                     { label: "Provider", value: selectedItem.provider },
-                    { label: "Price", value: `$${selectedItem.pricePerDay}` },
+                    { label: "Price", value: `$${selectedItem.prices[0].priceAmount}` },
                   ].map((item, index) => (
                     <div key={index} className="item-description-label">
                       <p className="item-label">{item.label}:</p>
