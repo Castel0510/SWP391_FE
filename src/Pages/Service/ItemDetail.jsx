@@ -145,14 +145,14 @@ const ItemDetailPage = () => {
                                 <FaArrowLeft />
                             </button> */}
                             <img
-                                src={selectedItem.imageURL}
-                                alt={selectedItem.birdServiceName}
+                                src={selectedItem?.imageURL}
+                                alt={selectedItem?.birdServiceName}
                                 className="object-cover w-full h-full"
                             />
                         </div>
 
                         <div className="w-full ">
-                            <h2 className="text-4xl font-semibold text-green-600">{selectedItem.birdServiceName}</h2>
+                            <h2 className="text-4xl font-semibold text-green-600">{selectedItem?.birdServiceName}</h2>
 
                             <div className="flex flex-col gap-4 mt-4">
                                 <div className="flex items-center gap-2">
@@ -167,22 +167,22 @@ const ItemDetailPage = () => {
                                 </div>
                                 <div className="flex flex-col gap-2">
                                     <div className="font-semibold ">Description</div>
-                                    <div className="leading-6">{selectedItem.description}</div>
+                                    <div className="leading-6">{selectedItem?.description}</div>
                                 </div>
                                 <div className="flex flex-col gap-2">
                                     <div className="font-semibold ">Category</div>
-                                    <div className="leading-6">{selectedItem.serviceCategory.categoryName}</div>
+                                    <div className="leading-6">{selectedItem?.serviceCategory?.categoryName}</div>
                                 </div>
                                 <div className="flex flex-col gap-2">
                                     <div className="font-semibold ">Price</div>
                                     <div className="flex flex-col gap-4 leading-6">
                                         {selectedItem.prices.map((item) => {
                                             const birdType = birdTypeOptions.find(
-                                                (option) => option.value === item.birdType
+                                                (option) => option.value === item?.birdType
                                             );
 
                                             const birdSize = birdSizeOptions.find(
-                                                (option) => option.value === item.birdSize
+                                                (option) => option.value === item?.birdSize
                                             );
 
                                             return (

@@ -56,9 +56,9 @@ const CommentsComponent = ({ serviceFeedbacks = [] }) => {
                     >
                         <div className="flex justify-between">
                             <div className="text-lg font-bold">Anonymous</div>
-                            <div>{moment(comment.createdDate).format('DD/MM/YYYY')}</div>
+                            <div>{moment(comment?.createdDate).format('DD/MM/YYYY')}</div>
                         </div>
-                        <div>{comment.content}</div>
+                        <div>{comment?.content}</div>
                     </div>
                 ))}
             </div>
