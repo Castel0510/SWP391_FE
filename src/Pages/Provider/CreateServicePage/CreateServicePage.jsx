@@ -34,6 +34,16 @@ const CreateServicePage = () => {
                     priceType: Yup.string().required('priceType Price is required'),
                 })
             ),
+        miniServices: Yup.array()
+            .min(0, 'Must have at least one mini service')
+            .max(1, "Can't have more than one mini service")
+            .of(
+                Yup.object().shape({
+                    miniServiceName: Yup.string().required('miniServiceName is required'),
+                    description: Yup.string().required('description is required'),
+                    price: Yup.string().required('price is required'),
+                })
+            ),
     });
 
     const formMethods = useForm({
@@ -45,13 +55,15 @@ const CreateServicePage = () => {
             description: '',
             providerId: 0,
             prices: [],
+            miniServices: [],
         },
         resolver: yupResolver(validationSchema),
     });
-
     console.log('validationSchema', formMethods.formState.errors);
 
     const prices = formMethods.watch('prices');
+    const miniServices = formMethods.watch('miniServices');
+    const serviceCategorySelectId = formMethods.watch('serviceCategorySelectId');
 
     const providerQuery = useQuery(
         ['provider', user?.id],
@@ -74,6 +86,28 @@ const CreateServicePage = () => {
 
         setUser(user);
     }, []);
+
+    const serviceTypeAfterQuery = useQuery(
+        ['serviceType', serviceCategorySelectId],
+        async () => {
+            const res = await axios.get(
+                'https://apis20231023230305.azurewebsites.net/api/ServiceCategory/GetByServiceType?type=' +
+                    serviceCategorySelectId
+            );
+
+            return [res.data.result];
+        },
+        {
+            enabled: serviceCategorySelectId !== '',
+            initialData: [],
+            refetchOnReconnect: false,
+            refetchOnWindowFocus: false,
+            onSuccess: (data) => {
+                if (data.length === 0) return;
+                formMethods.setValue('serviceCategoryId', data[0].id);
+            },
+        }
+    );
 
     const [error, setError] = useState(null);
 
@@ -112,7 +146,7 @@ const CreateServicePage = () => {
             const response = await axios.post('https://apis20231023230305.azurewebsites.net/api/BirdService/Create', {
                 ...data,
                 location: Number(data.location),
-                serviceCategoryId: Number(data.prices[0].serviceType),
+                serviceCategoryId: Number(data.serviceCategoryId),
                 prices: data.prices.map((item) => ({
                     serviceType: Number(item.serviceType),
                     birdSize: Number(item.birdSize),
@@ -121,6 +155,16 @@ const CreateServicePage = () => {
                     priceType: 0,
                     priceName: item.priceName,
                 })),
+                miniServices:
+                    data.miniServices.length > 0
+                        ? [
+                              {
+                                  miniServiceName: data.miniServices[0].miniServiceName,
+                                  description: data.miniServices[0].description,
+                                  price: Number(data.miniServices[0].price),
+                              },
+                          ]
+                        : null,
             });
 
             return response;
@@ -227,7 +271,7 @@ const CreateServicePage = () => {
                                 <select
                                     {...formMethods.register('location')}
                                     placeholder="Select location"
-                                    className="block w-full rounded-md border-0 px-4 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+                                    className="block w-full rounded-md border-0 px-4 py-2.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
                                 >
                                     {locationOptions.map(({ value, label }, index) => (
                                         <option key={index} value={Number(value)}>
@@ -237,7 +281,46 @@ const CreateServicePage = () => {
                                 </select>
                                 <FormError name="location" />
                             </div>
-
+                            <div className="flex flex-col col-span-1">
+                                <label
+                                    htmlFor="serviceType"
+                                    className="block text-sm font-semibold leading-6 text-gray-800"
+                                >
+                                    Service Category
+                                </label>
+                                <select
+                                    {...formMethods.register(`serviceCategorySelectId`)}
+                                    id="serviceCategorySelectId"
+                                    className=" bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 "
+                                >
+                                    {serviceCategory.map(({ value, label }, index) => (
+                                        <option key={index} value={Number(value)}>
+                                            {label}
+                                        </option>
+                                    ))}
+                                </select>
+                                <FormError name={`serviceCategorySelectId`} />
+                            </div>
+                            <div className="flex flex-col col-span-1">
+                                <label
+                                    htmlFor="serviceType"
+                                    className="block text-sm font-semibold leading-6 text-gray-800"
+                                >
+                                    Type Name
+                                </label>
+                                <select
+                                    {...formMethods.register(`serviceCategoryId`)}
+                                    id="serviceCategoryId"
+                                    className=" bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 "
+                                >
+                                    {serviceTypeAfterQuery.data.map(({ categoryName, id }, index) => (
+                                        <option key={id} value={Number(id)}>
+                                            {categoryName}
+                                        </option>
+                                    ))}
+                                </select>
+                                <FormError name={`serviceCategoryId`} />
+                            </div>
                             <div className="flex flex-col col-span-3">
                                 <label
                                     htmlFor="imageURL"
@@ -306,6 +389,7 @@ const CreateServicePage = () => {
                                     <span>Add Price</span>
                                 </button>
                             </div>
+                            <FormError name={`prices`} />
                             <div>
                                 {prices.length === 0 && (
                                     <div className="flex items-center justify-center w-full h-32 mt-2 bg-gray-200 rounded-lg">
@@ -315,28 +399,7 @@ const CreateServicePage = () => {
                             </div>
                             <div className="flex flex-col gap-2">
                                 {prices.map((item, index) => (
-                                    <div className="grid items-end w-full grid-cols-6 gap-4">
-                                        <div className="flex flex-col col-span-1">
-                                            <label
-                                                htmlFor="serviceType"
-                                                className="block text-sm font-semibold leading-6 text-gray-800"
-                                            >
-                                                Service type
-                                            </label>
-                                            <select
-                                                {...formMethods.register(`prices.${index}.serviceType`)}
-                                                id="serviceType"
-                                                className=" bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 "
-                                            >
-                                                {serviceCategory.map(({ value, label }, index) => (
-                                                    <option key={index} value={Number(value)}>
-                                                        {label}
-                                                    </option>
-                                                ))}
-                                            </select>
-                                            <FormError name={`prices.${index}.serviceType`} />
-                                        </div>
-
+                                    <div className="grid items-end w-full grid-cols-5 gap-4">
                                         <div className="flex flex-col col-span-1">
                                             <label
                                                 htmlFor="priceName"
@@ -344,23 +407,12 @@ const CreateServicePage = () => {
                                             >
                                                 Price Name
                                             </label>
-                                            <select
+                                            <input
                                                 {...formMethods.register(`prices.${index}.priceName`)}
                                                 id="priceName"
                                                 className=" bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 "
-                                            >
-                                                {serviceTypeQuery.data
-                                                    .filter((item) => {
-                                                        const price = prices[index];
+                                            />
 
-                                                        return Number(price.serviceType) === Number(item.serviceType);
-                                                    })
-                                                    .map(({ categoryName, id }, index) => (
-                                                        <option key={id} value={Number(id)}>
-                                                            {categoryName}
-                                                        </option>
-                                                    ))}
-                                            </select>
                                             <FormError name={`prices.${index}.priceName`} />
                                         </div>
 
@@ -434,20 +486,107 @@ const CreateServicePage = () => {
                                 ))}
                             </div>
                         </div>
+                        <FormError name={`miniServices`} />
+                        {miniServices.length > 0 && (
+                            <div>
+                                <div className="w-full h-px my-5 bg-gray-400" />
+                                <div name="miniServices">
+                                    <div className="flex items-center justify-between">
+                                        <h2 className="text-lg font-semibold leading-7 text-gray-900 ">Mini Service</h2>
+                                        <button
+                                            type="button"
+                                            onClick={() => {
+                                                formMethods.setValue('miniServices', []);
+                                            }}
+                                        >
+                                            <TrashIcon className="w-5 h-5 text-red-600 cursor-pointer fill-white" />
+                                        </button>
+                                    </div>
+                                </div>
+                                <div className="grid grid-cols-2 gap-4">
+                                    <div className="flex flex-col col-span-1">
+                                        <div className="flex flex-col ">
+                                            <label
+                                                htmlFor="priceAmount"
+                                                className="block text-sm font-semibold leading-6 text-gray-800"
+                                            >
+                                                Mini Service Name
+                                            </label>
+                                            <input
+                                                type="number"
+                                                {...formMethods.register(`miniServices[0].miniServiceName`)}
+                                                className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
+                                            />
+                                        </div>
+                                        <FormError name={`miniServices[0].miniServiceName`} />
+                                    </div>
+                                    <div className="flex flex-col col-span-1">
+                                        <div className="flex flex-col ">
+                                            <label
+                                                htmlFor="priceAmount"
+                                                className="block text-sm font-semibold leading-6 text-gray-800"
+                                            >
+                                                Price
+                                            </label>
+                                            <input
+                                                type="number"
+                                                {...formMethods.register(`miniServices[0].price`)}
+                                                className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
+                                            />
+                                        </div>
+                                        <FormError name={`miniServices[0].price`} />
+                                    </div>
+                                    <div className="flex flex-col col-span-2">
+                                        <div className="flex flex-col ">
+                                            <label
+                                                htmlFor="priceAmount"
+                                                className="block text-sm font-semibold leading-6 text-gray-800"
+                                            >
+                                                Price
+                                            </label>
+                                        </div>
+                                        <textarea
+                                            {...formMethods.register(`miniServices[0].description`)}
+                                            placeholder="Write your description here"
+                                            className="block w-full rounded-md border-0 px-4 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+                                        ></textarea>
+                                        <FormError name={`miniServices[0].price`} />
+                                    </div>
+                                </div>
+                            </div>
+                        )}
 
-                        <div className="flex justify-end col-span-3">
-                            <Link
-                                to={'/my-shop'}
-                                className="float-right cursor-pointer focus:outline-none text-white bg-red-700 hover:bg-red-800 focus:ring-4 focus:ring-red-300 font-medium rounded-lg text-sm px-5 py-2.5 mr-2 mb-2 dark:bg-red-600 dark:hover:bg-red-700 dark:focus:ring-red-900"
-                            >
-                                Cancel
-                            </Link>
+                        <div className="flex justify-between col-span-3">
                             <button
-                                type="submit"
-                                className="float-right cursor-pointer focus:outline-none text-white bg-green-700 hover:bg-green-800 focus:ring-4 focus:ring-green-300 font-medium rounded-lg text-sm px-5 py-2.5 mr-2 mb-2 dark:bg-green-600 dark:hover:bg-green-700 dark:focus:ring-green-800"
+                                type="button"
+                                className="flex items-center gap-2 px-4 py-1 text-white duration-300 !bg-green-600 rounded-lg hover:bg-green-500"
+                                onClick={() => {
+                                    formMethods.setValue('miniServices', [
+                                        {
+                                            miniServiceName: '',
+                                            description: '',
+                                            price: 0,
+                                        },
+                                    ]);
+                                }}
                             >
-                                Submit
+                                <PlusIcon className="w-5 h-5 text-white" />
+                                Add Mini Service
                             </button>
+                            <div className="flex items-center gap-2">
+                                <Link
+                                    to={'/my-shop'}
+                                    className="items-center block gap-2 px-6 py-3 text-white duration-300 bg-red-600 rounded-lg hover:bg-red-500"
+                                >
+                                    Cancel
+                                </Link>
+                                <button
+                                    type="submit"
+                                    className="items-center block h-full gap-2 px-6 py-3 text-white duration-300 !bg-green-600 rounded-lg hover:bg-green-500"
+                                >
+                                    Submit
+                                </button>
+                            </div>
                         </div>
                     </form>
                 </div>
