@@ -70,6 +70,8 @@ const ItemDetailPage = () => {
 
                 const routeMap = {
                     0: `/booking/boarding/${id}`,
+                    // 1: `/booking/boarding/${id}`,
+                    // 2: `/booking/boarding/${id}`,
                     1: `/booking/grooming/${id}`,
                     2: `/booking/healcare/${id}`,
                 };
