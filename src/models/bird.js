@@ -1,89 +1,89 @@
 export const birdSizeOptions = [
     {
-        value: 1,
+        value: 0,
         label: 'Small',
     },
     {
-        value: 2,
+        value: 1,
         label: 'Medium',
     },
     {
-        value: 3,
+        value: 2,
         label: 'Large',
     },
 ];
 
 export const birdTypeOptions = [
     {
-        value: 1,
+        value: 0,
         label: 'Chim Cảnh',
     },
     {
-        value: 2,
+        value: 1,
         label: 'Chào Mào',
     },
     {
-        value: 3,
+        value: 2,
         label: 'Cu Gáy',
     },
 
     {
-        value: 4,
+        value: 3,
         label: 'Bồ Câu',
     },
     {
-        value: 5,
+        value: 4,
         label: 'Sơn Ca',
     },
     {
-        value: 6,
+        value: 5,
         label: 'Yến Phụng',
     },
     {
-        value: 7,
+        value: 6,
         label: 'Họa Mi',
     },
     {
-        value: 8,
+        value: 7,
         label: 'Vành Khuyên',
     },
     {
-        value: 9,
+        value: 8,
         label: 'Chim Ưng',
     },
     {
-        value: 10,
+        value: 9,
         label: 'Vẹt',
     },
     {
-        value: 11,
+        value: 10,
         label: 'Công',
     },
     {
-        value: 12,
+        value: 11,
         label: 'Qụa',
     },
     {
-        value: 13,
+        value: 12,
         label: 'Chim Sẻ',
     },
     {
-        value: 14,
+        value: 13,
         label: 'Chích Chòe',
     },
 ];
 
 export const birdCategoryOptions = [
     {
-        value: 1,
+        value: 0,
         label: 'Boarding',
     },
     {
-        value: 2,
+        value: 1,
         label: 'Grooming',
     },
     {
-        value: 3,
+        value: 2,
         label: 'Healthcare',
     },
 ];
@@ -91,34 +91,34 @@ export const birdCategoryOptions = [
 export const locationOptions = [
     {
         label: 'None',
-        value: 1,
+        value: 0,
     },
     {
         label: 'Hà Nội',
-        value: 2,
+        value: 1,
     },
     {
         label: 'Hồ Chí Minh',
-        value: 3,
+        value: 2,
     },
     {
         label: 'Đà Nẵng',
-        value: 4,
+        value: 3,
     },
     {
         label: 'Cần Thơ',
-        value: 5,
+        value: 4,
     },
     {
         label: 'Hải Phòng',
-        value: 6,
+        value: 5,
     },
     {
         label: 'Nghệ An',
-        value: 7,
+        value: 6,
     },
     {
         label: 'Huế',
-        value: 8,
+        value: 7,
     },
 ];

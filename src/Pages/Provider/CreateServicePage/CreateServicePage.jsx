@@ -6,7 +6,7 @@ import { Formik, Field, Form, ErrorMessage, FieldArray } from 'formik';
 import * as Yup from 'yup';
 import axios from 'axios';
 import CTAUploadFile from '../../../Components/CTA/CTAUploadFile';
-import { locationOptions } from '../../../models/bird';
+import { birdSizeOptions, birdTypeOptions, locationOptions } from '../../../models/bird';
 
 const CreateServicePage = () => {
     const [isLoading, setIsLoading] = useState(false);
@@ -133,13 +133,6 @@ const CreateServicePage = () => {
         { value: 13, label: 'Chích Chòe' },
     ];
 
-    const birdType = [
-        { value: 0, label: 'less than 1kg' },
-        { value: 1, label: 'From 1kg to 2kg' },
-        { value: 2, label: 'From 3kg to 5kg' },
-        { value: 2, label: 'Greater than 5kg' },
-    ];
-
     const priceType = [
         { value: 0, label: 'Per hour' },
         { value: 1, label: 'Per day' },
@@ -152,7 +145,7 @@ const CreateServicePage = () => {
                 <div className="p-4 bg-white rounded-lg shadow-lg w-96 h-fit ring-1">
                     <CTAUploadFile description="Upload your service image here" />
                 </div>
-                <div className="w-full max-w-3xl p-4 rounded-lg ring-1">
+                <div className="w-full max-w-5xl p-4 rounded-lg ring-1">
                     <h1 className="text-2xl font-bold text-center mb-7">Add New Service</h1>
                     <Formik
                         initialValues={{
@@ -303,145 +296,18 @@ const CreateServicePage = () => {
                                 </div>
 
                                 <div className="w-full h-px my-5 bg-gray-400" />
-                                <h2 className="text-lg font-semibold leading-7 text-gray-900 ">Category Service</h2>
                                 <FieldArray name="prices">
                                     {({ push, remove }) => (
-                                        <div>
-                                            <div className="grid w-full grid-cols-6 gap-3">
-                                                <div className="flex flex-col col-span-2">
-                                                    <label
-                                                        htmlFor="serviceType"
-                                                        className="block text-sm font-semibold leading-6 text-gray-800"
-                                                    >
-                                                        Service type
-                                                    </label>
-                                                    <Field
-                                                        as="select"
-                                                        name="serviceType"
-                                                        id="serviceType"
-                                                        className=" bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 "
-                                                    >
-                                                        <option>Select type</option>
-                                                        {serviceCategory.map(({ value, label }, index) => (
-                                                            <option key={index} value={Number(value)}>
-                                                                {label}
-                                                            </option>
-                                                        ))}
-                                                    </Field>
-                                                </div>
-
-                                                <div className="flex flex-col col-span-2">
-                                                    <label
-                                                        htmlFor="priceName"
-                                                        className="block text-sm font-semibold leading-6 text-gray-800"
-                                                    >
-                                                        Select Price Name
-                                                    </label>
-                                                    <Field
-                                                        as="select"
-                                                        name="priceName"
-                                                        id="priceName"
-                                                        className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 "
-                                                    >
-                                                        <option value="">Select price name</option>
-                                                        {serviceCateList?.map &&
-                                                            serviceCateList?.map(
-                                                                (item, index) =>
-                                                                    values?.serviceType ===
-                                                                        String(item?.serviceType) && ( // Add this condition
-                                                                        <option
-                                                                            key={index}
-                                                                            value={item.categoryName}
-                                                                            onChange={handleTakeServiceCateId(item.id)}
-                                                                        >
-                                                                            {item.categoryName}
-                                                                        </option>
-                                                                    )
-                                                            )}
-                                                    </Field>
-                                                </div>
-
-                                                <div className="flex flex-col col-span-2">
-                                                    <label
-                                                        htmlFor="birdSize"
-                                                        className="block text-sm font-semibold leading-6 text-gray-800"
-                                                    >
-                                                        Select bird
-                                                    </label>
-                                                    <Field
-                                                        as="select"
-                                                        name="birdSize"
-                                                        className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
-                                                    >
-                                                        <option value="">Select bird</option>
-                                                        {birdSize.map(({ value, label }, index) => (
-                                                            <option key={index} value={Number(value)}>
-                                                                {label}
-                                                            </option>
-                                                        ))}
-                                                    </Field>
-                                                </div>
-                                                <div className="flex flex-col col-span-2">
-                                                    <label
-                                                        htmlFor="birdType"
-                                                        className="block text-sm font-semibold leading-6 text-gray-800"
-                                                    >
-                                                        Select size
-                                                    </label>
-                                                    <Field
-                                                        as="select"
-                                                        name="birdType"
-                                                        className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
-                                                    >
-                                                        <option value="">Select bird</option>
-                                                        {birdType.map(({ value, label }, index) => (
-                                                            <option key={index} value={Number(value)}>
-                                                                {label}
-                                                            </option>
-                                                        ))}
-                                                    </Field>
-                                                </div>
-
-                                                <div className="flex flex-col col-span-2">
-                                                    <div className="flex flex-col mb-4">
-                                                        <label
-                                                            htmlFor="priceAmount"
-                                                            className="block text-sm font-semibold leading-6 text-gray-800"
-                                                        >
-                                                            Price
-                                                        </label>
-                                                        <Field
-                                                            name="priceAmount"
-                                                            placeholder="Enter price "
-                                                            className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
-                                                        />
-                                                    </div>
-                                                </div>
-
-                                                <div className="flex flex-col col-span-2">
-                                                    <label
-                                                        htmlFor="priceType"
-                                                        className="block text-sm font-semibold leading-6 text-gray-800"
-                                                    >
-                                                        Select price type
-                                                    </label>
-                                                    <Field
-                                                        as="select"
-                                                        name="priceType"
-                                                        className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
-                                                    >
-                                                        <option value="">Select</option>
-                                                        {priceType.map(({ value, label }, index) => (
-                                                            <option key={index} value={Number(value)}>
-                                                                {label}
-                                                            </option>
-                                                        ))}
-                                                    </Field>
-                                                </div>
+                                        <>
+                                            <div className="flex items-center justify-between">
+                                                <h2 className="text-lg font-semibold leading-7 text-gray-900 ">
+                                                    Category Service
+                                                </h2>
                                                 <button
                                                     type="button"
                                                     className="flex items-center gap-2 px-4 py-2 text-white duration-300 bg-green-600 rounded-lg hover:bg-green-500"
                                                     onClick={() => {
+                                                        console.log(values);
                                                         const exists = values.prices.some(
                                                             (data) => data.birdType === values.birdType
                                                         );
@@ -452,14 +318,14 @@ const CreateServicePage = () => {
                                                                 birdSize: Number(values.birdSize),
                                                                 birdType: Number(values.birdType),
                                                                 priceAmount: Number(values.priceAmount),
-                                                                priceType: Number(values.priceType),
+                                                                priceType: 0,
                                                             });
                                                             setFieldValue('serviceType', '');
                                                             setFieldValue('priceName', '');
                                                             setFieldValue('birdSize', '');
                                                             setFieldValue('birdType', '');
                                                             setFieldValue('priceAmount', '0');
-                                                            setFieldValue('priceType', '');
+                                                            setFieldValue('priceType', '0');
                                                         }
                                                     }}
                                                     disabled={values.birdType === '' || values.priceAmount === ''}
@@ -468,67 +334,193 @@ const CreateServicePage = () => {
                                                     <span>Add Price</span>
                                                 </button>
                                             </div>
-                                            <ErrorMessage name="prices" component="div" className="mt-3 text-red-500" />
-                                            {values.prices.map((data, index) => (
-                                                <div key={index} className="flex overflow-hidden my-7">
-                                                    <div className="flex flex-col mb-4 mr-4 max-w-[100px]">
-                                                        <div
-                                                            name={`prices.${index}.serviceType`}
-                                                            value={serviceCategory[data.serviceType].label}
-                                                            className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block  p-2.5"
-                                                            readOnly
-                                                        />
-                                                    </div>
-                                                    <div className="flex flex-col mb-4 mr-4 max-w-[110px]">
+                                            <div>
+                                                <div className="grid w-full grid-cols-5 gap-3">
+                                                    <div className="flex flex-col col-span-1">
+                                                        <label
+                                                            htmlFor="serviceType"
+                                                            className="block text-sm font-semibold leading-6 text-gray-800"
+                                                        >
+                                                            Service type
+                                                        </label>
                                                         <Field
-                                                            name={`prices.${index}.priceName`}
-                                                            value={data.priceName}
+                                                            as="select"
+                                                            name="serviceType"
+                                                            defaultValue={serviceCategory[0].value}
+                                                            id="serviceType"
+                                                            className=" bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 "
+                                                        >
+                                                            {serviceCategory.map(({ value, label }, index) => (
+                                                                <option key={index} value={Number(value)}>
+                                                                    {label}
+                                                                </option>
+                                                            ))}
+                                                        </Field>
+                                                    </div>
+
+                                                    <div className="flex flex-col col-span-1">
+                                                        <label
+                                                            htmlFor="priceName"
+                                                            className="block text-sm font-semibold leading-6 text-gray-800"
+                                                        >
+                                                            Select Price Name
+                                                        </label>
+                                                        <Field
+                                                            as="select"
+                                                            name="priceName"
+                                                            id="priceName"
+                                                            className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 "
+                                                        >
+                                                            {serviceCateList?.map &&
+                                                                serviceCateList?.map(
+                                                                    (item, index) =>
+                                                                        values?.serviceType ===
+                                                                            String(item?.serviceType) && ( // Add this condition
+                                                                            <option
+                                                                                key={index}
+                                                                                value={item.categoryName}
+                                                                                onChange={handleTakeServiceCateId(
+                                                                                    item.id
+                                                                                )}
+                                                                            >
+                                                                                {item.categoryName}
+                                                                            </option>
+                                                                        )
+                                                                )}
+                                                        </Field>
+                                                    </div>
+
+                                                    <div className="flex flex-col col-span-1">
+                                                        <label
+                                                            htmlFor="birdSize"
+                                                            className="block text-sm font-semibold leading-6 text-gray-800"
+                                                        >
+                                                            Select Size
+                                                        </label>
+                                                        <Field
+                                                            as="select"
+                                                            name="birdSize"
                                                             className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
-                                                            readOnly
-                                                        />
+                                                        >
+                                                            <option value="">Select bird</option>
+                                                            {birdSizeOptions.map(({ value, label }, index) => (
+                                                                <option key={index} value={Number(value)}>
+                                                                    {label}
+                                                                </option>
+                                                            ))}
+                                                        </Field>
                                                     </div>
-                                                    <div className="flex flex-col mb-4 mr-4 max-w-[110px]">
+                                                    <div className="flex flex-col col-span-1">
+                                                        <label
+                                                            htmlFor="birdType"
+                                                            className="block text-sm font-semibold leading-6 text-gray-800"
+                                                        >
+                                                            Select Type
+                                                        </label>
                                                         <Field
-                                                            name={`prices.${index}.birdSize`}
-                                                            value={birdSize[data.birdSize].label}
+                                                            as="select"
+                                                            name="birdType"
                                                             className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
-                                                            readOnly
-                                                        />
+                                                        >
+                                                            {birdTypeOptions.map(({ value, label }, index) => (
+                                                                <option key={index} value={Number(value)}>
+                                                                    {label}
+                                                                </option>
+                                                            ))}
+                                                        </Field>
                                                     </div>
-                                                    <div className="flex flex-col mb-4 mr-4 max-w-[130px]">
-                                                        <Field
-                                                            name={`prices.${index}.birdType`}
-                                                            value={birdType[data.birdType].label}
-                                                            className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
-                                                            readOnly
-                                                        />
+
+                                                    <div className="flex flex-col col-span-1">
+                                                        <div className="flex flex-col mb-4">
+                                                            <label
+                                                                htmlFor="priceAmount"
+                                                                className="block text-sm font-semibold leading-6 text-gray-800"
+                                                            >
+                                                                Price
+                                                            </label>
+                                                            <Field
+                                                                type="number"
+                                                                name="priceAmount"
+                                                                placeholder="Enter price "
+                                                                className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
+                                                            />
+                                                        </div>
                                                     </div>
-                                                    <div className="flex flex-col mb-4 mr-4 min-w-[50px] max-w-[100px]">
-                                                        <Field
-                                                            name={`prices.${index}.priceAmount`}
-                                                            value={data.priceAmount}
-                                                            className="text-center bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 p-2.5"
-                                                            readOnly
-                                                        />
-                                                    </div>
-                                                    <div className="flex flex-col mb-4 mr-4 max-w-[100px]">
-                                                        <Field
-                                                            name={`prices.${index}.priceType`}
-                                                            value={priceType[data.priceType].label}
-                                                            className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block  p-2.5"
-                                                            readOnly
-                                                        />
-                                                    </div>
-                                                    {/* <button
+                                                </div>
+                                                <ErrorMessage
+                                                    name="prices"
+                                                    component="div"
+                                                    className="mt-3 text-red-500"
+                                                />
+                                                {values.prices.map((data, index) => (
+                                                    <div key={index} className="flex overflow-hidden my-7">
+                                                        <div className="flex flex-col mb-4 mr-4 max-w-[100px]">
+                                                            <div
+                                                                name={`prices.${index}.serviceType`}
+                                                                value={serviceCategory[data.serviceType].label}
+                                                                className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block  p-2.5"
+                                                                readOnly
+                                                            />
+                                                        </div>
+                                                        <div className="flex flex-col mb-4 mr-4 max-w-[110px]">
+                                                            <Field
+                                                                name={`prices.${index}.priceName`}
+                                                                value={data.priceName}
+                                                                className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
+                                                                readOnly
+                                                            />
+                                                        </div>
+                                                        <div className="flex flex-col mb-4 mr-4 max-w-[110px]">
+                                                            <Field
+                                                                name={`prices.${index}.birdSize`}
+                                                                value={
+                                                                    birdSizeOptions.find(
+                                                                        (item) => item.value === data.birdType
+                                                                    )?.label
+                                                                }
+                                                                className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
+                                                                readOnly
+                                                            />
+                                                        </div>
+                                                        <div className="flex flex-col mb-4 mr-4 max-w-[130px]">
+                                                            <Field
+                                                                name={`prices.${index}.birdType`}
+                                                                value={
+                                                                    birdTypeOptions.find(
+                                                                        (item) => item.value === data.birdType
+                                                                    )?.label
+                                                                }
+                                                                className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
+                                                                readOnly
+                                                            />
+                                                        </div>
+                                                        <div className="flex flex-col mb-4 mr-4 min-w-[50px] max-w-[100px]">
+                                                            <Field
+                                                                name={`prices.${index}.priceAmount`}
+                                                                value={data.priceAmount}
+                                                                className="text-center bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 p-2.5"
+                                                                readOnly
+                                                            />
+                                                        </div>
+                                                        <div className="flex flex-col mb-4 mr-4 max-w-[100px]">
+                                                            <Field
+                                                                name={`prices.${index}.priceType`}
+                                                                value={priceType[data.priceType].label}
+                                                                className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block  p-2.5"
+                                                                readOnly
+                                                            />
+                                                        </div>
+                                                        {/* <button
                                                             type="button"
                                                             className="float-right px-5 mb-2 mr-2 text-base font-medium text-white bg-red-700 rounded-lg cursor-pointer focus:outline-none hover:bg-red-800 focus:ring-4 focus:ring-red-300 dark:bg-red-600 dark:hover:bg-red-700 dark:focus:ring-red-900"
                                                             onClick={() => remove(index)}
                                                         >
                                                             <BsTrash />
                                                         </button> */}
-                                                </div>
-                                            ))}
-                                        </div>
+                                                    </div>
+                                                ))}
+                                            </div>
+                                        </>
                                     )}
                                 </FieldArray>
 
