@@ -8,6 +8,7 @@ import { FaArrowLeft } from 'react-icons/fa';
 import { useDispatch, useSelector } from 'react-redux';
 import { getUserInfoInLocalStorage } from '../../Store/userSlice';
 import { fetchServices } from '../../Store/serviceSlice';
+import { formatCurrency } from '../../Utils/string.helper';
 
 const BookingHotel = () => {
     const [items1, setItems1] = useState([]);
@@ -290,7 +291,7 @@ const BookingHotel = () => {
             ? services.prices.map((priceItem) => {
                   return {
                       name: priceItem.priceName,
-                      label: `${priceItem.priceName} ($${priceItem.priceAmount})`,
+                      label: `${priceItem.priceName} (${formatCurrency(priceItem.priceAmount)})`,
                       value: priceItem.priceAmount,
                   };
               })
@@ -300,118 +301,147 @@ const BookingHotel = () => {
     console.log(services.prices);
     console.log('====================================');
     return (
-        <div className="form-container">
-            <button onClick={() => window.history.back()} className="back-button">
-                <FaArrowLeft />
-            </button>
-            <h2 className="form-header">
-                Booking Form for: {services ? services.birdServiceName : 'No item selected'}
-            </h2>
-            <form onSubmit={handleSubmit}>
-                <div className="form-input">
-                    <label>Full Name</label>
-                    <input
-                        type="text"
-                        name="username"
-                        value={formData.username}
-                        onChange={handleInputChange}
-                        required
-                        className="input-text"
-                    />
-                </div>
-                <div className="form-input">
-                    <label>Email:</label>
-                    <input
-                        type="email"
-                        name="email"
-                        value={formData.email}
-                        onChange={handleInputChange}
-                        required
-                        className="input-text"
-                    />
-                </div>
-                <div className="form-input">
-                    <label>Phone</label>
-                    <input
-                        type="text"
-                        name="phone"
-                        value={formData.phone}
-                        onChange={handleInputChange}
-                        required
-                        className="input-text"
-                    />
-                </div>
+        <div className="flex items-start justify-center min-h-screen py-10">
+            <div className="flex flex-col w-full max-w-4xl gap-10">
+                <button onClick={() => window.history.back()} className="back-button">
+                    <FaArrowLeft />
+                </button>
+                <h2 className="mb-2 font-bold">
+                    Booking Form for: {services ? services.birdServiceName : 'No item selected'}
+                </h2>
+                <form className="grid grid-cols-3 gap-3" onSubmit={handleSubmit}>
+                    <div className="col-span-1">
+                        <label htmlFor="username" className="block text-sm font-semibold leading-6 text-gray-900">
+                            Username
+                        </label>
+                        <input
+                            type="text"
+                            name="username"
+                            id="username"
+                            value={formData.username}
+                            onChange={handleInputChange}
+                            required
+                            className="block w-full px-4 rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+                        />
+                    </div>
+                    <div className="col-span-1">
+                        <label htmlFor="email" className="block text-sm font-semibold leading-6 text-gray-900">
+                            Email:
+                        </label>
+                        <input
+                            type="email"
+                            name="email"
+                            id="email"
+                            value={formData.email}
+                            onChange={handleInputChange}
+                            required
+                            className="block w-full rounded-md px-4 border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+                        />
+                    </div>
+                    <div className="col-span-1">
+                        <label htmlFor="phone" className="block text-sm font-semibold leading-6 text-gray-900">
+                            Phone:
+                        </label>
+                        <input
+                            type="tel"
+                            name="phone"
+                            id="phone"
+                            value={formData.phone}
+                            onChange={handleInputChange}
+                            required
+                            className="block w-full rounded-md border-0 px-4 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+                        />
+                    </div>
 
-                <div className="form-input">
-                    <label>Note:</label>
-                    <textarea
-                        name="note"
-                        value={formData.note}
-                        onChange={handleInputChange}
-                        required
-                        rows="4"
-                        cols="100"
-                        style={{ resize: 'none' }}
-                        className="textarea"
-                    />
-                </div>
-                <div className="form-input">
-                    <label>Check-In Date:</label>
-                    <input
-                        type="date"
-                        name="checkInDate"
-                        value={formData.checkInDate}
-                        onChange={handleInputChange}
-                        required
-                        className="input-date"
-                    />
-                    {checkInError && <p className="error-message">{checkInError}</p>}
-                </div>
-                <div className="form-input">
-                    <label>Check-Out Date:</label>
-                    <input
-                        type="date"
-                        name="checkOutDate"
-                        value={formData.checkOutDate}
-                        onChange={handleInputChange}
-                        required
-                        className="input-date"
-                    />
-                    {checkOutError && <p className="error-message">{checkOutError}</p>}
-                </div>
-                <div className="form-input">
-                    <label>Select an Option of your bird size:</label>
-                    <select
-                        name="selectedOption"
-                        value={selectedOption}
-                        onChange={handleDropdownChange}
-                        required
-                        className="select-dropdown"
-                    >
-                        <option value="" disabled>
-                            Select an option
-                        </option>
-                        {dropdownOptions.map((option) => (
-                            <option key={option.name} value={option.value}>
-                                {option.label}
+                    <div className="col-span-1">
+                        <label htmlFor="checkInDate" className="block text-sm font-semibold leading-6 text-gray-900">
+                            Check-In Date:
+                        </label>
+                        <input
+                            type="date"
+                            name="checkInDate"
+                            id="checkInDate"
+                            value={formData.checkInDate}
+                            onChange={handleInputChange}
+                            required
+                            className="block w-full rounded-md border-0 px-4 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+                        />
+                        {checkInError && <p className="error-message">{checkInError}</p>}
+                    </div>
+                    <div className="col-span-1">
+                        <label htmlFor="checkOutDate" className="block text-sm font-semibold leading-6 text-gray-900">
+                            Check-Out Date:
+                        </label>
+                        <input
+                            type="date"
+                            name="checkOutDate"
+                            id="checkOutDate"
+                            value={formData.checkOutDate}
+                            onChange={handleInputChange}
+                            required
+                            className="block w-full rounded-md border-0 px-4 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+                        />
+                        {checkInError && <p className="error-message">{checkInError}</p>}
+                    </div>
+
+                    <div className="col-span-1">
+                        <label htmlFor="selectedOption" className="block text-sm font-semibold leading-6 text-gray-900">
+                            Select an Option of your bird size:
+                        </label>
+                        <select
+                            id="selectedOption"
+                            name="selectedOption"
+                            className="block w-full px-4 py-2.5 text-gray-900 border-0 rounded-md shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+                            value={selectedOption}
+                            onChange={handleDropdownChange}
+                            required
+                        >
+                            <option value="" disabled>
+                                Select an option
                             </option>
-                        ))}
-                    </select>
-                </div>
+                            {dropdownOptions.map((option) => (
+                                <option key={option.name} value={option.value}>
+                                    {option.label}
+                                </option>
+                            ))}
+                        </select>
+                    </div>
 
-                <div className="item-price">Total Price: {isNaN(totalPrice) ? '0' : `$${totalPrice}`}</div>
-                <div className="flex">
-                    <button
-                        type="button"
-                        onClick={(e) => handleConfirmation(e)}
-                        className="bg-green-500 form-submit-button"
-                    >
-                        SUBMIT
-                    </button>
-                </div>
-            </form>
+                    <div className="col-span-3">
+                        <label htmlFor="note" className="block text-sm font-semibold leading-6 text-gray-900">
+                            Note:
+                        </label>
+                        <div className="">
+                            <textarea
+                                rows={4}
+                                name="note"
+                                id="note"
+                                className="block w-full px-4 rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+                                value={formData.note}
+                                onChange={handleInputChange}
+                                required
+                            />
+                        </div>
+                    </div>
 
-            <ToastContainer />
+                    <div className="w-full col-span-3 border-t border-gray-400 border-solid" />
+                    <div className="flex flex-col items-end justify-end col-span-3 gap-10 mt-4">
+                        <p className="flex justify-between w-full max-w-xs text-xl font-bold text-black rounded-lg">
+                            <span>Total</span>
+                            <span>{formatCurrency(totalPrice)}</span>
+                        </p>
+                        <button
+                            type="button"
+                            onClick={(e) => handleConfirmation(e)}
+                            className="px-3 py-2 text-sm font-semibold text-white bg-green-600 rounded-md shadow-sm w-fit hover:bg-green-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-green-600"
+                        >
+                            Submit
+                        </button>
+                    </div>
+                </form>
+
+                <ToastContainer />
+            </div>
         </div>
     );
 };
