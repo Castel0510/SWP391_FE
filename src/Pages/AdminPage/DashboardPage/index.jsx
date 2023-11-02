@@ -96,7 +96,8 @@ const DashboardPage = () => {
                 'https://apis20231023230305.azurewebsites.net/api/User/GetAllUser?pageIndex=0&pageSize=999999'
             );
 
-            return groupCountValueByDate(res.data.result.items);
+            const data = groupCountValueByDate(res.data.result.items, 'createdAt');
+            return data;
         },
         {
             initialData: {},
@@ -110,7 +111,7 @@ const DashboardPage = () => {
                 'https://apis20231023230305.azurewebsites.net/api/Customer/Get?pageIndex=0&pageSize=999999'
             );
 
-            return groupCountValueByDate(res.data.result.items);
+            return groupCountValueByDate(res.data.result.items, 'createdAt');
         },
         { initialData: {} }
     );
@@ -122,7 +123,19 @@ const DashboardPage = () => {
                 'https://apis20231023230305.azurewebsites.net/api/Provider/Get?pageIndex=0&pageSize=999999'
             );
 
-            return groupCountValueByDate(res.data.result.items);
+            return groupCountValueByDate(res.data.result.items, 'createdAt');
+        },
+        { initialData: {} }
+    );
+
+    const orderQuery = useQuery(
+        ['order'],
+        async () => {
+            const res = await axios.get(
+                'https://apis20231023230305.azurewebsites.net/api/BirdServiceBooking/GetAllBooking?pageIndex=0&pageSize=999999'
+            );
+
+            return groupCountValueByDate(res.data.result.items, 'createAt');
         },
         { initialData: {} }
     );
@@ -183,7 +196,7 @@ const DashboardPage = () => {
                         }))}
                     />
                 </div>
-                <div className="col-span-4">
+                <div className="col-span-2">
                     <ChartBasicArea
                         colors={['#d81b60']}
                         title={'Provider'}
@@ -194,17 +207,17 @@ const DashboardPage = () => {
                         }))}
                     />
                 </div>
-                {/* <div className="col-span-2">
+                <div className="col-span-2">
                     <ChartBasicArea
-                        colors={['#4F46E5']}
-                        title={'Provider'}
-                        unit={'Provider'}
-                        values={Object.keys(providerQuery.data).map((key) => ({
+                        colors={['#43a047']}
+                        title={'Order'}
+                        unit={'Order'}
+                        values={Object.keys(orderQuery.data).map((key) => ({
                             name: key,
-                            data: providerQuery.data[key],
+                            data: orderQuery.data[key],
                         }))}
                     />
-                </div> */}
+                </div>
             </div>
         </div>
     );
