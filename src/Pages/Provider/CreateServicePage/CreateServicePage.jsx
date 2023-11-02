@@ -151,7 +151,7 @@ const CreateServicePage = () => {
         <>
             <div className="flex justify-center w-full ">
                 <div className="p-4 rounded-lg w-fit ring-1">
-                    <h1 className="text-2xl font-bold text-center mb-7">ADD NEW SERVICE</h1>
+                    <h1 className="text-2xl font-bold text-center mb-7">Add New Service</h1>
                     <Formik
                         initialValues={{
                             birdServiceName: '',

@@ -2,9 +2,12 @@ import React, { useState, useEffect } from 'react';
 import { NavLink, Link } from 'react-router-dom';
 import logo from '../../Assets/Images/logo.png';
 import './style.scss';
-import DropdownUser from '../DropdownUser'
+import DropdownUser from '../DropdownUser';
 import { useSelector } from 'react-redux';
 import { getUser } from '../../Store/userSlice';
+import { useQuery } from 'react-query';
+import axios from 'axios';
+import { formatCurrency } from '../../Utils/string.helper';
 
 const HeaderComponent = () => {
     const [scrolled, setScrolled] = useState(false);
@@ -36,7 +39,6 @@ const HeaderComponent = () => {
             path: '/service',
             display: 'Service',
         },
-
     ];
 
     const customerMenu = [
@@ -71,13 +73,29 @@ const HeaderComponent = () => {
     } else if (user && user?.role === 'Provider') {
         menu = providerMenu;
     } else {
-        menu = defaultMenu
+        menu = defaultMenu;
     }
+
+    const userWallet = useQuery(
+        ['user-Wallet', user?.Id],
+        async () => {
+            const res = await axios.get(
+                `https://apis20231023230305.azurewebsites.net/api/Wallet/GetByUserId?id=${user?.Id}`
+            );
+            console.log('res', res.data.result);
+            return res.data.result;
+        },
+        {
+            enabled: user?.Id !== null,
+        }
+    );
+
+    console.log('userWallet', userWallet.data);
 
     return (
         <header className="header">
             <div className={`main__navbar ${scrolled ? 'scrolled' : ''}`}>
-                <div className="container mx-auto flex items-center gap-1 justify-between">
+                <div className="container flex items-center justify-between gap-1 mx-auto">
                     <div className="logo">
                         <Link to="/" className="flex items-center">
                             <img src={logo} alt="Logo" className="w-8 h-8" />
@@ -92,17 +110,22 @@ const HeaderComponent = () => {
                             </NavLink>
                         ))}
 
-                        {user === null
-                            ?
+                        {user === null ? (
                             <NavLink className="btn_login" to="/login">
                                 Log in
                             </NavLink>
-                            :
-                            <>
+                        ) : (
+                            <div className="flex items-center gap-2">
+                                <div>
+                                    {Boolean(userWallet.data) && (
+                                        <div className="px-8 py-4 text-white bg-green-600 rounded-lg" to="/wallet">
+                                            {formatCurrency(userWallet.data?.walletAmount)}
+                                        </div>
+                                    )}
+                                </div>
                                 <DropdownUser id={user?.Id} role={user?.role} resetUser={setUser} />
-                            </>
-                        }
-
+                            </div>
+                        )}
                     </div>
                 </div>
             </div>

@@ -72,3 +72,18 @@ export const birdTypeOptions = [
         label: 'Chích Chòe',
     },
 ];
+
+export const birdCategoryOptions = [
+    {
+        value: 1,
+        label: 'Boarding',
+    },
+    {
+        value: 2,
+        label: 'Grooming',
+    },
+    {
+        value: 3,
+        label: 'Healthcare',
+    },
+];
