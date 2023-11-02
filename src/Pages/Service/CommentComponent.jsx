@@ -18,29 +18,13 @@ const CommentsComponent = ({ serviceFeedbacks = [] }) => {
 
     // }, [dataUser]);
 
-    const apiUrlCommentGet = 'https://apis20231023230305.azurewebsites.net/api/Comment/Get?pageIndex=0&pageSize=10';
-
     useEffect(() => {
-        fetch(apiUrlCommentGet)
-            .then((response) => {
-                if (!response.ok) {
-                    throw new Error(`Network response was not ok: ${response.status}`);
-                }
-                return response.json();
-            })
-            .then((data) => {
-                setComments(data.result.items);
-            })
-            .catch((error) => {
-                console.error('Error fetching comment data:', error);
-            });
-    }, []);
+        setComments(serviceFeedbacks);
+    }, [serviceFeedbacks]);
 
     const submitComment = () => {
         if (newComment) {
-            const fullName = user ? user.fullName : 'Anonymous';
-            const commentText = `${fullName}: ${newComment}`;
-            setComments([...comments, { commentContent: commentText }]);
+            setComments([...comments, { content: newComment }]);
             setNewComment('');
         }
     };
@@ -49,7 +33,7 @@ const CommentsComponent = ({ serviceFeedbacks = [] }) => {
         <div className="flex flex-col mt-16">
             <h2 className="text-2xl font-semibold">Comments</h2>
             <div className="flex flex-col gap-4 mt-8">
-                {serviceFeedbacks.map((comment, index) => (
+                {comments.map((comment, index) => (
                     <div
                         key={index}
                         className="flex flex-col gap-4 p-4 bg-white border-2 border-green-300 border-dashed rounded-lg shadow-lg"
@@ -62,7 +46,7 @@ const CommentsComponent = ({ serviceFeedbacks = [] }) => {
                     </div>
                 ))}
             </div>
-            <div className="flex flex-col items-start gap-4 mb-8">
+            <div className="flex flex-col items-start gap-4 mt-4 mb-8">
                 <div className="text-lg">
                     Leave a comment as <span className="font-semibold">Anonymous</span>
                 </div>

@@ -39,26 +39,25 @@ const ItemDetailPage = () => {
         fetchItemData();
     }, [itemId, navigate]);
     useEffect(() => {
+        if (!selectedItem) return;
+
         const fetchData = async () => {
             try {
-                const response = await fetch('https://63692ab028cd16bba716cff0.mockapi.io/news');
+                const response = await fetch(
+                    `https://apis20231023230305.azurewebsites.net/api/Provider/GetByProviderId?id=${selectedItem.providerId}`
+                );
                 if (!response.ok) {
                     throw new Error('Failed to fetch provider data');
                 }
                 const data = await response.json();
-                setProviderData(data);
+                setProviderData(data.result);
             } catch (error) {
                 console.error('Error fetching provider data:', error);
             }
         };
 
         fetchData();
-    }, []);
-    useEffect(() => {
-        if (providerData) {
-            const itemsWithSameProviderID = providerData.filter((item) => item.providerID === selectedItem?.providerID);
-        }
-    }, [providerData, selectedItem]);
+    }, [selectedItem]);
 
     const handleBookNow = () => {
         if (!userID) {
@@ -92,48 +91,35 @@ const ItemDetailPage = () => {
 
     const renderProviderData = () => {
         if (selectedItem && providerData) {
-            const provider = providerData.find((item) => item.id === selectedItem.providerID);
-
-            if (provider) {
-                return (
-                    <div class="provider-details">
-                        <div class="provider-details-information">
-                            <div class="provider-image">
-                                <img src={provider.image} alt={provider.name} class="provider-info-image" />
-                            </div>
-                            <div class="provider-info">
-                                <h2>{provider.provider}</h2>
-                                <div class="info-row">
-                                    <div class="info-col">
-                                        <p>Name: {provider.name}</p>
-                                        <p>Phone: {provider.phone}</p>
-                                        <p>Email: {provider.email}</p>
-                                    </div>
-                                    <div class="info-col">
-                                        <p>Address: {provider.address}</p>
-                                        <p>Rating: {provider.rating}</p>
-                                        <p>Number of Services: {provider.numbOfService}</p>
-                                    </div>
-                                </div>
-                                <div class="info-row">
-                                    <div class="info-col">
-                                        <p>Day Join: {provider.dayJoin}</p>
-                                        <p>Follower: {provider.follower}</p>
-                                    </div>
-                                </div>
-                            </div>
+            return (
+                <div class="w-full " aos="fade-up">
+                    <div class="provider-details-information">
+                        <div class="provider-image">
+                            <img
+                                src={providerData?.user?.avatarURL}
+                                alt={providerData?.name}
+                                class="provider-info-image"
+                            />
                         </div>
-                        <div class="gallery">
-                            <ItemDetailGallery providerId={selectedItem.providerID} />
+                        <div class="provider-info flex flex-col">
+                            <h2>{providerData?.providerName}</h2>
+                            <div class="flex w-full flex-1">
+                                <div class="flex flex-col gap-1">
+                                    <p className="w-full ">Name: {providerData?.user?.fullname}</p>
+
+                                    <p>Phone: {providerData?.user?.phoneNumber}</p>
+
+                                    <p>Email: {providerData?.user?.email}</p>
+                                </div>
+                            </div>
                         </div>
                     </div>
-                );
-            }
+                    <div class="gallery">{/* <ItemDetailGallery providerId={selectedItem?.providerID} /> */}</div>
+                </div>
+            );
         }
         return <p className="w-full">Provider data not found</p>;
     };
-
-    console.log(selectedItem);
 
     return (
         <div className="max-w-6xl py-12 mx-auto">
@@ -220,10 +206,10 @@ const ItemDetailPage = () => {
                 </div>
             )}
             {selectedItem && (
-                <div className="w-full p-4 my-16 bg-white border border-gray-400 border-solid rounded-lg shadow-xl">
+                <div className="w-full p-4 my-16 bg-white border border-gray-400 border-solid rounded-lg shadow-xl ">
                     {providerData ? (
                         <div>
-                            {selectedItem.providerID !== null ? (
+                            {selectedItem?.providerID !== null ? (
                                 renderProviderData()
                             ) : (
                                 <p className="text-gray-600">Provider data not found</p>
