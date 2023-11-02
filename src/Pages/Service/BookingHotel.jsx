@@ -10,9 +10,11 @@ import { getUserInfoInLocalStorage } from '../../Store/userSlice';
 import { fetchServices } from '../../Store/serviceSlice';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { formatCurrency } from '../../Utils/string.helper';
-import { useForm } from 'react-hook-form';
-import { useQuery } from 'react-query';
+import { FormProvider, useForm } from 'react-hook-form';
+import { useMutation, useQuery } from 'react-query';
 import * as Yup from 'yup';
+import FormError from '../../Components/FormError/FormError';
+import axios from 'axios';
 
 const validationSchema = Yup.object().shape({
     serviceStartDate: Yup.date().required('Check-in date is required'),
@@ -33,12 +35,7 @@ const validationSchema = Yup.object().shape({
 });
 
 const BookingHotel = () => {
-    const {
-        register,
-        setValue,
-        watch,
-        formState: { errors },
-    } = useForm(
+    const methods = useForm(
         {
             defaultValues: {
                 serviceStartDate: null,
@@ -63,9 +60,9 @@ const BookingHotel = () => {
     const user = useSelector(getUserInfoInLocalStorage);
 
     useEffect(() => {
-        setValue('serviceStartDate', format(new Date(), 'yyyy-MM-dd'));
-        setValue('serviceEndDate', format(new Date(), 'yyyy-MM-dd'));
-        setValue('customerId', user.id);
+        methods.setValue('serviceStartDate', format(new Date(), 'yyyy-MM-dd'));
+        methods.setValue('serviceEndDate', format(new Date(), 'yyyy-MM-dd'));
+        methods.setValue('customerId', user.id);
     }, []);
 
     const { itemId } = useParams();
@@ -86,29 +83,77 @@ const BookingHotel = () => {
             enabled: !!itemId,
             initialData: {},
             onSuccess: (data) => {
-                setValue('providerId', data.providerId);
-                setValue('bookingDetails[0].birdServiceId', data.id);
+                methods.setValue('providerId', data.providerId);
+                methods.setValue('bookingDetails[0].birdServiceId', data.id);
             },
         }
     );
 
-    const [selectPrice, setSelectPrice] = useState(0);
+    const [selectPriceId, setSelectPriceId] = useState(null);
 
-    const watchAllFields = watch();
+    const selectPriceOption = useMemo(() => {
+        if (services && services.prices) {
+            return services.prices.map((priceItem) => {
+                return {
+                    name: priceItem.priceName,
+                    label: `${priceItem.priceName} (${formatCurrency(priceItem.priceAmount)})`,
+                    value: priceItem.id,
+                };
+            });
+        }
+
+        return [];
+    }, [services]);
+
+    const watchServiceStartDate = methods.watch('serviceStartDate');
+    const watchServiceEndDate = methods.watch('serviceEndDate');
 
     const totalPrice = useMemo(() => {
-        const checkInDate = new Date(watchAllFields.serviceStartDate);
-        const checkOutDate = new Date(watchAllFields.serviceEndDate);
+        if (!services || !services.prices || !selectPriceId) {
+            return 0;
+        }
+
+        const checkInDate = new Date(watchServiceStartDate);
+        const checkOutDate = new Date(watchServiceEndDate);
         const days = differenceInDays(checkOutDate, checkInDate);
 
+        const selectPrice = services.prices.find((item) => item.id == selectPriceId);
+
         let total = 0;
-        total = total + days * selectPrice;
+        total = total + days * selectPrice.priceAmount;
         if (total < 0) {
             total = 0;
         }
 
+        methods.setValue('totalPrice', total);
+
         return total;
-    }, [watchAllFields, selectPrice]);
+    }, [services, watchServiceStartDate, watchServiceEndDate, selectPriceId]);
+
+    const createBookingMutation = useMutation(async (input) => {
+        return await axios.post(
+            `https://apis20231023230305.azurewebsites.net/api/BirdServiceBooking/CreateBookingg?priceId=${selectPriceId}`,
+            input
+        );
+    });
+
+    const onSubmit = (data) => {
+        const isConfirmed = window.confirm(`Are you sure you want to book ${services.birdServiceName}?`);
+
+        if (!isConfirmed) {
+            return;
+        }
+
+        createBookingMutation.mutate(data, {
+            onSuccess: (data) => {
+                console.log(data);
+                toast.success('Booking Successful');
+                // setTimeout(() => {
+                //     navigateTo('/payment', { state: { dataToSend } });
+                // }, 3000);
+            },
+        });
+    };
 
     // useEffect(() => {
     //     const fetchData = async () => {
@@ -377,32 +422,23 @@ const BookingHotel = () => {
     // };
 
     // console.log(formData);
-    const dropdownOptions =
-        services && services.prices
-            ? services.prices.map((priceItem) => {
-                  return {
-                      name: priceItem.priceName,
-                      label: `${priceItem.priceName} (${formatCurrency(priceItem.priceAmount)})`,
-                      value: priceItem.priceAmount,
-                  };
-              })
-            : [];
 
     // console.log('====================================');
     // console.log(services.prices);
     // console.log('====================================');
 
     return (
-        <div className="flex items-start justify-center min-h-screen py-10">
-            <div className="flex flex-col w-full max-w-4xl gap-10">
-                <button onClick={() => window.history.back()} className="back-button">
-                    <FaArrowLeft />
-                </button>
-                <h2 className="mb-2 font-bold">
-                    Booking Form for: {services ? services.birdServiceName : 'No item selected'}
-                </h2>
-                <form className="grid grid-cols-3 gap-3">
-                    <div className="col-span-1">
+        <FormProvider {...methods}>
+            <div className="flex items-start justify-center min-h-screen py-10">
+                <div className="flex flex-col w-full max-w-4xl gap-10">
+                    <button onClick={() => window.history.back()} className="back-button">
+                        <FaArrowLeft />
+                    </button>
+                    <h2 className="mb-2 font-bold">
+                        Booking Form for: {services ? services.birdServiceName : 'No item selected'}
+                    </h2>
+                    <form className="grid grid-cols-3 gap-3" onSubmit={methods.handleSubmit(onSubmit)}>
+                        {/* <div className="col-span-1">
                         <label htmlFor="username" className="block text-sm font-semibold leading-6 text-gray-900">
                             Username
                         </label>
@@ -412,12 +448,12 @@ const BookingHotel = () => {
                             id="username"
                             // value={formData.username}
                             // onChange={handleInputChange}
-                            {...register('username', { required: true })}
+                            {...methods.register('username', { required: true })}
                             required
                             className="block w-full px-4 rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
                         />
-                    </div>
-                    <div className="col-span-1">
+                    </div> */}
+                        {/* <div className="col-span-1">
                         <label htmlFor="email" className="block text-sm font-semibold leading-6 text-gray-900">
                             Email:
                         </label>
@@ -427,12 +463,12 @@ const BookingHotel = () => {
                             id="email"
                             // value={formData.email}
                             // onChange={handleInputChange}
-                            {...register('email', { required: true })}
+                            {...methods.register('email', { required: true })}
                             required
                             className="block w-full rounded-md px-4 border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
                         />
-                    </div>
-                    <div className="col-span-1">
+                    </div> */}
+                        {/* <div className="col-span-1">
                         <label htmlFor="phone" className="block text-sm font-semibold leading-6 text-gray-900">
                             Phone:
                         </label>
@@ -446,98 +482,106 @@ const BookingHotel = () => {
                             required
                             className="block w-full rounded-md border-0 px-4 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
                         />
-                    </div>
+                    </div> */}
 
-                    <div className="col-span-1">
-                        <label
-                            htmlFor="serviceStartDate"
-                            className="block text-sm font-semibold leading-6 text-gray-900"
-                        >
-                            Check-In Date:
-                        </label>
-                        <input
-                            type="date"
-                            name="serviceStartDate"
-                            id="serviceStartDate"
-                            // value={formData.checkInDate}
-                            // onChange={handleInputChange}
-                            {...register('serviceStartDate', { required: true })}
-                            required
-                            className="block w-full rounded-md border-0 px-4 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
-                        />
-                        {/* {checkInError && <p className="error-message">{checkInError}</p>} */}
-                    </div>
-                    <div className="col-span-1">
-                        <label htmlFor="serviceEndDate" className="block text-sm font-semibold leading-6 text-gray-900">
-                            Check-Out Date:
-                        </label>
-                        <input
-                            type="date"
-                            name="serviceEndDate"
-                            id="serviceEndDate"
-                            // value={formData.checkOutDate}
-                            // onChange={handleInputChange}
-                            {...register('serviceEndDate', { required: true })}
-                            required
-                            className="block w-full rounded-md border-0 px-4 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
-                        />
-                        {/* {checkInError && <p className="error-message">{checkInError}</p>} */}
-                    </div>
-
-                    <div className="col-span-1">
-                        <label htmlFor="selectedOption" className="block text-sm font-semibold leading-6 text-gray-900">
-                            Select an Option of your bird size:
-                        </label>
-                        <select
-                            className="block w-full px-4 py-2.5 text-gray-900 border-0 rounded-md shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
-                            value={selectPrice}
-                            onChange={(e) => setSelectPrice(e.target.value)}
-                            required
-                        >
-                            <option value={0}>Select an option</option>
-                            {dropdownOptions.map((option) => (
-                                <option key={option.name} value={option.value}>
-                                    {option.label}
-                                </option>
-                            ))}
-                        </select>
-                    </div>
-
-                    <div className="col-span-3">
-                        <label htmlFor="note" className="block text-sm font-semibold leading-6 text-gray-900">
-                            Note:
-                        </label>
-                        <div className="">
-                            <textarea
-                                {...register('bookingDetails[0].description', { required: true })}
-                                rows={4}
-                                name="note"
-                                id="note"
-                                className="block w-full px-4 rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+                        <div className="col-span-1">
+                            <label
+                                htmlFor="serviceStartDate"
+                                className="block text-sm font-semibold leading-6 text-gray-900"
+                            >
+                                Check-In Date:
+                            </label>
+                            <input
+                                type="date"
+                                name="serviceStartDate"
+                                id="serviceStartDate"
+                                // value={formData.checkInDate}
+                                // onChange={handleInputChange}
+                                {...methods.register('serviceStartDate', { required: true })}
                                 required
+                                className="block w-full rounded-md border-0 px-4 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
                             />
+                            <FormError name="serviceStartDate" />
                         </div>
-                    </div>
+                        <div className="col-span-1">
+                            <label
+                                htmlFor="serviceEndDate"
+                                className="block text-sm font-semibold leading-6 text-gray-900"
+                            >
+                                Check-Out Date:
+                            </label>
+                            <input
+                                type="date"
+                                name="serviceEndDate"
+                                id="serviceEndDate"
+                                // value={formData.checkOutDate}
+                                // onChange={handleInputChange}
+                                {...methods.register('serviceEndDate', { required: true })}
+                                required
+                                className="block w-full rounded-md border-0 px-4 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+                            />
+                            <FormError name="serviceEndDate" />
+                        </div>
 
-                    <div className="w-full col-span-3 border-t border-gray-400 border-solid" />
-                    <div className="flex flex-col items-end justify-end col-span-3 gap-10 mt-4">
-                        <p className="flex justify-between w-full max-w-xs text-xl font-bold text-black rounded-lg">
-                            <span>Total</span>
-                            <span>{formatCurrency(totalPrice)}</span>
-                        </p>
-                        <button
-                            type="button"
-                            // onClick={(e) => handleConfirmation(e)}
-                            className="px-3 py-2 text-sm font-semibold text-white bg-green-600 rounded-md shadow-sm w-fit hover:bg-green-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-green-600"
-                        >
-                            Submit
-                        </button>
-                    </div>
-                </form>
+                        <div className="col-span-1">
+                            <label
+                                htmlFor="selectedOption"
+                                className="block text-sm font-semibold leading-6 text-gray-900"
+                            >
+                                Select an Option of your bird size:
+                            </label>
+                            <select
+                                className="block w-full px-4 py-2.5 text-gray-900 border-0 rounded-md shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+                                value={selectPriceId}
+                                onChange={(e) => setSelectPriceId(e.target.value)}
+                                required
+                            >
+                                <option value={0}>Select an option</option>
+                                {selectPriceOption.map((option) => (
+                                    <option key={option.name} value={option.value}>
+                                        {option.label}
+                                    </option>
+                                ))}
+                            </select>
+                        </div>
 
-                <ToastContainer />
+                        <div className="col-span-3">
+                            <label
+                                htmlFor="bookingDetails[0].description"
+                                className="block text-sm font-semibold leading-6 text-gray-900"
+                            >
+                                Note:
+                            </label>
+                            <div className="">
+                                <textarea
+                                    {...methods.register('bookingDetails[0].description', { required: true })}
+                                    rows={4}
+                                    id="bookingDetails[0].description"
+                                    className="block w-full px-4 rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+                                    required
+                                />
+                            </div>
+                        </div>
+
+                        <div className="w-full col-span-3 border-t border-gray-400 border-solid" />
+                        <div className="flex flex-col items-end justify-end col-span-3 gap-10 mt-4">
+                            <p className="flex justify-between w-full max-w-xs text-xl font-bold text-black rounded-lg">
+                                <span>Total</span>
+                                <span>{formatCurrency(totalPrice)}</span>
+                            </p>
+                            <button
+                                type="submit"
+                                className="px-3 py-2 text-sm font-semibold text-white bg-green-600 rounded-md shadow-sm w-fit hover:bg-green-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-green-600"
+                            >
+                                Submit
+                            </button>
+                        </div>
+                    </form>
+
+                    <ToastContainer />
+                </div>
             </div>
-        </div>
+        </FormProvider>
     );
 };
 
