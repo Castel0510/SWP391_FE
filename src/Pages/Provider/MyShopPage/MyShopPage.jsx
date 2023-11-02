@@ -9,7 +9,7 @@ const MyShopPage = () => {
     const items = JSON.parse(localStorage.getItem('userInfo'));
     // console.log("check id: ", items?.id);
     const [page, setPage] = useState(1);
-    const [pageSize, setPageSize] = useState(9);
+    const [pageSize, setPageSize] = useState(8);
     const [totalPage, setTotalPage] = useState(0);
 
     const serviceQuery = useQuery(
@@ -53,7 +53,7 @@ const MyShopPage = () => {
                     </Link>
                 </div>
 
-                <div className="flex gap-8 ">
+                <div className="grid grid-cols-4 gap-8 ">
                     {serviceQuery.data.map((item, index) => (
                         <div
                             key={index}
@@ -68,7 +68,7 @@ const MyShopPage = () => {
                             </div>
                             <div className="p-5 ">
                                 <div>
-                                    <h5 className="mb-2 text-2xl font-bold tracking-tight text-gray-900 dark:text-white">
+                                    <h5 className="mb-2 text-2xl font-bold tracking-tight text-gray-900 dark:text-white line-clamp-1">
                                         {item.birdServiceName}
                                     </h5>
                                 </div>

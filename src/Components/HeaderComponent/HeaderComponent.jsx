@@ -90,8 +90,6 @@ const HeaderComponent = () => {
         }
     );
 
-    console.log('userWallet', userWallet.data);
-
     return (
         <header className="header">
             <div className={`main__navbar ${scrolled ? 'scrolled' : ''}`}>

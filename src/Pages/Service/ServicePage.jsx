@@ -206,7 +206,7 @@ const ServicePage = () => {
                     </div>
                 </div>
 
-                <div className="grid grid-cols-1 gap-x-6 gap-y-10 sm:grid-cols-2 lg:grid-cols-3 xl:gap-x-8">
+                <div className="grid flex-1 grid-cols-3 gap-4 ">
                     {serviceQuery.isLoading && (
                         <div className="col-span-4">
                             <ColorRing
@@ -228,19 +228,18 @@ const ServicePage = () => {
                         </div>
                     )}
                     {serviceQuery.data?.map((item) => (
-                        <div key={item?.id} className="relative group fade-in">
-                            <div className="w-full overflow-hidden bg-gray-200 border-2 border-green-100 border-solid rounded-md aspect-h-1 aspect-w-1 lg:aspect-none group-hover:opacity-75 lg:h-80">
+                        <div key={item?.id} className="relative col-span-1 group fade-in">
+                            <div className="w-full overflow-hidden bg-gray-200 border-2 border-green-100 border-solid rounded-md lg:h-80">
                                 <img
                                     src={item?.imageURL}
                                     alt={item?.birdServiceName}
-                                    className="object-cover object-center w-full h-full lg:h-full lg:w-full"
+                                    className="object-cover object-center w-full h-full "
                                 />
                             </div>
                             <div className="flex flex-col mt-4">
                                 <div>
                                     <h3 className="text-2xl font-semibold text-green-700">
-                                        <Link to={`/detail/${item?.id}`} state={{ selectedItem: item }}>
-                                            <span aria-hidden="true" className="absolute inset-0" />
+                                        <Link to={`/detail/${item?.id}`} className="line-clamp-1">
                                             {item?.birdServiceName}
                                         </Link>
                                     </h3>
@@ -257,7 +256,7 @@ const ServicePage = () => {
                         </div>
                     ))}
                     {totalPage > 1 && (
-                        <div className="col-span-4">
+                        <div className="col-span-3 mt-4">
                             <Pagination
                                 count={totalPage}
                                 page={page}
