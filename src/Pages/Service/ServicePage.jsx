@@ -60,10 +60,6 @@ const ServicePage = () => {
             const res = await axios.get('https://apis20231023230305.azurewebsites.net/api/BirdService/GetAllService');
 
             setTotalPage(Math.ceil(res.data.result.length / pageSize));
-            const serviceLocationOptions = res.data.result
-                .map((item) => item?.serviceLocation)
-                .filter((v, i, a) => a.indexOf(v) === i)
-                .filter((item) => item);
 
             return res.data?.result
 

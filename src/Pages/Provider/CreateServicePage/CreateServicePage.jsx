@@ -1,5 +1,5 @@
 import { React, useState, useEffect } from 'react';
-import { useLocation } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 import { Link } from 'react-router-dom';
 import { TrashIcon, PlusIcon } from '@heroicons/react/24/outline';
 
@@ -7,23 +7,51 @@ import * as Yup from 'yup';
 import axios from 'axios';
 import CTAUploadFile from '../../../Components/CTA/CTAUploadFile';
 import { birdSizeOptions, birdTypeOptions, locationOptions } from '../../../models/bird';
-import { useQuery } from 'react-query';
-import { useForm } from 'react-hook-form';
+import { useMutation, useQuery } from 'react-query';
+import { FormProvider, useForm } from 'react-hook-form';
+import { yupResolver } from '@hookform/resolvers/yup';
+import FormError from '../../../Components/FormError/FormError';
+import { toast } from 'react-toastify';
 
 const CreateServicePage = () => {
+    const router = useNavigate();
     const [isLoading, setIsLoading] = useState(false);
     const [user, setUser] = useState(null);
+    const validationSchema = Yup.object().shape({
+        birdServiceName: Yup.string().required('Service name is required'),
+        imageURL: Yup.string().required('Picture is required'),
+        videoURL: Yup.string().required('Video is required'),
+        description: Yup.string().required('description is required'),
+        prices: Yup.array()
+            .min(1, 'At least one birdType must be added to Size Data')
+            .of(
+                Yup.object().shape({
+                    serviceType: Yup.string().required('serviceType is required'),
+                    priceName: Yup.string().required('priceName Price is required'),
+                    birdSize: Yup.string().required('birdSize Price is required'),
+                    birdType: Yup.string().required('birdType Price is required'),
+                    priceAmount: Yup.string().required('priceAmount Price is required'),
+                    priceType: Yup.string().required('priceType Price is required'),
+                })
+            ),
+    });
 
     const formMethods = useForm({
-        birdServiceName: '',
-        description: '',
-        imageURL: '',
-        videoURL: '',
-        location: 0,
-        serviceCategoryId: '',
-        providerId: '',
-        prices: [],
+        defaultValues: {
+            birdServiceName: '',
+            location: 0,
+            imageURL: '',
+            videoURL: '',
+            description: '',
+            providerId: 0,
+            prices: [],
+        },
+        resolver: yupResolver(validationSchema),
     });
+
+    console.log('validationSchema', formMethods.formState.errors);
+
+    const prices = formMethods.watch('prices');
 
     const providerQuery = useQuery(
         ['provider', user?.id],
@@ -48,25 +76,6 @@ const CreateServicePage = () => {
     }, []);
 
     const [error, setError] = useState(null);
-
-    const validationSchema = Yup.object().shape({
-        birdServiceName: Yup.string().required('Service name is required'),
-        imageURL: Yup.string().required('Picture is required'),
-        videoURL: Yup.string().required('Video is required'),
-        description: Yup.string().required('description is required'),
-        prices: Yup.array()
-            .min(1, 'At least one birdType must be added to Size Data')
-            .of(
-                Yup.object().shape({
-                    serviceType: Yup.string().required('serviceType is required'),
-                    priceName: Yup.string().required('priceName Price is required'),
-                    birdSize: Yup.string().required('birdSize Price is required'),
-                    birdType: Yup.string().required('birdType Price is required'),
-                    priceAmount: Yup.string().required('priceAmount Price is required'),
-                    priceType: Yup.string().required('priceType Price is required'),
-                })
-            ),
-    });
 
     // const formMethods = useFormik({
     //     initialValues: {
@@ -98,23 +107,34 @@ const CreateServicePage = () => {
     //     },
     // });
 
-    const items = JSON.parse(localStorage.getItem('userInfo'));
+    const createService = useMutation(
+        async (data) => {
+            const response = await axios.post('https://apis20231023230305.azurewebsites.net/api/BirdService/Create', {
+                ...data,
+                location: Number(data.location),
+                serviceCategoryId: Number(data.prices[0].serviceType),
+                prices: data.prices.map((item) => ({
+                    serviceType: Number(item.serviceType),
+                    birdSize: Number(item.birdSize),
+                    birdType: Number(item.birdType),
+                    priceAmount: Number(item.priceAmount),
+                    priceType: 0,
+                    priceName: item.priceName,
+                })),
+            });
 
-    const createService = async (data) => {
-        try {
-            setIsLoading(true);
-
-            const response = await axios.post(
-                'https://apis20231023230305.azurewebsites.net/api/BirdService/Create',
-                data
-            );
-
-            setIsLoading(false);
-        } catch (error) {
-            setError(error.message);
-            setIsLoading(false);
+            return response;
+        },
+        {
+            onSuccess: (data) => {
+                toast.success('Create service successfully');
+                router('/my-shop');
+            },
+            onError: (error) => {
+                toast.error('Create service failed');
+            },
         }
-    };
+    );
 
     if (isLoading) {
         return (
@@ -144,9 +164,19 @@ const CreateServicePage = () => {
         return <p>Error: {error}</p>;
     }
 
-    const serviceTypeQuery = useQuery(['serviceType'], async () => {
-        return [];
-    });
+    const serviceTypeQuery = useQuery(
+        ['serviceType'],
+        async () => {
+            const res = await axios.get(
+                'https://apis20231023230305.azurewebsites.net/api/ServiceCategory/Get?pageIndex=0&pageSize=9999'
+            );
+
+            return res.data.result.items;
+        },
+        {
+            initialData: [],
+        }
+    );
 
     const serviceCategory = [
         { value: 0, label: 'Boarding' },
@@ -154,14 +184,8 @@ const CreateServicePage = () => {
         { value: 2, label: 'Healthcare' },
     ];
 
-    const priceType = [
-        { value: 0, label: 'Per hour' },
-        { value: 1, label: 'Per day' },
-        { value: 2, label: 'Per month' },
-    ];
-
     return (
-        <>
+        <FormProvider {...formMethods}>
             <div className="flex justify-center w-full gap-4">
                 <div className="p-4 bg-white rounded-lg shadow-lg w-96 h-fit ring-1">
                     <CTAUploadFile description="Upload your service image here" />
@@ -169,7 +193,12 @@ const CreateServicePage = () => {
                 <div className="w-full max-w-5xl p-4 rounded-lg ring-1">
                     <h1 className="text-2xl font-bold text-center mb-7">Add New Service</h1>
 
-                    <form className="flex flex-col gap-3">
+                    <form
+                        className="flex flex-col gap-3"
+                        onSubmit={formMethods.handleSubmit((data) => {
+                            createService.mutate(data);
+                        })}
+                    >
                         <h2 className="text-lg font-semibold leading-7 text-gray-900 ">Service Information</h2>
                         <div className="grid grid-cols-6 gap-3">
                             <div className="flex flex-col col-span-2">
@@ -184,6 +213,7 @@ const CreateServicePage = () => {
                                     {...formMethods.register('birdServiceName')}
                                     className="block w-full rounded-md border-0 px-4 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
                                 />
+                                <FormError name="birdServiceName" />
                             </div>
 
                             <div className="flex flex-col col-span-2">
@@ -205,6 +235,7 @@ const CreateServicePage = () => {
                                         </option>
                                     ))}
                                 </select>
+                                <FormError name="location" />
                             </div>
 
                             <div className="flex flex-col col-span-3">
@@ -219,6 +250,7 @@ const CreateServicePage = () => {
                                     placeholder="Link imageURL"
                                     className="block w-full rounded-md border-0 px-4 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
                                 />
+                                <FormError name="imageURL" />
                             </div>
                             <div className="flex flex-col col-span-3">
                                 <label
@@ -232,6 +264,7 @@ const CreateServicePage = () => {
                                     placeholder="Link videoURL"
                                     className="block w-full rounded-md border-0 px-4 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
                                 />
+                                <FormError name="videoURL" />
                             </div>
                             <div className="flex flex-col col-span-full">
                                 <label
@@ -245,6 +278,7 @@ const CreateServicePage = () => {
                                     placeholder="Write your description here"
                                     className="block w-full rounded-md border-0 px-4 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
                                 ></textarea>
+                                <FormError name="description" />
                             </div>
                         </div>
 
@@ -255,113 +289,149 @@ const CreateServicePage = () => {
                                 <button
                                     type="button"
                                     className="flex items-center gap-2 px-4 py-2 text-white duration-300 bg-green-600 rounded-lg hover:bg-green-500"
-                                    // onClick={() => {
-                                    //     console.log(values);
-                                    //     const exists = values.prices.some(
-                                    //         (data) => data.birdType === values.birdType
-                                    //     );
-                                    //     if (!exists) {
-                                    //         push({
-                                    //             serviceType: Number(values.serviceType),
-                                    //             priceName: values.priceName,
-                                    //             birdSize: Number(values.birdSize),
-                                    //             birdType: Number(values.birdType),
-                                    //             priceAmount: Number(values.priceAmount),
-                                    //             priceType: 0,
-                                    //         });
-                                    //         setFieldValue('serviceType', '');
-                                    //         setFieldValue('priceName', '');
-                                    //         setFieldValue('birdSize', '');
-                                    //         setFieldValue('birdType', '');
-                                    //         setFieldValue('priceAmount', '0');
-                                    //         setFieldValue('priceType', '0');
-                                    //     }
-                                    // }}
+                                    onClick={() => {
+                                        formMethods.setValue('prices', [
+                                            ...formMethods.getValues('prices'),
+                                            {
+                                                serviceType: 0,
+                                                birdSize: 0,
+                                                birdType: 0,
+                                                priceAmount: 0,
+                                                priceType: 0,
+                                            },
+                                        ]);
+                                    }}
                                 >
                                     <PlusIcon className="w-5 h-5 text-white" />
                                     <span>Add Price</span>
                                 </button>
                             </div>
                             <div>
-                                <div className="grid w-full grid-cols-5 gap-3">
-                                    <div className="flex flex-col col-span-1">
-                                        <label
-                                            htmlFor="serviceType"
-                                            className="block text-sm font-semibold leading-6 text-gray-800"
-                                        >
-                                            Service type
-                                        </label>
-                                        <select
-                                            as="select"
-                                            name="serviceType"
-                                            defaultValue={serviceCategory[0].value}
-                                            id="serviceType"
-                                            className=" bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 "
-                                        >
-                                            {serviceCategory.map(({ value, label }, index) => (
-                                                <option key={index} value={Number(value)}>
-                                                    {label}
-                                                </option>
-                                            ))}
-                                        </select>
+                                {prices.length === 0 && (
+                                    <div className="flex items-center justify-center w-full h-32 mt-2 bg-gray-200 rounded-lg">
+                                        <span className="text-gray-400">No price added</span>
                                     </div>
-
-                                    <div className="flex flex-col col-span-1">
-                                        <label
-                                            htmlFor="birdSize"
-                                            className="block text-sm font-semibold leading-6 text-gray-800"
-                                        >
-                                            Select Size
-                                        </label>
-                                        <select
-                                            as="select"
-                                            name="birdSize"
-                                            className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
-                                        >
-                                            {birdSizeOptions.map(({ value, label }, index) => (
-                                                <option key={index} value={Number(value)}>
-                                                    {label}
-                                                </option>
-                                            ))}
-                                        </select>
-                                    </div>
-                                    <div className="flex flex-col col-span-1">
-                                        <label
-                                            htmlFor="birdType"
-                                            className="block text-sm font-semibold leading-6 text-gray-800"
-                                        >
-                                            Select Type
-                                        </label>
-                                        <select
-                                            as="select"
-                                            name="birdType"
-                                            className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
-                                        >
-                                            {birdTypeOptions.map(({ value, label }, index) => (
-                                                <option key={index} value={Number(value)}>
-                                                    {label}
-                                                </option>
-                                            ))}
-                                        </select>
-                                    </div>
-
-                                    <div className="flex flex-col col-span-1">
-                                        <div className="flex flex-col mb-4">
+                                )}
+                            </div>
+                            <div className="flex flex-col gap-2">
+                                {prices.map((item, index) => (
+                                    <div className="grid items-end w-full grid-cols-6 gap-4">
+                                        <div className="flex flex-col col-span-1">
                                             <label
-                                                htmlFor="priceAmount"
+                                                htmlFor="serviceType"
                                                 className="block text-sm font-semibold leading-6 text-gray-800"
                                             >
-                                                Price
+                                                Service type
                                             </label>
                                             <select
-                                                type="number"
-                                                name="priceAmount"
-                                                placeholder="Enter price "
+                                                {...formMethods.register(`prices.${index}.serviceType`)}
+                                                id="serviceType"
+                                                className=" bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 "
+                                            >
+                                                {serviceCategory.map(({ value, label }, index) => (
+                                                    <option key={index} value={Number(value)}>
+                                                        {label}
+                                                    </option>
+                                                ))}
+                                            </select>
+                                            <FormError name={`prices.${index}.serviceType`} />
+                                        </div>
+
+                                        <div className="flex flex-col col-span-1">
+                                            <label
+                                                htmlFor="priceName"
+                                                className="block text-sm font-semibold leading-6 text-gray-800"
+                                            >
+                                                Price Name
+                                            </label>
+                                            <select
+                                                {...formMethods.register(`prices.${index}.priceName`)}
+                                                id="priceName"
+                                                className=" bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 "
+                                            >
+                                                {serviceTypeQuery.data
+                                                    .filter((item) => {
+                                                        const price = prices[index];
+
+                                                        return Number(price.serviceType) === Number(item.serviceType);
+                                                    })
+                                                    .map(({ categoryName, id }, index) => (
+                                                        <option key={id} value={Number(id)}>
+                                                            {categoryName}
+                                                        </option>
+                                                    ))}
+                                            </select>
+                                            <FormError name={`prices.${index}.priceName`} />
+                                        </div>
+
+                                        <div className="flex flex-col col-span-1">
+                                            <label
+                                                htmlFor="birdSize"
+                                                className="block text-sm font-semibold leading-6 text-gray-800"
+                                            >
+                                                Select Size
+                                            </label>
+                                            <select
+                                                {...formMethods.register(`prices.${index}.birdSize`)}
                                                 className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
-                                            />
+                                            >
+                                                {birdSizeOptions.map(({ value, label }, index) => (
+                                                    <option key={index} value={Number(value)}>
+                                                        {label}
+                                                    </option>
+                                                ))}
+                                            </select>
+                                            <FormError name={`prices.${index}.birdSize`} />
+                                        </div>
+                                        <div className="flex flex-col col-span-1">
+                                            <label
+                                                htmlFor="birdType"
+                                                className="block text-sm font-semibold leading-6 text-gray-800"
+                                            >
+                                                Select Type
+                                            </label>
+                                            <select
+                                                {...formMethods.register(`prices.${index}.birdType`)}
+                                                className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
+                                            >
+                                                {birdTypeOptions.map(({ value, label }, index) => (
+                                                    <option key={index} value={Number(value)}>
+                                                        {label}
+                                                    </option>
+                                                ))}
+                                            </select>
+                                            <FormError name={`prices.${index}.birdType`} />
+                                        </div>
+
+                                        <div className="flex flex-col col-span-1">
+                                            <div className="flex flex-col ">
+                                                <label
+                                                    htmlFor="priceAmount"
+                                                    className="block text-sm font-semibold leading-6 text-gray-800"
+                                                >
+                                                    Price
+                                                </label>
+                                                <input
+                                                    type="number"
+                                                    {...formMethods.register(`prices.${index}.priceAmount`)}
+                                                    className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
+                                                />
+                                            </div>
+                                            <FormError name={`prices.${index}.priceAmount`} />
+                                        </div>
+                                        <div className="flex flex-col col-span-1 py-4">
+                                            <div
+                                                onClick={() => {
+                                                    const price = formMethods.getValues('prices');
+                                                    price.splice(index, 1);
+                                                    formMethods.setValue('prices', price);
+                                                }}
+                                            >
+                                                <TrashIcon className="w-5 h-5 text-red-600 cursor-pointer fill-white" />
+                                            </div>
                                         </div>
                                     </div>
-                                </div>
+                                ))}
                             </div>
                         </div>
 
@@ -382,7 +452,7 @@ const CreateServicePage = () => {
                     </form>
                 </div>
             </div>
-        </>
+        </FormProvider>
     );
 };
 
