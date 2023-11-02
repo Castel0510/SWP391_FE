@@ -87,3 +87,38 @@ export const birdCategoryOptions = [
         label: 'Healthcare',
     },
 ];
+
+export const locationOptions = [
+    {
+        label: 'None',
+        value: 1,
+    },
+    {
+        label: 'Hà Nội',
+        value: 2,
+    },
+    {
+        label: 'Hồ Chí Minh',
+        value: 3,
+    },
+    {
+        label: 'Đà Nẵng',
+        value: 4,
+    },
+    {
+        label: 'Cần Thơ',
+        value: 5,
+    },
+    {
+        label: 'Hải Phòng',
+        value: 6,
+    },
+    {
+        label: 'Nghệ An',
+        value: 7,
+    },
+    {
+        label: 'Huế',
+        value: 8,
+    },
+];

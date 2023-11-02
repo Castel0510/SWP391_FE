@@ -1,10 +1,12 @@
 import { React, useState, useEffect } from 'react';
 import { useLocation } from 'react-router-dom';
 import { Link } from 'react-router-dom';
-import { BsTrash, BsPlusCircle } from 'react-icons/bs';
+import { TrashIcon, PlusIcon } from '@heroicons/react/24/outline';
 import { Formik, Field, Form, ErrorMessage, FieldArray } from 'formik';
 import * as Yup from 'yup';
 import axios from 'axios';
+import CTAUploadFile from '../../../Components/CTA/CTAUploadFile';
+import { locationOptions } from '../../../models/bird';
 
 const CreateServicePage = () => {
     const [isLoading, setIsLoading] = useState(false);
@@ -17,8 +19,6 @@ const CreateServicePage = () => {
 
     const createService = async (data) => {
         try {
-            console.log(data);
-
             setIsLoading(true);
 
             const response = await axios.post(
@@ -87,7 +87,6 @@ const CreateServicePage = () => {
 
     const handleTakeServiceCateId = (value) => {
         setServiceCateId(() => value);
-        console.log('serviceCateId: ', serviceCateId);
     };
 
     const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
@@ -149,8 +148,11 @@ const CreateServicePage = () => {
 
     return (
         <>
-            <div className="flex justify-center w-full ">
-                <div className="p-4 rounded-lg w-fit ring-1">
+            <div className="flex justify-center w-full gap-4">
+                <div className="p-4 bg-white rounded-lg shadow-lg w-96 h-fit ring-1">
+                    <CTAUploadFile description="Upload your service image here" />
+                </div>
+                <div className="w-full max-w-3xl p-4 rounded-lg ring-1">
                     <h1 className="text-2xl font-bold text-center mb-7">Add New Service</h1>
                     <Formik
                         initialValues={{
@@ -164,9 +166,10 @@ const CreateServicePage = () => {
                         }}
                         validationSchema={validationSchema}
                         onSubmit={async (values) => {
-                            await sleep(500);
                             console.log(values);
-                            const { birdServiceName, description, imageURL, videoURL, prices } = values;
+                            await sleep(500);
+
+                            const { birdServiceName, description, imageURL, videoURL, prices, location } = values;
                             const newObj = {
                                 birdServiceName,
                                 description,
@@ -175,12 +178,10 @@ const CreateServicePage = () => {
                                 serviceCategoryId: serviceCateId,
                                 providerId: proId,
                                 prices,
+                                location,
                             };
-                            // console.log(newObj)
-                            console.log(JSON.stringify({ newObj }, null, 2));
 
-                            const test = { ...newObj };
-                            createService(test);
+                            createService(newObj);
                         }}
                     >
                         {({ isSubmitting, values, setFieldValue }) => (
@@ -209,44 +210,38 @@ const CreateServicePage = () => {
 
                                     <div className="flex flex-col col-span-2">
                                         <label
-                                            htmlFor="email"
+                                            htmlFor="serviceLocation"
                                             className="block text-sm font-semibold leading-6 text-gray-800"
                                         >
-                                            Email
+                                            Location
                                         </label>
-                                        <Field
-                                            name="email"
-                                            id="email"
-                                            placeholder="mail@gmail.com"
-                                            type="email"
-                                            className="block w-full rounded-md border-0 px-4 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
-                                        />
+                                        <Field name="location">
+                                            {({
+                                                field, // { name, value, onChange, onBlur }
+                                                form: { touched, errors }, // also values, setXXXX, handleXXXX, dirty, isValid, status, etc.
+                                                meta,
+                                            }) => (
+                                                <select
+                                                    {...field}
+                                                    id="serviceLocation"
+                                                    placeholder="Select location"
+                                                    className="block w-full rounded-md border-0 px-4 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+                                                >
+                                                    {locationOptions.map(({ value, label }, index) => (
+                                                        <option key={index} value={Number(value)}>
+                                                            {label}
+                                                        </option>
+                                                    ))}
+                                                </select>
+                                            )}
+                                        </Field>
                                         <ErrorMessage
-                                            name="email"
+                                            name="serviceLocation"
                                             component="div"
                                             className="mt-1 text-sm text-red-500"
                                         />
                                     </div>
-                                    <div className="flex flex-col col-span-2">
-                                        <label
-                                            htmlFor="phone"
-                                            className="block text-sm font-semibold leading-6 text-gray-800"
-                                        >
-                                            Phone Number
-                                        </label>
-                                        <Field
-                                            name="phone"
-                                            id="phone"
-                                            placeholder="Phone number"
-                                            type="tel"
-                                            className="block w-full rounded-md border-0 px-4 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
-                                        />
-                                        <ErrorMessage
-                                            name="phone"
-                                            component="div"
-                                            className="mt-1 text-sm text-red-500"
-                                        />
-                                    </div>
+
                                     <div className="flex flex-col col-span-3">
                                         <label
                                             htmlFor="imageURL"
@@ -308,7 +303,7 @@ const CreateServicePage = () => {
                                 </div>
 
                                 <div className="w-full h-px my-5 bg-gray-400" />
-                                <h2 className="text-lg font-semibold leading-7 text-gray-900 ">Detail Information</h2>
+                                <h2 className="text-lg font-semibold leading-7 text-gray-900 ">Category Service</h2>
                                 <FieldArray name="prices">
                                     {({ push, remove }) => (
                                         <div>
@@ -445,7 +440,7 @@ const CreateServicePage = () => {
                                                 </div>
                                                 <button
                                                     type="button"
-                                                    className="float-right cursor-pointer focus:outline-none text-white bg-green-700 hover:bg-green-800 focus:ring-4 focus:ring-green-300 font-medium rounded-lg text-base px-5 py-2.5 mr-2 mb-2 dark:bg-green-600 dark:hover:bg-green-700 dark:focus:ring-green-800 max-h-11 mt-[25px]"
+                                                    className="flex items-center gap-2 px-4 py-2 text-white duration-300 bg-green-600 rounded-lg hover:bg-green-500"
                                                     onClick={() => {
                                                         const exists = values.prices.some(
                                                             (data) => data.birdType === values.birdType
@@ -469,14 +464,15 @@ const CreateServicePage = () => {
                                                     }}
                                                     disabled={values.birdType === '' || values.priceAmount === ''}
                                                 >
-                                                    <BsPlusCircle />
+                                                    <PlusIcon className="w-5 h-5 text-white" />
+                                                    <span>Add Price</span>
                                                 </button>
                                             </div>
                                             <ErrorMessage name="prices" component="div" className="mt-3 text-red-500" />
                                             {values.prices.map((data, index) => (
                                                 <div key={index} className="flex overflow-hidden my-7">
                                                     <div className="flex flex-col mb-4 mr-4 max-w-[100px]">
-                                                        <Field
+                                                        <div
                                                             name={`prices.${index}.serviceType`}
                                                             value={serviceCategory[data.serviceType].label}
                                                             className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block  p-2.5"

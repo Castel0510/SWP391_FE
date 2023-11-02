@@ -14,6 +14,7 @@ import clsx from 'clsx';
 import ReactPaginate from 'react-paginate';
 import { ArrowLongLeftIcon, ArrowLongRightIcon } from '@heroicons/react/20/solid';
 import Pagination from '@mui/material/Pagination';
+import { locationOptions } from '../../models/bird';
 
 const plans = [
     { id: 0, name: 'Boarding' },
@@ -34,7 +35,6 @@ const ServicePage = () => {
     const [selectedOrder, setSelectedOrder] = useState(0);
     const [totalPage, setTotalPage] = useState(1);
     const [serviceLocations, setServiceLocations] = useState([]);
-    const [serviceLocationOptions, setServiceLocationOptions] = useState([]);
 
     // const [selectedCategory, setSelectedCategory] = useState(null);
     // const [selectedFilters, setSelectedFilters] = useState({
@@ -65,7 +65,6 @@ const ServicePage = () => {
                 .filter((v, i, a) => a.indexOf(v) === i)
                 .filter((item) => item);
 
-            setServiceLocationOptions(serviceLocationOptions);
             return res.data?.result
 
                 .filter((item) => {
@@ -100,7 +99,7 @@ const ServicePage = () => {
                         return true;
                     }
 
-                    return serviceLocations?.includes(item?.serviceLocation);
+                    return serviceLocations?.includes(item?.location);
                 })
                 .slice((page - 1) * pageSize, page * pageSize);
         },
@@ -175,29 +174,31 @@ const ServicePage = () => {
                             </div>
                         </div>
                         <div>
-                            <div className="mt-4 text-sm font-medium text-gray-600">Service Location</div>
+                            <div className="mt-4 text-sm font-medium text-gray-600">Location</div>
                             <div className="flex flex-col gap-2 mt-4">
-                                {serviceLocationOptions.map((serviceLocation) => (
+                                {locationOptions.map((serviceLocation) => (
                                     <div
                                         className={clsx(' font-medium duration-300', {
-                                            'text-green-600 !font-bold': serviceLocations.includes(serviceLocation),
+                                            'text-green-600 !font-bold': serviceLocations.includes(
+                                                serviceLocation.value
+                                            ),
                                         })}
                                         key={serviceLocation}
                                         onClick={() => {
                                             const newServiceLocations = [...serviceLocations];
 
-                                            if (serviceLocations.includes(serviceLocation)) {
+                                            if (serviceLocations.includes(serviceLocation.value)) {
                                                 newServiceLocations.splice(
-                                                    newServiceLocations.indexOf(serviceLocation),
+                                                    newServiceLocations.indexOf(serviceLocation.value),
                                                     1
                                                 );
                                             } else {
-                                                newServiceLocations.push(serviceLocation);
+                                                newServiceLocations.push(serviceLocation.value);
                                             }
                                             setServiceLocations(newServiceLocations);
                                         }}
                                     >
-                                        {serviceLocation}
+                                        {serviceLocation.label}
                                     </div>
                                 ))}
                             </div>
