@@ -19,6 +19,7 @@ import axios from 'axios';
 const validationSchema = Yup.object().shape({
     serviceStartDate: Yup.date().required('Check-in date is required'),
     serviceEndDate: Yup.date()
+
         .required('Check-out date is required')
         .min(Yup.ref('serviceStartDate'), 'Check-out date must be after check-in date'),
     totalPrice: Yup.number().required('Total price is required'),
@@ -66,6 +67,7 @@ const BookingHotel = () => {
     }, []);
 
     const { itemId } = useParams();
+    const navigate = useNavigate();
     const [selectPriceId, setSelectPriceId] = useState(null);
     const [selectMiniServiceId, setSelectMiniServiceId] = useState(null);
     const { data: services } = useQuery(
@@ -162,6 +164,11 @@ const BookingHotel = () => {
     });
 
     const onSubmit = (data) => {
+        if (data.serviceStartDate >= data.serviceEndDate) {
+            toast.error('Check-out date must be after check-in date');
+            return;
+        }
+
         const isConfirmed = window.confirm(`Are you sure you want to book ${services.birdServiceName}?`);
 
         if (!isConfirmed) {
@@ -170,8 +177,8 @@ const BookingHotel = () => {
 
         createBookingMutation.mutate(data, {
             onSuccess: (data) => {
-                console.log(data);
                 toast.success('Booking Successful');
+                navigate('/order');
                 // setTimeout(() => {
                 //     navigateTo('/payment', { state: { dataToSend } });
                 // }, 3000);
@@ -625,8 +632,6 @@ const BookingHotel = () => {
                             </button>
                         </div>
                     </form>
-
-                    <ToastContainer />
                 </div>
             </div>
         </FormProvider>

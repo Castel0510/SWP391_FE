@@ -10,7 +10,7 @@ import CommentsComponent from './CommentComponent';
 import _get from 'lodash/get';
 import { Rating, RoundedStar } from '@smastrom/react-rating';
 import { birdSizeOptions, birdTypeOptions } from '../../models/bird';
-import { formatCurrency } from '../../Utils/string.helper';
+import { formatCurrency, formatNumberFixed } from '../../Utils/string.helper';
 
 const ItemDetailPage = () => {
     const [selectedItem, setSelectedItem] = useState(null);
@@ -19,6 +19,7 @@ const ItemDetailPage = () => {
     const navigate = useNavigate();
     const [rating, setRating] = useState(0);
     const user = useSelector(getUserInfoInLocalStorage);
+    const [isNeedUpdate, setIsNeedUpdate] = useState(false);
     const userID = user ? user.id : null;
     useEffect(() => {
         const fetchItemData = async () => {
@@ -30,6 +31,7 @@ const ItemDetailPage = () => {
                     throw new Error('Failed to fetch item data');
                 }
                 const data = await response.json();
+                setIsNeedUpdate(false);
                 setSelectedItem(data.result);
             } catch (error) {
                 console.error('Error fetching item data:', error);
@@ -37,7 +39,7 @@ const ItemDetailPage = () => {
         };
 
         fetchItemData();
-    }, [itemId, navigate]);
+    }, [itemId, navigate, isNeedUpdate]);
     useEffect(() => {
         if (!selectedItem) return;
 
@@ -144,7 +146,9 @@ const ItemDetailPage = () => {
 
                             <div className="flex flex-col gap-4 mt-4">
                                 <div className="flex items-center gap-2">
-                                    <span className="font-bold">{_get(selectedItem, 'avgRating', 0)}</span>
+                                    <span className="font-bold">
+                                        {formatNumberFixed(_get(selectedItem, 'avgRating', 0), 2)}
+                                    </span>
                                     <Rating
                                         className="w-32 h-8"
                                         value={_get(selectedItem, 'avgRating', 0)}
@@ -239,7 +243,12 @@ const ItemDetailPage = () => {
                     )}
                 </div>
             )}
-            <CommentsComponent serviceFeedbacks={_get(selectedItem, 'serviceFeedbacks', [])} />
+            <CommentsComponent
+                serviceId={selectedItem?.id}
+                userId={userID}
+                onChange={() => setIsNeedUpdate(true)}
+                serviceFeedbacks={_get(selectedItem, 'serviceFeedbacks', [])}
+            />
         </div>
     );
 };

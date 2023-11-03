@@ -76,7 +76,7 @@ const WalletPage = () => {
         },
         resolver: yupResolver(
             Yup.object().shape({
-                amount: Yup.number().min(0, 'Amount must be greater than 0').required('Amount is required'),
+                amount: Yup.number().min(10000, 'Amount must be greater than 10000').required('Amount is required'),
             })
         ),
     });
@@ -87,7 +87,7 @@ const WalletPage = () => {
         },
         resolver: yupResolver(
             Yup.object().shape({
-                amount: Yup.number().min(0, 'Amount must be greater than 0').required('Amount is required'),
+                amount: Yup.number().min(10000, 'Amount must be greater than 10000').required('Amount is required'),
             })
         ),
     });
@@ -114,24 +114,31 @@ const WalletPage = () => {
             const res = await axios.post('https://apis20231023230305.azurewebsites.net/api/Transaction/Create', dto);
 
             return {
-                ...res.data.result,
+                ...res,
                 amount: dto.amountTransaction,
                 transactionType: dto.transactionType,
             };
         },
         {
             onSuccess: (data) => {
-                if (data.transactionType === 0) {
-                    setIsOpenTransaction(true);
-                    setTransaction(data);
-                    toast.success('Deposit successfully');
+                if (data.data?.status === 'BadRequest') {
+                    toast.error(data.data?.message);
                 } else {
-                    toast.success('Withdraw successfully');
-                }
-                transactionHistory.refetch();
+                    if (data.data.result.transactionType === 0) {
+                        setIsOpenTransaction(true);
+                        setTransaction(data);
+                        toast.success('Deposit successfully');
+                    } else {
+                        toast.success('Withdraw successfully');
+                    }
+                    transactionHistory.refetch();
 
-                setIsDeposit(false);
-                setIsWithdraw(false);
+                    setIsDeposit(false);
+                    setIsWithdraw(false);
+                }
+            },
+            onError: (data) => {
+                toast.error('Confirm failed!');
             },
         }
     );
@@ -284,16 +291,31 @@ const WalletPage = () => {
                                     <div className="text-lg font-semibold">Payment with MoMo</div>
                                     <div
                                         className={clsx('font-semibold', {
-                                            'text-green-600': item.transactionStatus === 0,
-                                            'text-red-600': item.transactionStatus === 1,
+                                            'text-green-600': item.transactionType === 0,
+                                            'text-red-600': item.transactionType === 1,
                                         })}
                                     >
-                                        {item.transactionStatus === 0 ? 'Deposit' : 'Withdraw'}
+                                        {item.transactionType === 0 ? 'Deposit' : 'Withdraw'}
                                     </div>
                                 </div>
                             </div>
-                            <div className="flex items-center gap-4">
+                            <div className="flex flex-col items-end gap-4">
                                 <div className="text-lg font-semibold">{formatCurrency(item.amountTransaction)}</div>
+                                <td
+                                    className={clsx('font-bold ', {
+                                        'text-yellow-700': item.transactionStatus === 0,
+                                        'text-green-700': item.transactionStatus === 1,
+                                        'text-red-700': item.transactionStatus === 2,
+                                    })}
+                                >
+                                    <div className="inline-block">
+                                        {clsx('', {
+                                            Waiting: item.transactionStatus === 0,
+                                            Approve: item.transactionStatus === 1,
+                                            Reject: item.transactionStatus === 2,
+                                        })}
+                                    </div>
+                                </td>
                             </div>
                         </div>
                     ))}

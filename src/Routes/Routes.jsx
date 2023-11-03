@@ -35,6 +35,7 @@ import CreateServicePage from '../Pages/Provider/CreateServicePage/CreateService
 import EditServicePage from '../Pages/Provider/EditServicePage/EditServicePage';
 import ProviderOrderStatusDetail from '../Pages/Provider/ProviderOrderStatusDetail/ProviderOrderStatusDetail';
 import WalletPage from '../Pages/WalletPage/WalletPage';
+import PaymentManagementPage from '../Pages/AdminPage/PaymentManagementPage';
 
 export const routes = [
     {
@@ -194,6 +195,11 @@ export const routes = [
     {
         path: '/admin-provider-management',
         page: ProviderManagementPage,
+        isShowAdmin: true,
+    },
+    {
+        path: '/admin-payment-management',
+        page: PaymentManagementPage,
         isShowAdmin: true,
     },
     {

@@ -3,10 +3,16 @@ import { useSelector } from 'react-redux';
 import { getUser } from '../../Store/userSlice';
 import { logoutUser, getUserInfoInLocalStorage } from '../../Store/userSlice';
 import moment from 'moment';
+import { useMutation } from 'react-query';
+import axios from 'axios';
+import { toast } from 'react-toastify';
+import { Rating, RoundedStar } from '@smastrom/react-rating';
+import _get from 'lodash/get';
 
-const CommentsComponent = ({ serviceFeedbacks = [] }) => {
+const CommentsComponent = ({ serviceFeedbacks = [], serviceId, userId, onChange }) => {
     const [comments, setComments] = useState([]);
     const [newComment, setNewComment] = useState([]);
+    const [rating, setRating] = useState(5);
     // const [user, setUser] = useState('');
     // const userID = user ? user.Id : null;
 
@@ -24,10 +30,35 @@ const CommentsComponent = ({ serviceFeedbacks = [] }) => {
 
     const submitComment = () => {
         if (newComment) {
-            setComments([...comments, { content: newComment }]);
+            createFeedbackMutation.mutate(newComment);
             setNewComment('');
         }
     };
+
+    const createFeedbackMutation = useMutation(
+        async (content) => {
+            return await axios.post(`https://apis20231023230305.azurewebsites.net/api/ServiceFeedback/Create`, {
+                content: content,
+                customerId: user?.id,
+                birdServiceId: serviceId,
+                rating: rating,
+            });
+        },
+        {
+            onSuccess: (data) => {
+                onChange();
+                if (data.data?.status === 'BadRequest') {
+                    toast.error(data.data?.message);
+                } else {
+                    toast.success('Create feedback success');
+                }
+            },
+
+            onError: () => {
+                toast.error('Create feedback fail');
+            },
+        }
+    );
 
     return (
         <div className="flex flex-col mt-16">
@@ -40,17 +71,19 @@ const CommentsComponent = ({ serviceFeedbacks = [] }) => {
                     >
                         <div className="flex justify-between">
                             <div className="text-lg font-bold">Anonymous</div>
-                            <div>{moment(comment?.createdDate).format('DD/MM/YYYY')}</div>
+                            <div>
+                                <Rating className="w-32 h-8" value={comment.rating} onChange={() => {}} readOnly />
+                            </div>
                         </div>
                         <div>{comment?.content}</div>
                     </div>
                 ))}
             </div>
-            <div className="flex flex-col items-start gap-4 mt-4 mb-8">
-                <div className="text-lg">
-                    Leave a comment as <span className="font-semibold">Anonymous</span>
-                </div>
-
+            <div className="flex flex-col items-start gap-4 mt-4 mb-4">
+                Leave a comment as <span className="font-semibold">Anonymous</span>
+                <Rating className="w-32 h-8" value={rating} onChange={setRating} />
+            </div>
+            <div className="text-lg">
                 <textarea
                     placeholder="Add a comment..."
                     value={newComment}
@@ -60,8 +93,9 @@ const CommentsComponent = ({ serviceFeedbacks = [] }) => {
                 <button
                     onClick={submitComment}
                     className="bg-[#34a853] inline-block px-8 py-3 rounded-md text-white hover:bg-[#228b22] duration-300"
+                    disabled={user === null}
                 >
-                    Submit
+                    {user === null ? 'Login to comment' : 'Comment'}
                 </button>
             </div>
         </div>

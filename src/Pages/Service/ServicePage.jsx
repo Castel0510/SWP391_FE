@@ -241,7 +241,13 @@ const ServicePage = () => {
                                     </h3>
                                 </div>
                                 <div className="flex items-center justify-between flex-1 w-full gap-2 text-sm font-medium text-gray-900">
+                                    <div className="text-lg font-bold">
+                                        {locationOptions.find((x) => x.value === item?.location)?.label}
+                                    </div>
+                                </div>
+                                <div className="flex items-center justify-between flex-1 w-full gap-2 text-sm font-medium text-gray-900">
                                     <div>From:</div>
+
                                     <div className="text-lg font-bold">
                                         {formatCurrency(
                                             item.prices.sort((a, b) => a?.priceAmount - b?.priceAmount)[0]?.priceAmount

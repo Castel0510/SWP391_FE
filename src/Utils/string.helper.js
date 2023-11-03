@@ -6,6 +6,14 @@ export const formatCurrency = (value) => {
     }
 };
 
+export const formatNumberFixed = (value, fixed = 0) => {
+    try {
+        return Number(value).toFixed(fixed);
+    } catch (error) {
+        return '0';
+    }
+};
+
 export const formatNumber = (value) => {
     try {
         return Number(value)
