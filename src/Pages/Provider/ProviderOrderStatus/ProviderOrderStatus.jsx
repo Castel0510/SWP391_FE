@@ -69,7 +69,7 @@ const ProviderOrderStatus = () => {
                     return item.bookingStatus === selectedTab;
                 })
                 .filter((item) => {
-                    return item.customer.customerName.toLowerCase().includes(searchValue.toLowerCase());
+                    return item?.customer?.customerName.toLowerCase().includes(searchValue.toLowerCase());
                 });
 
             setTotalPage(Math.ceil(filterList.length / pageSize));

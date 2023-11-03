@@ -165,6 +165,11 @@ export const routes = [
         page: ProviderOrderStatus,
         isShowSidebarProvider: true,
     },
+    {
+        path: '/provider-payment',
+        page: WalletPage,
+        isShowSidebarProvider: true,
+    },
 
     {
         path: '/order-status-detail/:id',

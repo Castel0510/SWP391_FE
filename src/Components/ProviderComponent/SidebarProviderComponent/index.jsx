@@ -24,6 +24,11 @@ const SidebarProviderComponent = () => {
             display: 'Order',
         },
         {
+            icon: <AiOutlineFileDone className="w-5 h-5" />,
+            path: '/provider-payment',
+            display: 'Payment',
+        },
+        {
             icon: <ImProfile className="w-5 h-5" />,
             path: '/provider-profile',
             display: 'Profile',

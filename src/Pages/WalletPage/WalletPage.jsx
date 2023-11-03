@@ -107,9 +107,6 @@ const WalletPage = () => {
             } else {
                 dto.transactionType = 1;
             }
-            setTransaction({
-                amount: data.amount,
-            });
 
             const res = await axios.post('https://apis20231023230305.azurewebsites.net/api/Transaction/Create', dto);
 
@@ -126,7 +123,11 @@ const WalletPage = () => {
                 } else {
                     if (data.data.result.transactionType === 0) {
                         setIsOpenTransaction(true);
-                        setTransaction(data);
+
+                        setTransaction({
+                            id: data.data.result.id,
+                            amount: data.amount,
+                        });
                         toast.success('Deposit successfully');
                     } else {
                         toast.success('Withdraw successfully');
@@ -142,6 +143,8 @@ const WalletPage = () => {
             },
         }
     );
+
+    console.log(transaction);
 
     return (
         <>
