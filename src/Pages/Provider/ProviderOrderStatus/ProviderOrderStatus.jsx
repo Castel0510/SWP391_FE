@@ -22,6 +22,7 @@ import { Link } from 'react-router-dom';
 import axios from 'axios';
 import { useQuery } from 'react-query';
 import { formatCurrency } from '../../../Utils/string.helper';
+import moment from 'moment';
 
 const ProviderOrderStatus = () => {
     const [isLoading, setIsLoading] = useState(false);
@@ -73,8 +74,6 @@ const ProviderOrderStatus = () => {
             initialData: [],
         }
     );
-
-    console.log('orderQuery: ', orderQuery.data);
 
     // console.log("check: ", table);
 
@@ -282,12 +281,12 @@ const ProviderOrderStatus = () => {
 
                                             <td className={classes}>
                                                 <Typography variant="small" color="blue-gray" className="font-normal">
-                                                    {serviceEndDate}
+                                                    {moment(serviceStartDate).format('DD/MM/YYYY')}
                                                 </Typography>
                                             </td>
                                             <td className={classes}>
                                                 <Typography variant="small" color="blue-gray" className="font-normal">
-                                                    {serviceStartDate}
+                                                    {moment(serviceEndDate).format('DD/MM/YYYY')}
                                                 </Typography>
                                             </td>
                                             <td className={classes}>

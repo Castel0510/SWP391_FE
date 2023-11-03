@@ -9,6 +9,7 @@ import './style.scss';
 import { useNavigate, Link } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { loginUser } from '../../Store/userSlice';
+import { toast } from 'react-toastify';
 
 const LoginPage = () => {
     const [showForgotPasswordModal, setShowForgotPasswordModal] = useState(false);
@@ -48,6 +49,11 @@ const LoginPage = () => {
         const userCredentials = { username, password };
 
         dispatch(loginUser(userCredentials)).then((result) => {
+            if (result.status === 'BadRequest') {
+                toast.error(result.message);
+                return;
+            }
+
             if (result.payload) {
                 setUsername('');
                 setPassword('');

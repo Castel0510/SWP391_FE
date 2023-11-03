@@ -29,7 +29,7 @@ const AuthenticationComponent = ({ children }) => {
         <div className="background-authentication">
             <div className="container">
                 <div className="container-left">
-                    <Link className="branch" to="/">
+                    <Link className="branch !ml-3 mt-4" to="/">
                         <img src={logo} alt="logo" />
                         <p>BirdLive</p>
                     </Link>
