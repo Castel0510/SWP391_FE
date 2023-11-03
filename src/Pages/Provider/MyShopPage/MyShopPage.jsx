@@ -4,6 +4,7 @@ import { renderRatingStars } from '../../../Utils';
 import axios from 'axios';
 import { useQuery } from 'react-query';
 import Pagination from '@mui/material/Pagination';
+import { toast } from 'react-toastify';
 
 const MyShopPage = () => {
     const items = JSON.parse(localStorage.getItem('userInfo'));
@@ -33,6 +34,8 @@ const MyShopPage = () => {
             const response = await axios.delete(
                 `https://apis20231023230305.azurewebsites.net/api/BirdService/Delete?id=${id}`
             );
+
+            toast.success('Delete successfully!');
 
             serviceQuery.refetch();
         } catch (error) {
@@ -78,7 +81,7 @@ const MyShopPage = () => {
 
                                 <div className="flex justify-end">
                                     <Link
-                                        to={{ pathname: `/item-detail-page/${item.id}` }}
+                                        to={{ pathname: `/editService/${item.id}` }}
                                         state={{ item }}
                                         className="inline-flex items-center px-10 py-2 mb-10 mr-4 text-sm font-medium text-center text-white bg-blue-700 rounded-lg hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
                                     >

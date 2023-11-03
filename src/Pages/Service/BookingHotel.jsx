@@ -66,7 +66,7 @@ const BookingHotel = () => {
     }, []);
 
     const { itemId } = useParams();
-
+    const [selectPriceId, setSelectPriceId] = useState(null);
     const { data: services } = useQuery(
         ['services', itemId],
         async () => {
@@ -82,14 +82,15 @@ const BookingHotel = () => {
         {
             enabled: !!itemId,
             initialData: {},
+            refetchOnReconnect: false,
+            refetchOnWindowFocus: false,
             onSuccess: (data) => {
                 methods.setValue('providerId', data.providerId);
                 methods.setValue('bookingDetails[0].birdServiceId', data.id);
+                setSelectPriceId(data.prices[0].id);
             },
         }
     );
-
-    const [selectPriceId, setSelectPriceId] = useState(null);
 
     const selectPriceOption = useMemo(() => {
         if (services && services.prices) {
@@ -107,10 +108,10 @@ const BookingHotel = () => {
 
     const watchServiceStartDate = methods.watch('serviceStartDate');
     const watchServiceEndDate = methods.watch('serviceEndDate');
-
-    const totalPrice = useMemo(() => {
+    const totalPrice = methods.watch('totalPrice');
+    useEffect(() => {
         if (!services || !services.prices || !selectPriceId) {
-            return 0;
+            return;
         }
 
         const checkInDate = new Date(watchServiceStartDate);
@@ -126,8 +127,6 @@ const BookingHotel = () => {
         }
 
         methods.setValue('totalPrice', total);
-
-        return total;
     }, [services, watchServiceStartDate, watchServiceEndDate, selectPriceId]);
 
     const createBookingMutation = useMutation(async (input) => {
@@ -353,7 +352,7 @@ const BookingHotel = () => {
     //             'Content-Type': 'application/json',
     //         },
     //         body: JSON.stringify(dataToSend),
-    //     })
+    //     })f
     //         .then((response) => {
     //             if (response.ok) {
     //                 return response.json();
@@ -536,7 +535,6 @@ const BookingHotel = () => {
                                 onChange={(e) => setSelectPriceId(e.target.value)}
                                 required
                             >
-                                <option value={0}>Select an option</option>
                                 {selectPriceOption.map((option) => (
                                     <option key={option.name} value={option.value}>
                                         {option.label}

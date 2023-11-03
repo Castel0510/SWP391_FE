@@ -1,11 +1,11 @@
 import React, { useState, useEffect } from 'react';
-import avatar_tmp from '../../Assets/Images/bird_hero.png'
+import avatar_tmp from '../../Assets/Images/bird_hero.png';
 import { NavLink, Link, useNavigate } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
 import { logoutUser, getUserInfoInLocalStorage } from '../../Store/userSlice';
 
 const DropdownUser = (props) => {
-    const { id, role, resetUser } = props
+    const { id, role, resetUser } = props;
     const [isOpen, setIsOpen] = useState(false);
     const dispatch = useDispatch();
 
@@ -24,17 +24,21 @@ const DropdownUser = (props) => {
             display: 'Change password',
         },
         {
+            path: '/wallet',
+            display: 'Wallet',
+        },
+        {
             path: '/order',
             display: 'Order history',
         },
-    ]
+    ];
 
     const providerDropdownList = [
         {
             path: '/profile',
             display: 'View profile',
         },
-    ]
+    ];
 
     let dropdownItems = [];
 
@@ -45,15 +49,14 @@ const DropdownUser = (props) => {
     }
 
     const handleLogout = () => {
-        resetUser(null)
+        resetUser(null);
         dispatch(logoutUser());
-        navigate('/')
-    }
+        navigate('/');
+    };
 
     useEffect(() => {
-        setUser(getUserInfoInLocalStorage())
+        setUser(getUserInfoInLocalStorage());
     }, []);
-
 
     return (
         <div className="relative inline-block text-left">
@@ -61,18 +64,20 @@ const DropdownUser = (props) => {
                 <button
                     onClick={toggleDropdown}
                     type="button"
-                    className="inline-flex justify-center items-center w-full rounded-md border border-gray-300 shadow-sm px-4 py-2 bg-white text-sm font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-100 focus:ring-indigo-500"
+                    className="inline-flex items-center justify-center w-full px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-md shadow-sm hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-100 focus:ring-indigo-500"
                     id="menu-button"
                     aria-expanded="true"
                     aria-haspopup="true"
                 >
-                    <div className="w-8 h-8 rounded-full border border-solid border-black p-1">
+                    <div className="w-8 h-8 p-1 border border-black border-solid rounded-full">
                         <img
-                            src={user?.user?.avatarURL && user?.user?.avatarURL !== "string"
-                                ? user.user?.avatarURL
-                                : user?.user?.image && user?.user?.image !== "string"
+                            src={
+                                user?.user?.avatarURL && user?.user?.avatarURL !== 'string'
+                                    ? user.user?.avatarURL
+                                    : user?.user?.image && user?.user?.image !== 'string'
                                     ? user?.user?.image
-                                    : avatar_tmp}
+                                    : avatar_tmp
+                            }
                             alt="User Avatar"
                             className="w-full h-full rounded-full"
                         />
@@ -80,15 +85,24 @@ const DropdownUser = (props) => {
 
                     <p className="px-1">{user?.providerName || user?.user?.fullname || user?.fullname}</p>
 
-                    <svg className="-mr-1 h-5 w-5 text-gray-400" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
-                        <path fillRule="evenodd" d="M5.23 7.21a.75.75 0 011.06.02L10 11.168l3.71-3.938a.75.75 0 111.08 1.04l-4.25 4.5a.75.75 0 01-1.08 0l-4.25-4.5a.75.75 0 01.02-1.06z" clipRule="evenodd" />
+                    <svg
+                        className="w-5 h-5 -mr-1 text-gray-400"
+                        viewBox="0 0 20 20"
+                        fill="currentColor"
+                        aria-hidden="true"
+                    >
+                        <path
+                            fillRule="evenodd"
+                            d="M5.23 7.21a.75.75 0 011.06.02L10 11.168l3.71-3.938a.75.75 0 111.08 1.04l-4.25 4.5a.75.75 0 01-1.08 0l-4.25-4.5a.75.75 0 01.02-1.06z"
+                            clipRule="evenodd"
+                        />
                     </svg>
                 </button>
             </div>
 
             {isOpen && (
                 <div
-                    className="origin-top-right absolute z-50 right-0 mt-2 w-48 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5"
+                    className="absolute right-0 z-50 w-48 mt-2 origin-top-right bg-white rounded-md shadow-lg ring-1 ring-black ring-opacity-5"
                     role="menu"
                     aria-orientation="vertical"
                     aria-labelledby="menu-button"
