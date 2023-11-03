@@ -101,7 +101,7 @@ const EditServicePage = () => {
                 formMethods.setValue('birdServiceName', data.birdServiceName);
                 formMethods.setValue('description', data.description);
                 formMethods.setValue('imageURL', data.imageURL);
-                formMethods.setValue('videoURL', data.videoURL);
+                formMethods.setValue('VideoURL', data.videoURL);
                 formMethods.setValue('location', data.location);
                 formMethods.setValue('serviceCategoryId', data.serviceCategoryId);
                 formMethods.setValue('providerId', data.providerId);
@@ -125,7 +125,7 @@ const EditServicePage = () => {
                     serviceCategorySelectId
             );
 
-            return [res.data.result];
+            return res.data.result;
         },
         {
             enabled: serviceCategorySelectId !== '',
@@ -171,9 +171,10 @@ const EditServicePage = () => {
     //     },
     // });
 
-    const createService = useMutation(
+    const editService = useMutation(
         async (data) => {
-            const response = await axios.post(
+            console.log(data);
+            const response = await axios.put(
                 'https://apis20231023230305.azurewebsites.net/api/BirdService/Update?id=' + id,
                 {
                     ...data,
@@ -186,11 +187,13 @@ const EditServicePage = () => {
                         priceAmount: Number(item.priceAmount),
                         priceType: 0,
                         priceName: item.priceName,
+                        id: item.id,
                     })),
                     miniServices:
                         data.miniServices.length > 0
                             ? [
                                   {
+                                      id: data.miniServices[0].id,
                                       miniServiceName: data.miniServices[0].miniServiceName,
                                       description: data.miniServices[0].description,
                                       price: Number(data.miniServices[0].price),
@@ -204,11 +207,11 @@ const EditServicePage = () => {
         },
         {
             onSuccess: (data) => {
-                toast.success('Create service successfully');
+                toast.success('Update service successfully');
                 router('/my-shop');
             },
             onError: (error) => {
-                toast.error('Create service failed');
+                toast.error('Update service failed');
             },
         }
     );
@@ -268,12 +271,12 @@ const EditServicePage = () => {
                     <CTAUploadFile description="Upload your service image here" />
                 </div>
                 <div className="w-full max-w-5xl p-4 rounded-lg ring-1">
-                    <h1 className="text-2xl font-bold text-center mb-7">Add New Service</h1>
+                    <h1 className="text-2xl font-bold text-center mb-7">Update New Service</h1>
 
                     <form
                         className="flex flex-col gap-3"
                         onSubmit={formMethods.handleSubmit((data) => {
-                            createService.mutate(data);
+                            editService.mutate(data);
                         })}
                     >
                         <h2 className="text-lg font-semibold leading-7 text-gray-900 ">Service Information</h2>

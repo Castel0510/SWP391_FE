@@ -146,9 +146,9 @@ const BookingHotel = () => {
                 methods.setValue('bookingDetails[0].miniServiceId', selectMiniService.id);
 
                 total = total + selectMiniService.price;
-            } else {
-                methods.setValue('bookingDetails[0].miniServiceId', null);
             }
+        } else {
+            methods.setValue('bookingDetails[0].miniServiceId', 0);
         }
 
         methods.setValue('totalPrice', total);
@@ -156,7 +156,7 @@ const BookingHotel = () => {
 
     const createBookingMutation = useMutation(async (input) => {
         return await axios.post(
-            `https://apis20231023230305.azurewebsites.net/api/BirdServiceBooking/CreateBookingg?priceId=${selectPriceId}`,
+            `https://apis20231023230305.azurewebsites.net/api/BirdServiceBooking/CreateBooking?priceId=${selectPriceId}`,
             input
         );
     });
@@ -580,7 +580,9 @@ const BookingHotel = () => {
                                 onChange={(e) => setSelectMiniServiceId(e.target.value)}
                                 required
                             >
-                                <option value="">Select an option</option>
+                                <option selected value="0">
+                                    Select an option
+                                </option>
                                 {selectMiniServiceOption.map((option) => {
                                     return (
                                         <option key={option.name} value={option.value}>

@@ -1,9 +1,17 @@
 export const formatCurrency = (value) => {
-    return value.toLocaleString('it-IT', { style: 'currency', currency: 'VND' });
+    try {
+        return value.toLocaleString('it-IT', { style: 'currency', currency: 'VND' });
+    } catch (error) {
+        return '0 VNĐ';
+    }
 };
 
 export const formatNumber = (value) => {
-    return Number(value)
-        .toString()
-        .replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+    try {
+        return Number(value)
+            .toString()
+            .replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+    } catch (error) {
+        return '0';
+    }
 };

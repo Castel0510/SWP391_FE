@@ -114,12 +114,12 @@ export const routes = [
     },
     {
         path: '/booking/grooming/:itemId',
-        page: BookingPageSpa,
+        page: BookingPageHotel,
         isShowHeaderFooter: true,
     },
     {
         path: '/booking/healcare/:itemId',
-        page: BookingPageMedical,
+        page: BookingPageHotel,
         isShowHeaderFooter: true,
     },
     {

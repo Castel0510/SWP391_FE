@@ -4,10 +4,11 @@ import { Card, CardBody, Typography } from '@material-tailwind/react';
 import { toast } from 'react-toastify';
 import Modal from 'react-modal';
 import axios from 'axios';
-import { useQuery } from 'react-query';
+import { useQuery, useMutation } from 'react-query';
 import { useParams } from 'react-router-dom';
 import { GiDivergence } from 'react-icons/gi';
 import moment from 'moment';
+import { formatCurrency } from '../../../Utils/string.helper';
 
 const ProviderOrderStatusDetail = () => {
     const [isLoading, setIsLoading] = useState(false);
@@ -16,7 +17,7 @@ const ProviderOrderStatusDetail = () => {
     const [birdServiceData, setBirdServiceData] = useState(null);
 
     const location = useLocation();
-    const filteredRows = location?.state;
+
     const { id = '' } = useParams();
 
     const service = useQuery(
@@ -49,7 +50,6 @@ const ProviderOrderStatusDetail = () => {
 
     useEffect(() => {
         if (service.data?.id) {
-            console.log(service.data);
             axios
                 .get(
                     `https://apis20231023230305.azurewebsites.net/api/BirdService/GetById?id=${service.data.bookingDetails[0].birdServiceId}`
@@ -60,27 +60,6 @@ const ProviderOrderStatusDetail = () => {
                 });
         }
     }, [service.data?.id]);
-
-    const fetchData = async () => {
-        try {
-            setIsLoading(true);
-
-            const response = await axios.get(
-                `https://apis20231023230305.azurewebsites.net/api/BirdServiceBooking/GetBookingInfoById?id=${filteredRows.id}`
-            );
-            setData(response?.data?.result);
-
-            setIsLoading(false);
-        } catch (error) {
-            setError(error.message);
-            setIsLoading(false);
-        }
-    };
-    // console.log(data);
-
-    useEffect(() => {
-        fetchData();
-    }, []);
 
     const TABLE_HEAD = ['Service title', 'Category', 'Service', 'Price', 'Amount', 'Total price'];
 
@@ -98,10 +77,155 @@ const ProviderOrderStatusDetail = () => {
     const handleCancel = () => {
         setIsModalOpen(false);
     };
+    const statusOptions = [
+        {
+            label: 'Waiting',
+            value: 'waiting',
+            status: 0,
+        },
+        {
+            label: 'Confirm',
+            value: 'confirm',
+            status: 1,
+        },
+        {
+            label: 'Refuse',
+            value: 'refuse',
+            status: 2,
+        },
+        {
+            label: 'Already paid',
+            value: 'already paid',
+            status: 3,
+        },
+        {
+            label: 'On going',
+            value: 'onGoing',
+            status: 4,
+        },
 
-    if (!filteredRows) {
-        return <div>Item not founds</div>;
-    }
+        {
+            label: 'Done',
+            value: 'done',
+            status: 5,
+        },
+        {
+            label: 'Cancel',
+            value: 'cancel',
+            status: 6,
+        },
+    ];
+
+    const handleAcceptMutation = useMutation(
+        () => axios.put(`https://apis20231023230305.azurewebsites.net/api/BirdServiceBooking/ConfirmBooking?id=${id}`),
+        {
+            onSuccess: (data) => {
+                service.refetch();
+                if (data.data?.status === 'BadRequest') {
+                    toast.error(data.data?.message);
+                } else {
+                    toast.success('Confirm success!');
+                }
+            },
+            onError: (data) => {
+                toast.error('Confirm failed!');
+            },
+        }
+    );
+
+    const handleRefuseMutation = useMutation(
+        () => axios.put(`https://apis20231023230305.azurewebsites.net/api/BirdServiceBooking/RefuseBooking?id=${id}`),
+        {
+            onSuccess: (data) => {
+                service.refetch();
+                if (data.data?.status === 'BadRequest') {
+                    toast.error(data.data?.message);
+                } else {
+                    toast.success('Confirm success!');
+                }
+            },
+            onError: (data) => {
+                toast.error('Confirm failed!');
+            },
+        }
+    );
+
+    const handleCancelMutation = useMutation(
+        () =>
+            axios.put(
+                `https://apis20231023230305.azurewebsites.net/api/BirdServiceBooking/UpdateStatusOrder?id=${id}&status=6`
+            ),
+        {
+            onSuccess: (data) => {
+                service.refetch();
+                if (data.data?.status === 'BadRequest') {
+                    toast.error(data.data?.message);
+                } else {
+                    toast.success('Confirm success!');
+                }
+            },
+            onError: (data) => {
+                toast.error('Confirm failed!');
+            },
+        }
+    );
+
+    const handleDoneMutation = useMutation(
+        () =>
+            axios.put(
+                `https://apis20231023230305.azurewebsites.net/api/BirdServiceBooking/UpdateStatusOrder?id=${id}&status=5`
+            ),
+        {
+            onSuccess: (data) => {
+                service.refetch();
+                if (data.data?.status === 'BadRequest') {
+                    toast.error(data.data?.message);
+                } else {
+                    toast.success('Confirm success!');
+                }
+            },
+            onError: (data) => {
+                toast.error('Confirm failed!');
+            },
+        }
+    );
+
+    const handleOnGoingMutation = useMutation(
+        () =>
+            axios.put(
+                `https://apis20231023230305.azurewebsites.net/api/BirdServiceBooking/UpdateStatusOrder?id=${id}&status=4`
+            ),
+        {
+            onSuccess: (data) => {
+                service.refetch();
+                if (data.data?.status === 'BadRequest') {
+                    toast.error(data.data?.message);
+                } else {
+                    toast.success('Confirm success!');
+                }
+            },
+            onError: (data) => {
+                toast.error('Confirm failed!');
+            },
+        }
+    );
+
+    const handleChangeStatusMutation = useMutation(
+        (status) =>
+            axios.put(
+                `https://apis20231023230305.azurewebsites.net/api/BirdServiceBooking/ChangeBookingStatus?id=${id}&status=${status}`
+            ),
+        {
+            onSuccess: () => {
+                service.refetch();
+                toast.success('Update status success!');
+            },
+            onError: (data) => {
+                console.log(data);
+                toast.error('Update status failed!');
+            },
+        }
+    );
 
     if (isLoading) {
         return (
@@ -130,7 +254,7 @@ const ProviderOrderStatusDetail = () => {
     if (error) {
         return <p>Error: {error}</p>;
     }
-    console.log(birdServiceData);
+
     return (
         <>
             <div className="p-4">
@@ -199,7 +323,9 @@ const ProviderOrderStatusDetail = () => {
                             </div>
                             <div>
                                 <div className="text-sm font-semibold">Payment Status:</div>
-                                <span className="text-lg">Pending</span>
+                                <span className="text-lg">
+                                    {statusOptions.find((item) => item.status === service.data?.bookingStatus)?.label}
+                                </span>
                             </div>
                         </div>
                     </div>
@@ -241,17 +367,11 @@ const ProviderOrderStatusDetail = () => {
                                                     <td className="px-6 py-4 whitespace-nowrap">
                                                         {birdServiceData?.serviceCategory?.categoryName}
                                                     </td>
-                                                    <td className="px-6 py-4 whitespace-nowrap">
-                                                        {filteredRows.service}
-                                                    </td>
-                                                    <td className="px-8 py-4 whitespace-nowrap">
-                                                        {filteredRows.price}$
-                                                    </td>
+                                                    <td className="px-6 py-4 whitespace-nowrap"></td>
+                                                    <td className="px-8 py-4 whitespace-nowrap"></td>
+                                                    <td className="px-10 py-4 whitespace-nowrap"></td>
                                                     <td className="px-10 py-4 whitespace-nowrap">
-                                                        {filteredRows.amount}
-                                                    </td>
-                                                    <td className="px-10 py-4 whitespace-nowrap">
-                                                        {filteredRows.totalPrice}$
+                                                        {formatCurrency(service.data?.totalPrice)}
                                                     </td>
                                                 </tr>
                                             </tbody>
@@ -263,52 +383,66 @@ const ProviderOrderStatusDetail = () => {
                     </Card>
                 </div>
                 <div className="flex justify-end mx-4 my-8 ">
-                    {data.status === 'Waiting' && (
+                    {service.data?.bookingStatus === 0 && (
                         <>
                             <button
                                 className="middle none center mr-4 rounded-lg bg-green-500 py-3 px-6 font-sans text-xs font-bold uppercase text-white shadow-md shadow-green-500/20 transition-all hover:shadow-lg hover:shadow-green-500/40 focus:opacity-[0.85] focus:shadow-none active:opacity-[0.85] active:shadow-none disabled:pointer-events-none disabled:opacity-50 disabled:shadow-none"
                                 data-ripple-light="true"
-                                onClick={handleButtonClick}
+                                onClick={() => handleAcceptMutation.mutate()}
                             >
                                 Accept
                             </button>
                             <button
                                 className="middle none center mr-4 rounded-lg bg-red-500 py-3 px-6 font-sans text-xs font-bold uppercase text-white shadow-md shadow-red-500/20 transition-all hover:shadow-lg hover:shadow-red-500/40 focus:opacity-[0.85] focus:shadow-none active:opacity-[0.85] active:shadow-none disabled:pointer-events-none disabled:opacity-50 disabled:shadow-none"
                                 data-ripple-light="true"
+                                onClick={() => handleRefuseMutation.mutate()}
+                            >
+                                Refuse
+                            </button>
+                        </>
+                    )}
+                    {service.data?.bookingStatus === 1 && (
+                        <>
+                            <button
+                                className="middle none center mr-4 rounded-lg bg-red-500 py-3 px-6 font-sans text-xs font-bold uppercase text-white shadow-md shadow-red-500/20 transition-all hover:shadow-lg hover:shadow-red-500/40 focus:opacity-[0.85] focus:shadow-none active:opacity-[0.85] active:shadow-none disabled:pointer-events-none disabled:opacity-50 disabled:shadow-none"
+                                data-ripple-light="true"
+                                onClick={() => handleCancelMutation.mutate()}
                             >
                                 Cancel
                             </button>
                         </>
                     )}
-                    {data.status === 'Confirm' && (
+                    {service.data?.bookingStatus === 3 && (
                         <>
                             <button
                                 className="middle none center mr-4 rounded-lg bg-green-500 py-3 px-6 font-sans text-xs font-bold uppercase text-white shadow-md shadow-green-500/20 transition-all hover:shadow-lg hover:shadow-green-500/40 focus:opacity-[0.85] focus:shadow-none active:opacity-[0.85] active:shadow-none disabled:pointer-events-none disabled:opacity-50 disabled:shadow-none"
                                 data-ripple-light="true"
-                                onClick={handleButtonClick}
+                                onClick={() => handleOnGoingMutation.mutate()}
                             >
                                 Next
                             </button>
                             <button
                                 className="middle none center mr-4 rounded-lg bg-red-500 py-3 px-6 font-sans text-xs font-bold uppercase text-white shadow-md shadow-red-500/20 transition-all hover:shadow-lg hover:shadow-red-500/40 focus:opacity-[0.85] focus:shadow-none active:opacity-[0.85] active:shadow-none disabled:pointer-events-none disabled:opacity-50 disabled:shadow-none"
                                 data-ripple-light="true"
+                                onClick={() => handleCancelMutation.mutate()}
                             >
                                 Cancel
                             </button>
                         </>
                     )}
-                    {(data.status === 'On going' || data.status === 'Waiting for payment') && (
+                    {service.data?.bookingStatus === 4 && (
                         <>
                             <button
                                 className="middle none center mr-4 rounded-lg bg-green-500 py-3 px-6 font-sans text-xs font-bold uppercase text-white shadow-md shadow-green-500/20 transition-all hover:shadow-lg hover:shadow-green-500/40 focus:opacity-[0.85] focus:shadow-none active:opacity-[0.85] active:shadow-none disabled:pointer-events-none disabled:opacity-50 disabled:shadow-none"
                                 data-ripple-light="true"
-                                onClick={handleButtonClick}
+                                onClick={() => handleDoneMutation.mutate()}
                             >
                                 Done
                             </button>
                             <button
                                 className="middle none center mr-4 rounded-lg bg-red-500 py-3 px-6 font-sans text-xs font-bold uppercase text-white shadow-md shadow-red-500/20 transition-all hover:shadow-lg hover:shadow-red-500/40 focus:opacity-[0.85] focus:shadow-none active:opacity-[0.85] active:shadow-none disabled:pointer-events-none disabled:opacity-50 disabled:shadow-none"
                                 data-ripple-light="true"
+                                onClick={() => handleCancelMutation.mutate()}
                             >
                                 Cancel
                             </button>

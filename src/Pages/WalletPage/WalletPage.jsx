@@ -12,15 +12,48 @@ import { formatCurrency } from '../../Utils/string.helper';
 import axios from 'axios';
 import QRCode from 'react-qr-code';
 import { toast } from 'react-toastify';
+import Pagination from '@mui/material/Pagination';
+import clsx from 'clsx';
 
 const WalletPage = () => {
     const [user, setUser] = useState(null);
     const dataUser = useSelector((state) => state.user);
     const [isOpenTransaction, setIsOpenTransaction] = useState(false);
     const [transaction, setTransaction] = useState(null);
+    const [page, setPage] = useState(1);
+    const [pageSize, setPageSize] = useState(10);
+    const [totalPage, setTotalPage] = useState(1);
+
     useEffect(() => {
         setUser(getUser());
     }, [dataUser]);
+    const transactionHistory = useQuery(
+        ['transaction-history', user?.Id, page, pageSize],
+        async () => {
+            const data = await axios.get(
+                `https://apis20231023230305.azurewebsites.net/api/Wallet/GetByUserId?id=${user?.Id}`
+            );
+
+            const res = await axios.get(
+                `https://apis20231023230305.azurewebsites.net/api/Transaction/Get?pageIndex=0&pageSize=999999`
+            );
+
+            const finalList = res.data.result.items
+                .filter((item) => item.walletId === data.data.result.id)
+                .sort((a, b) => {
+                    return a.id < b.id ? 1 : -1;
+                });
+
+            setTotalPage(Math.ceil(finalList.length / pageSize));
+
+            return finalList.slice((page - 1) * pageSize, page * pageSize);
+        },
+        {
+            enabled: user?.Id !== null,
+            initialData: [],
+        }
+    );
+
     const userWallet = useQuery(
         ['user-Wallet', user?.Id],
         async () => {
@@ -68,6 +101,7 @@ const WalletPage = () => {
                 walletId: userWallet.data.id,
                 amountTransaction: data.amount,
             };
+
             if (isDeposit) {
                 dto.transactionType = 0;
             } else {
@@ -81,7 +115,7 @@ const WalletPage = () => {
 
             return {
                 ...res.data.result,
-                amount: data.amount,
+                amount: dto.amountTransaction,
                 transactionType: dto.transactionType,
             };
         },
@@ -94,6 +128,7 @@ const WalletPage = () => {
                 } else {
                     toast.success('Withdraw successfully');
                 }
+                transactionHistory.refetch();
 
                 setIsDeposit(false);
                 setIsWithdraw(false);
@@ -161,7 +196,7 @@ const WalletPage = () => {
                         <FormProvider {...depositForm}>
                             <form
                                 className="mt-4"
-                                onSubmit={withdrawForm.handleSubmit((data) => transactionMutation.mutate(data))}
+                                onSubmit={depositForm.handleSubmit((data) => transactionMutation.mutate(data))}
                             >
                                 <input
                                     type="number"
@@ -233,6 +268,47 @@ const WalletPage = () => {
                         >
                             Withdraw Money
                         </button>
+                    </div>
+                </div>
+                <div className="mt-8">
+                    {transactionHistory.data.map((item, index) => (
+                        <div className="flex items-center justify-between py-4 border-b border-gray-200" key={index}>
+                            <div className="flex items-center gap-4">
+                                <div className="w-8 h-8">
+                                    <img
+                                        src="https://upload.wikimedia.org/wikipedia/vi/f/fe/MoMo_Logo.png"
+                                        className="w-full h-full"
+                                    />
+                                </div>
+                                <div className="flex flex-col">
+                                    <div className="text-lg font-semibold">Payment with MoMo</div>
+                                    <div
+                                        className={clsx('font-semibold', {
+                                            'text-green-600': item.transactionStatus === 0,
+                                            'text-red-600': item.transactionStatus === 1,
+                                        })}
+                                    >
+                                        {item.transactionStatus === 0 ? 'Deposit' : 'Withdraw'}
+                                    </div>
+                                </div>
+                            </div>
+                            <div className="flex items-center gap-4">
+                                <div className="text-lg font-semibold">{formatCurrency(item.amountTransaction)}</div>
+                            </div>
+                        </div>
+                    ))}
+                    <div>
+                        {totalPage > 1 && (
+                            <div className="col-span-3 mt-4">
+                                <Pagination
+                                    count={totalPage}
+                                    page={page}
+                                    onChange={(e, value) => {
+                                        setPage(value);
+                                    }}
+                                />
+                            </div>
+                        )}
                     </div>
                 </div>
             </div>

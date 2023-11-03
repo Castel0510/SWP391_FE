@@ -95,7 +95,7 @@ const CreateServicePage = () => {
                     serviceCategorySelectId
             );
 
-            return [res.data.result];
+            return res.data.result;
         },
         {
             enabled: serviceCategorySelectId !== '',
