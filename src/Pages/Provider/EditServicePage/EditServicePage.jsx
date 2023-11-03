@@ -546,7 +546,6 @@ const EditServicePage = () => {
                                                 Mini Service Name
                                             </label>
                                             <input
-                                                type="number"
                                                 {...formMethods.register(`miniServices[0].miniServiceName`)}
                                                 className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
                                             />
@@ -575,7 +574,7 @@ const EditServicePage = () => {
                                                 htmlFor="priceAmount"
                                                 className="block text-sm font-semibold leading-6 text-gray-800"
                                             >
-                                                Price
+                                                Description
                                             </label>
                                         </div>
                                         <textarea

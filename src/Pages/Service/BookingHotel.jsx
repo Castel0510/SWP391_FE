@@ -67,6 +67,7 @@ const BookingHotel = () => {
 
     const { itemId } = useParams();
     const [selectPriceId, setSelectPriceId] = useState(null);
+    const [selectMiniServiceId, setSelectMiniServiceId] = useState(null);
     const { data: services } = useQuery(
         ['services', itemId],
         async () => {
@@ -106,6 +107,20 @@ const BookingHotel = () => {
         return [];
     }, [services]);
 
+    const selectMiniServiceOption = useMemo(() => {
+        if (services && services.miniServices) {
+            return services.miniServices.map((miniServiceItem) => {
+                return {
+                    name: miniServiceItem.miniServiceName,
+                    label: `${miniServiceItem.miniServiceName} (${formatCurrency(miniServiceItem.price)})`,
+                    value: miniServiceItem.id,
+                };
+            });
+        } else {
+            return [];
+        }
+    }, [services]);
+
     const watchServiceStartDate = methods.watch('serviceStartDate');
     const watchServiceEndDate = methods.watch('serviceEndDate');
     const totalPrice = methods.watch('totalPrice');
@@ -117,7 +132,6 @@ const BookingHotel = () => {
         const checkInDate = new Date(watchServiceStartDate);
         const checkOutDate = new Date(watchServiceEndDate);
         const days = differenceInDays(checkOutDate, checkInDate);
-
         const selectPrice = services.prices.find((item) => item.id == selectPriceId);
 
         let total = 0;
@@ -125,9 +139,20 @@ const BookingHotel = () => {
         if (total < 0) {
             total = 0;
         }
+        if (selectMiniServiceId) {
+            const selectMiniService = services.miniServices.find((item) => item.id == selectMiniServiceId);
+
+            if (selectMiniService) {
+                methods.setValue('bookingDetails[0].miniServiceId', selectMiniService.id);
+
+                total = total + selectMiniService.price;
+            } else {
+                methods.setValue('bookingDetails[0].miniServiceId', null);
+            }
+        }
 
         methods.setValue('totalPrice', total);
-    }, [services, watchServiceStartDate, watchServiceEndDate, selectPriceId]);
+    }, [services, watchServiceStartDate, watchServiceEndDate, selectPriceId, selectMiniServiceId]);
 
     const createBookingMutation = useMutation(async (input) => {
         return await axios.post(
@@ -540,6 +565,29 @@ const BookingHotel = () => {
                                         {option.label}
                                     </option>
                                 ))}
+                            </select>
+                        </div>
+                        <div className="col-span-1">
+                            <label
+                                htmlFor="selectedOption"
+                                className="block text-sm font-semibold leading-6 text-gray-900"
+                            >
+                                Mini Service:
+                            </label>
+                            <select
+                                className="block w-full px-4 py-2.5 text-gray-900 border-0 rounded-md shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+                                value={selectMiniServiceId}
+                                onChange={(e) => setSelectMiniServiceId(e.target.value)}
+                                required
+                            >
+                                <option value="">Select an option</option>
+                                {selectMiniServiceOption.map((option) => {
+                                    return (
+                                        <option key={option.name} value={option.value}>
+                                            {option.label}
+                                        </option>
+                                    );
+                                })}
                             </select>
                         </div>
 

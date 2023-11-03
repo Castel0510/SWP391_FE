@@ -82,7 +82,7 @@ const HeaderComponent = () => {
             const res = await axios.get(
                 `https://apis20231023230305.azurewebsites.net/api/Wallet/GetByUserId?id=${user?.Id}`
             );
-            console.log('res', res.data.result);
+
             return res.data.result;
         },
         {

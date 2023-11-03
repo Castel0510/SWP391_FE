@@ -34,6 +34,7 @@ import MyShopPage from '../Pages/Provider/MyShopPage/MyShopPage';
 import CreateServicePage from '../Pages/Provider/CreateServicePage/CreateServicePage';
 import EditServicePage from '../Pages/Provider/EditServicePage/EditServicePage';
 import ProviderOrderStatusDetail from '../Pages/Provider/ProviderOrderStatusDetail/ProviderOrderStatusDetail';
+import WalletPage from '../Pages/WalletPage/WalletPage';
 
 export const routes = [
     {
@@ -62,7 +63,7 @@ export const routes = [
     },
     {
         path: '/wallet',
-        page: ProfilePage,
+        page: WalletPage,
         isShowHeaderFooter: true,
     },
     {

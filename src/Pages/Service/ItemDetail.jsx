@@ -187,6 +187,23 @@ const ItemDetailPage = () => {
                                         })}
                                     </div>
                                 </div>
+                                <div className="flex flex-col gap-2">
+                                    <div className="font-semibold ">Mini Services</div>
+                                    <div className="flex flex-col gap-4 leading-6">
+                                        {selectedItem.miniServices.map((item) => {
+                                            return (
+                                                <div className="flex flex-col gap-2">
+                                                    <div className="flex items-center justify-between max-w-xs font-mediu">
+                                                        <div>{item?.miniServiceName}</div>
+                                                    </div>
+                                                    <div className="text-xl font-semibold">
+                                                        {formatCurrency(item?.price)}
+                                                    </div>
+                                                </div>
+                                            );
+                                        })}
+                                    </div>
+                                </div>
                                 <div className="">
                                     <button
                                         className="bg-[#34a853] inline-block px-16 py-4 rounded-md text-white hover:bg-[#228b22] duration-300 shadow-lg shadow-green-600"
