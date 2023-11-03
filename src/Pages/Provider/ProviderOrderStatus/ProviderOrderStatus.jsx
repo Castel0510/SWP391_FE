@@ -43,18 +43,25 @@ const ProviderOrderStatus = () => {
         ['order', page, pageSize, selectedTab, searchValue],
         async () => {
             const response = await axios.get(
-                `https://apis20231023230305.azurewebsites.net/api/BirdServiceBooking/GetByProviderId?id=${proId}&pageIndex=0&pageSize=1000`
+                'https://apis20231023230305.azurewebsites.net/api/BirdServiceBooking/GetAllBooking?pageIndex=0&pageSize=1000'
+                // `https://apis20231023230305.azurewebsites.net/api/BirdServiceBooking/GetByProviderId?id=${proId}&pageIndex=0&pageSize=1000`
             );
 
             const list = await Promise.all(
-                response.data.result.items.map(async (item) => {
-                    const customer = await axios.get(
-                        `https://apis20231023230305.azurewebsites.net/api/Customer/GetByCustonerId?id=${item?.customerId}`
-                    );
-                    item.customer = customer.data.result;
+                response.data.result.items
 
-                    return item;
-                })
+                    .filter((item) => item.providerId === proId)
+                    .sort((a, b) => {
+                        return a.id - b.id > 0 ? 1 : -1;
+                    })
+                    .map(async (item) => {
+                        const customer = await axios.get(
+                            `https://apis20231023230305.azurewebsites.net/api/Customer/GetByCustonerId?id=${item?.customerId}`
+                        );
+                        item.customer = customer.data.result;
+
+                        return item;
+                    })
             );
 
             const filterList = list
@@ -72,6 +79,7 @@ const ProviderOrderStatus = () => {
         {
             enabled: proId !== null,
             initialData: [],
+            refetchInterval: 5000,
         }
     );
 
