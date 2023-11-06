@@ -141,7 +141,7 @@ export const routes = [
     // provider
     {
         path: '/provider',
-        page: ProviderPage,
+        page: DashboardPageProvider,
         isShowSidebarProvider: true,
     },
     {

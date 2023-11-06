@@ -41,7 +41,7 @@ const DataCard = ({ title, icon, count, countInMonth, colorClassName }) => (
     </div>
 );
 
-const DashboardPage = () => {
+const DashboardPageProvider = () => {
     const [dataDashboard, setDataDashboard] = useState({
         customer: '',
         customerInMonth: '',
@@ -186,4 +186,4 @@ const DashboardPage = () => {
     );
 };
 
-export default DashboardPage;
+export default DashboardPageProvider;

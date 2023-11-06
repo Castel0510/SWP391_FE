@@ -14,7 +14,7 @@ const CTAUploadImage = ({ description, onUpload, defaultValue }) => {
     const [currentUrl, setCurrentUrl] = React.useState('');
 
     const v1UploadFile = async (file) => {
-        const url = 'http://localhost:4000/api/v1/upload-file/upload';
+        const url = 'https://api.monoinfinity.net/api/v1/upload-file/upload';
         const formData = new FormData();
         formData.append('file', file);
         const res = await axios.post(url, formData, {
@@ -39,6 +39,7 @@ const CTAUploadImage = ({ description, onUpload, defaultValue }) => {
         },
         {
             onSuccess: (data) => {
+                console.log(data);
                 setCurrentUrl(data);
                 onUpload(data);
             },

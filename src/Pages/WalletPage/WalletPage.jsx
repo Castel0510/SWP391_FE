@@ -14,6 +14,7 @@ import QRCode from 'react-qr-code';
 import { toast } from 'react-toastify';
 import Pagination from '@mui/material/Pagination';
 import clsx from 'clsx';
+import { BanknotesIcon } from '@heroicons/react/24/outline';
 
 const WalletPage = () => {
     const [user, setUser] = useState(null);
@@ -144,8 +145,6 @@ const WalletPage = () => {
         }
     );
 
-    console.log(transaction);
-
     return (
         <>
             <Dialog
@@ -268,21 +267,26 @@ const WalletPage = () => {
                     <div className="flex items-center gap-4">
                         <button
                             onClick={() => setIsDeposit(true)}
-                            className="px-4 py-2 font-bold text-white bg-green-600 rounded hover:bg-green-700"
+                            className="flex items-center gap-2 px-4 py-2 font-bold text-white bg-green-600 rounded hover:bg-green-700"
                         >
-                            Deposit Money
+                            <BanknotesIcon className="w-5 h-5" />
+                            <span>Deposit Money</span>
                         </button>
                         <button
                             onClick={() => setIsWithdraw(true)}
-                            className="px-4 py-2 font-bold text-white bg-red-600 rounded hover:bg-red-700"
+                            className="flex items-center gap-2 px-4 py-2 font-bold text-white bg-red-600 rounded hover:bg-red-700"
                         >
-                            Withdraw Money
+                            <BanknotesIcon className="w-5 h-5" />
+                            <span>Withdraw Money</span>
                         </button>
                     </div>
                 </div>
                 <div className="mt-8">
                     {transactionHistory.data.map((item, index) => (
-                        <div className="flex items-center justify-between py-4 border-b border-gray-200" key={index}>
+                        <div
+                            className="flex items-center justify-between px-4 py-2 border border-b border-green-300 border-solid rounded-lg shadow-xl"
+                            key={index}
+                        >
                             <div className="flex items-center gap-4">
                                 <div className="w-8 h-8">
                                     <img
