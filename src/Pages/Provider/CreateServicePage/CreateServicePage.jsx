@@ -28,8 +28,7 @@ const CreateServicePage = () => {
                 Yup.object().shape({
                     serviceType: Yup.string().required('serviceType is required'),
                     priceName: Yup.string().required('priceName Price is required'),
-                    birdSize: Yup.string().required('birdSize Price is required'),
-                    birdType: Yup.string().required('birdType Price is required'),
+                    birdTypeId: Yup.string().required('birdType Price is required'),
                     priceAmount: Yup.string().required('priceAmount Price is required'),
                     priceType: Yup.string().required('priceType Price is required'),
                 })
@@ -86,6 +85,23 @@ const CreateServicePage = () => {
 
         setUser(user);
     }, []);
+
+    const birdType = useQuery(
+        ['birdType'],
+        async () => {
+            const res = await axios.get(
+                'https://apis20231023230305.azurewebsites.net/api/BirdType/Get?pageIndex=0&pageSize=999'
+            );
+
+            return res.data.result.items.map((item) => ({
+                label: `${item.birdName} ( ${birdSizeOptions.find((size) => size.value === item.birdSize).label} )`,
+                value: item.id,
+            }));
+        },
+        {
+            initialData: [],
+        }
+    );
 
     const serviceTypeAfterQuery = useQuery(
         ['serviceType', serviceCategorySelectId],
@@ -149,8 +165,8 @@ const CreateServicePage = () => {
                 serviceCategoryId: Number(data.serviceCategoryId),
                 prices: data.prices.map((item) => ({
                     serviceType: Number(item.serviceType),
-                    birdSize: Number(item.birdSize),
-                    birdType: Number(item.birdType),
+
+                    birdTypeId: Number(item.birdTypeId),
                     priceAmount: Number(item.priceAmount),
                     priceType: 0,
                     priceName: item.priceName,
@@ -416,26 +432,7 @@ const CreateServicePage = () => {
                                             <FormError name={`prices.${index}.priceName`} />
                                         </div>
 
-                                        <div className="flex flex-col col-span-1">
-                                            <label
-                                                htmlFor="birdSize"
-                                                className="block text-sm font-semibold leading-6 text-gray-800"
-                                            >
-                                                Select Size
-                                            </label>
-                                            <select
-                                                {...formMethods.register(`prices.${index}.birdSize`)}
-                                                className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
-                                            >
-                                                {birdSizeOptions.map(({ value, label }, index) => (
-                                                    <option key={index} value={Number(value)}>
-                                                        {label}
-                                                    </option>
-                                                ))}
-                                            </select>
-                                            <FormError name={`prices.${index}.birdSize`} />
-                                        </div>
-                                        <div className="flex flex-col col-span-1">
+                                        <div className="flex flex-col col-span-2">
                                             <label
                                                 htmlFor="birdType"
                                                 className="block text-sm font-semibold leading-6 text-gray-800"
@@ -443,10 +440,10 @@ const CreateServicePage = () => {
                                                 Select Type
                                             </label>
                                             <select
-                                                {...formMethods.register(`prices.${index}.birdType`)}
+                                                {...formMethods.register(`prices.${index}.birdTypeId`)}
                                                 className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
                                             >
-                                                {birdTypeOptions.map(({ value, label }, index) => (
+                                                {birdType.data.map(({ value, label }, index) => (
                                                     <option key={index} value={Number(value)}>
                                                         {label}
                                                     </option>

@@ -37,6 +37,7 @@ import ProviderOrderStatusDetail from '../Pages/Provider/ProviderOrderStatusDeta
 import WalletPage from '../Pages/WalletPage/WalletPage';
 import PaymentManagementPage from '../Pages/AdminPage/PaymentManagementPage';
 import Cart from '../Pages/Service/Cart';
+import BirdTypeManagementPage from '../Pages/AdminPage/BirdTypeManagementPage';
 
 export const routes = [
     {
@@ -202,6 +203,11 @@ export const routes = [
     {
         path: '/admin-account-management',
         page: AccountManagementPage,
+        isShowAdmin: true,
+    },
+    {
+        path: '/admin-bird-type-management',
+        page: BirdTypeManagementPage,
         isShowAdmin: true,
     },
     {

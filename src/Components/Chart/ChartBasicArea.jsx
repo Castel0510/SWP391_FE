@@ -5,7 +5,6 @@ import { formatNumber } from '../../Utils/string.helper';
 import PropTypes from 'prop-types';
 
 const ChartBasicArea = ({ title, values, unit, colors }) => {
-    console.log('values', values);
     return (
         <div>
             <ReactApexChart

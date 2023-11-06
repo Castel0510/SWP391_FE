@@ -20,7 +20,7 @@ const ServiceCardItem = ({ item }) => {
     const [user, setUser] = useState(null);
     const navigate = useNavigate();
     const dataUser = useSelector((state) => state.user);
-    console.log(item);
+
     useEffect(() => {
         setUser(getUser());
     }, [dataUser]);

@@ -130,6 +130,7 @@ const ServicePage = () => {
                                             } else {
                                                 newCategoryIds.push(plan.id);
                                             }
+                                            setPage(1);
                                             setCategoryIds(newCategoryIds);
                                         }}
                                     >
@@ -148,6 +149,7 @@ const ServicePage = () => {
                                     placeholder="Search by item name"
                                     value={searchQuery}
                                     onChange={(e) => {
+                                        setPage(1);
                                         setSearchQuery(e.target.value);
                                     }}
                                 />
@@ -159,7 +161,10 @@ const ServicePage = () => {
                                 <select
                                     className="w-full px-4 py-2 text-sm duration-300 border border-gray-300 rounded-lg focus:outline-none focus:ring-1 focus:ring-green-600 focus:border-green-600"
                                     value={selectedOrder}
-                                    onChange={(e) => setSelectedOrder(e.target.value)}
+                                    onChange={(e) => {
+                                        setSelectedOrder(e.target.value);
+                                        setPage(1);
+                                    }}
                                 >
                                     {orderBy.map((order) => (
                                         <option key={order.id} value={order.id}>
@@ -179,7 +184,7 @@ const ServicePage = () => {
                                                 serviceLocation.value
                                             ),
                                         })}
-                                        key={serviceLocation}
+                                        key={serviceLocation.value}
                                         onClick={() => {
                                             const newServiceLocations = [...serviceLocations];
 
@@ -192,6 +197,7 @@ const ServicePage = () => {
                                                 newServiceLocations.push(serviceLocation.value);
                                             }
                                             setServiceLocations(newServiceLocations);
+                                            setPage(1);
                                         }}
                                     >
                                         {serviceLocation.label}

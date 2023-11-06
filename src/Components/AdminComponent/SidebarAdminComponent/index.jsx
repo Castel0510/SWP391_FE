@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
-import { LuLayoutDashboard } from 'react-icons/lu';
-import { MdManageAccounts } from 'react-icons/md';
+import { LuLayoutDashboard, LuBird } from 'react-icons/lu';
+import { MdManageAccounts, MdCategory } from 'react-icons/md';
 import { HiOutlineBuildingStorefront } from 'react-icons/hi2';
 import { FaRegMoneyBillAlt } from 'react-icons/fa';
 import { GoReport } from 'react-icons/go';
@@ -17,6 +17,16 @@ const SidebarAdminComponent = () => {
             icon: <MdManageAccounts className="w-5 h-5" />,
             path: '/admin-account-management',
             display: 'User Management',
+        },
+        {
+            icon: <MdCategory className="w-5 h-5" />,
+            path: '/admin-service-category-management',
+            display: 'Service Category Management',
+        },
+        {
+            icon: <LuBird className="w-5 h-5" />,
+            path: '/admin-bird-type-management',
+            display: 'Bird Type Management',
         },
         {
             icon: <HiOutlineBuildingStorefront className="w-5 h-5" />,
