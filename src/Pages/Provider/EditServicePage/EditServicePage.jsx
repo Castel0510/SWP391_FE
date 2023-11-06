@@ -6,6 +6,7 @@ import { TrashIcon, PlusIcon } from '@heroicons/react/24/outline';
 import * as Yup from 'yup';
 import axios from 'axios';
 import CTAUploadFile from '../../../Components/CTA/CTAUploadFile';
+import CTAUploadImage from '../../../Components/CTA/CTAUploadImage';
 import { birdSizeOptions, birdTypeOptions, locationOptions } from '../../../models/bird';
 import { useMutation, useQuery } from 'react-query';
 import { FormProvider, useForm } from 'react-hook-form';
@@ -315,7 +316,17 @@ const EditServicePage = () => {
         <FormProvider {...formMethods}>
             <div className="flex justify-center w-full gap-4">
                 <div className="p-4 bg-white rounded-lg shadow-lg w-96 h-fit ring-1">
-                    <CTAUploadFile description="Upload your service image here" />
+                    <label htmlFor="imageURL" className="block text-sm font-semibold leading-6 text-gray-800">
+                        Picture URL
+                    </label>
+                    <CTAUploadImage
+                        defaultValue={serviceQuery.data?.imageURL}
+                        description="Upload your service image here"
+                        onUpload={(url) => {
+                            formMethods.setValue('imageURL', url);
+                        }}
+                    />
+                    <FormError name="imageURL" />
                 </div>
                 <div className="w-full max-w-5xl p-4 rounded-lg ring-1">
                     <h1 className="text-2xl font-bold text-center mb-7">Update New Service</h1>
@@ -404,21 +415,8 @@ const EditServicePage = () => {
                                 </select>
                                 <FormError name={`serviceCategoryId`} />
                             </div>
-                            <div className="flex flex-col col-span-3">
-                                <label
-                                    htmlFor="imageURL"
-                                    className="block text-sm font-semibold leading-6 text-gray-800"
-                                >
-                                    Picture URL
-                                </label>
-                                <input
-                                    {...formMethods.register('imageURL')}
-                                    placeholder="Link imageURL"
-                                    className="block w-full rounded-md border-0 px-4 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
-                                />
-                                <FormError name="imageURL" />
-                            </div>
-                            <div className="flex flex-col col-span-3">
+
+                            <div className="flex flex-col col-span-6">
                                 <label
                                     htmlFor="videoURL"
                                     className="block text-sm font-semibold leading-6 text-gray-800"
@@ -537,7 +535,18 @@ const EditServicePage = () => {
                                         <div className="flex flex-col col-span-1 py-4">
                                             <div
                                                 onClick={() => {
-                                                    deletePriceMutation.mutate(item.id);
+                                                    const isConfirmed = window.confirm(
+                                                        'Are you sure you want to delete this price?'
+                                                    );
+                                                    if (isConfirmed) {
+                                                        if (item.id) {
+                                                            deletePriceMutation.mutate(item.id);
+                                                        } else {
+                                                            const newPrices = formMethods.getValues('prices');
+                                                            newPrices.splice(index, 1);
+                                                            formMethods.setValue('prices', newPrices);
+                                                        }
+                                                    }
                                                 }}
                                             >
                                                 <TrashIcon className="w-5 h-5 text-red-600 cursor-pointer fill-white" />
@@ -557,7 +566,16 @@ const EditServicePage = () => {
                                         <button
                                             type="button"
                                             onClick={() => {
-                                                deleteMiniServiceMutation.mutate(miniServices[0].id);
+                                                const isConfirmed = window.confirm(
+                                                    'Are you sure you want to delete this mini service?'
+                                                );
+                                                if (isConfirmed) {
+                                                    if (miniServices[0].id) {
+                                                        deleteMiniServiceMutation.mutate(miniServices[0].id);
+                                                    } else {
+                                                        formMethods.setValue('miniServices', []);
+                                                    }
+                                                }
                                             }}
                                         >
                                             <TrashIcon className="w-5 h-5 text-red-600 cursor-pointer fill-white" />

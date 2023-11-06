@@ -4,58 +4,29 @@ import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { useNavigate } from 'react-router-dom';
 import { format, differenceInDays, addDays } from 'date-fns';
-import { FaArrowLeft } from 'react-icons/fa';
+import { FaArrowLeft, FaTrash } from 'react-icons/fa';
 import { useDispatch, useSelector } from 'react-redux';
-import { getUserInfoInLocalStorage } from '../../Store/userSlice';
+import { getUserInfoInLocalStorage, getUser } from '../../Store/userSlice';
 import { fetchServices } from '../../Store/serviceSlice';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { formatCurrency } from '../../Utils/string.helper';
 import { FormProvider, useForm } from 'react-hook-form';
 import { useMutation, useQuery } from 'react-query';
 import * as Yup from 'yup';
+
 import FormError from '../../Components/FormError/FormError';
 import axios from 'axios';
 
-const validationSchema = Yup.object().shape({
-    birdServiceId: Yup.string().required('Service ID is required'),
-    description: Yup.number().required('Description is required'),
-    miniServiceId: Yup.number().required('Mini service ID is required'),
-    // serviceStartDate: Yup.date().required('Check-in date is required'),
-    // serviceEndDate: Yup.date()
-    //     .required('Check-out date is required')
-    //     .min(Yup.ref('serviceStartDate'), 'Check-out date must be after check-in date'),
-    price: Yup.number().required('Price is required'),
-    quantity: Yup.number().required('Quantity is required'),
-    cartId: Yup.number().required('Cart ID is required'),
-});
-
 const Cart = () => {
-    const methods = useForm(
-        {
-            defaultValues: {
-                birdServiceId: '',
-                description: '',
-                miniServiceId: '',
-                serviceStartDate: '',
-                serviceEndDate: '',
-                price: 0,
-                quantity: 0,
-                cartId: '',
-            },
-        },
-        {
-            resolver: yupResolver(validationSchema),
-        }
-    );
     const user = useSelector(getUserInfoInLocalStorage);
 
     const cart = useQuery(
-        ['cart'],
+        ['cart-checkout'],
         async () => {
             const user = getUser();
 
             const res = await axios.get(
-                `https://apis20231023230305.azurewebsites.net/api/Cart/GetByUserId?id=${user?.id}`
+                `https://apis20231023230305.azurewebsites.net/api/Cart/GetByUserId?id=${user?.Id}`
             );
 
             return res.data.result;
@@ -63,338 +34,147 @@ const Cart = () => {
         {
             onSuccess: (data) => {
                 console.log(data);
-                methods.setValue('cartId', data.id);
+            },
+        }
+    );
+
+    const deleteCartItem = useMutation(
+        async (id) => {
+            const res = await axios.delete(
+                `https://apis20231023230305.azurewebsites.net/api/CartDetail/DeleteCartDetail?id=${id}`
+            );
+        },
+        {
+            onSuccess: (data) => {
+                cart.refetch();
+                toast.success('Delete cart item successfully');
+            },
+        }
+    );
+
+    const handleUpdateQuantity = useMutation(
+        async (data) => {
+            const res = await axios.post(
+                `https://apis20231023230305.azurewebsites.net/api/CartDetail/UpdateCartDetail?id=${data.id}`,
+                data
+            );
+
+            return res.data;
+        },
+        {
+            onSuccess: (data) => {
+                cart.refetch();
             },
         }
     );
 
     const { itemId } = useParams();
     const navigate = useNavigate();
-    const [selectPriceId, setSelectPriceId] = useState(null);
-    const [selectMiniServiceId, setSelectMiniServiceId] = useState(null);
-    const { data: services } = useQuery(
-        ['services', itemId],
-        async () => {
-            const response = await fetch(
-                `https://apis20231023230305.azurewebsites.net/api/BirdService/GetById?id=${itemId}`
-            );
-            if (!response.ok) {
-                throw new Error('Failed to fetch data');
-            }
-            const data = await response.json();
-            return data.result;
-        },
-        {
-            enabled: !!itemId,
-            initialData: {},
-            refetchOnReconnect: false,
-            refetchOnWindowFocus: false,
-            onSuccess: (data) => {
-                methods.setValue('birdServiceId', data.id);
-                setSelectPriceId(data.prices[0].id);
-            },
-        }
-    );
-    useEffect(() => {
-        if (services !== null) {
-            methods.setValue('serviceStartDate', format(new Date(), 'yyyy-MM-dd'));
-            methods.setValue('serviceEndDate', format(new Date(), 'yyyy-MM-dd'));
-
-            methods.setValue('customerId', user.id);
-        }
-    }, [services]);
-
-    const selectPriceOption = useMemo(() => {
-        if (services && services.prices) {
-            return services.prices.map((priceItem) => {
-                return {
-                    name: priceItem.priceName,
-                    label: `${priceItem.priceName} (${formatCurrency(priceItem.priceAmount)})`,
-                    value: priceItem.id,
-                };
-            });
-        }
-
-        return [];
-    }, [services]);
-
-    const selectMiniServiceOption = useMemo(() => {
-        if (services && services.miniServices) {
-            return services.miniServices.map((miniServiceItem) => {
-                return {
-                    name: miniServiceItem.miniServiceName,
-                    label: `${miniServiceItem.miniServiceName} (${formatCurrency(miniServiceItem.price)})`,
-                    value: miniServiceItem.id,
-                };
-            });
-        } else {
-            return [];
-        }
-    }, [services]);
-
-    const watchServiceStartDate = methods.watch('serviceStartDate');
-    const watchServiceEndDate = methods.watch('serviceEndDate');
-    const quantity = methods.watch('quantity');
-    const totalPrice = methods.watch('price');
-    useEffect(() => {
-        if (!services || !services.prices || !selectPriceId || !quantity) {
-            return;
-        }
-
-        const checkInDate = new Date(watchServiceStartDate);
-        const checkOutDate = new Date(watchServiceEndDate);
-        const days = services?.serviceCategory?.serviceType === 0 ? differenceInDays(checkOutDate, checkInDate) : 1;
-        const selectPrice = services.prices.find((item) => item.id == selectPriceId);
-
-        let total = 0;
-        total = total + days * selectPrice.priceAmount * Number(quantity);
-        if (total < 0) {
-            total = 0;
-        }
-        if (selectMiniServiceId) {
-            const selectMiniService = services.miniServices.find((item) => item.id == selectMiniServiceId);
-
-            if (selectMiniService) {
-                methods.setValue('miniServiceId', selectMiniService.id);
-
-                total = total + selectMiniService.price;
-            }
-        } else {
-            methods.setValue('miniServiceId', 0);
-        }
-
-        methods.setValue('price', total);
-    }, [services, watchServiceStartDate, watchServiceEndDate, selectPriceId, selectMiniServiceId, quantity]);
-
-    const createBookingMutation = useMutation(async (input) => {
-        return await axios.post(`https://apis20231023230305.azurewebsites.net/api/CartDetail/CreateCartDetail`, {
-            ...input,
-        });
-    });
-
-    const onSubmit = (data) => {
-        if (services?.serviceCategory?.serviceType === 0) {
-            if (
-                data.serviceStartDate !== null &&
-                data.serviceEndDate !== null &&
-                data.serviceStartDate >= data.serviceEndDate
-            ) {
-                toast.error('Check-out date must be after check-in date');
-                return;
-            }
-        }
-
-        const isConfirmed = window.confirm(`Are you sure you want to book ${services.birdServiceName}?`);
-
-        if (!isConfirmed) {
-            return;
-        }
-
-        createBookingMutation.mutate(data, {
-            onSuccess: (data) => {
-                toast.success('Booking Successful');
-
-                // setTimeout(() => {
-                //     navigateTo('/payment', { state: { dataToSend } });
-                // }, 3000);
-            },
-        });
-    };
 
     return (
-        <FormProvider {...methods}>
-            <div className="flex items-start justify-center min-h-screen py-10">
-                <div className="flex flex-col w-full max-w-4xl gap-10">
-                    <button onClick={() => window.history.back()} className="back-button">
-                        <FaArrowLeft />
-                    </button>
-                    <h2 className="mb-2 font-bold">
-                        Booking Form for: {services ? services.birdServiceName : 'No item selected'}
-                    </h2>
-                    <form className="grid grid-cols-3 gap-3" onSubmit={methods.handleSubmit(onSubmit)}>
-                        {/* <div className="col-span-1">
-                        <label htmlFor="username" className="block text-sm font-semibold leading-6 text-gray-900">
-                            Username
-                        </label>
-                        <input
-                            type="text"
-                            name="username"
-                            id="username"
-                            // value={formData.username}
-                            // onChange={handleInputChange}
-                            {...methods.register('username', { required: true })}
-                            required
-                            className="block w-full px-4 rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
-                        />
-                    </div> */}
-                        {/* <div className="col-span-1">
-                        <label htmlFor="email" className="block text-sm font-semibold leading-6 text-gray-900">
-                            Email:
-                        </label>
-                        <input
-                            type="email"
-                            name="email"
-                            id="email"
-                            // value={formData.email}
-                            // onChange={handleInputChange}
-                            {...methods.register('email', { required: true })}
-                            required
-                            className="block w-full rounded-md px-4 border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
-                        />
-                    </div> */}
-                        {/* <div className="col-span-1">
-                        <label htmlFor="phone" className="block text-sm font-semibold leading-6 text-gray-900">
-                            Phone:
-                        </label>
-                        <input
-                            type="tel"
-                            name="phone"
-                            id="phone"
-                            // value={formData.phone}
-                            // onChange={handleInputChange}
-                            {...register('phone', { required: true })}
-                            required
-                            className="block w-full rounded-md border-0 px-4 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
-                        />
-                    </div> */}
-                        {services?.serviceCategory?.serviceType === 0 && (
-                            <>
-                                <div className="col-span-1">
-                                    <label
-                                        htmlFor="serviceStartDate"
-                                        className="block text-sm font-semibold leading-6 text-gray-900"
-                                    >
-                                        Check-In Date:
-                                    </label>
-                                    <input
-                                        type="date"
-                                        name="serviceStartDate"
-                                        id="serviceStartDate"
-                                        // value={formData.checkInDate}
-                                        // onChange={handleInputChange}
-                                        {...methods.register('serviceStartDate', { required: true })}
-                                        required
-                                        className="block w-full rounded-md border-0 px-4 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
-                                    />
-                                    <FormError name="serviceStartDate" />
-                                </div>
-                                <div className="col-span-1">
-                                    <label
-                                        htmlFor="serviceEndDate"
-                                        className="block text-sm font-semibold leading-6 text-gray-900"
-                                    >
-                                        Check-Out Date:
-                                    </label>
-                                    <input
-                                        type="date"
-                                        name="serviceEndDate"
-                                        id="serviceEndDate"
-                                        // value={formData.checkOutDate}
-                                        // onChange={handleInputChange}
-                                        {...methods.register('serviceEndDate', { required: true })}
-                                        required
-                                        className="block w-full rounded-md border-0 px-4 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
-                                    />
-                                    <FormError name="serviceEndDate" />
-                                </div>
-                            </>
-                        )}
-
-                        <div className="col-span-1">
-                            <label
-                                htmlFor="selectedOption"
-                                className="block text-sm font-semibold leading-6 text-gray-900"
-                            >
-                                Select an Option of your bird size:
-                            </label>
-                            <select
-                                className="block w-full px-4 py-2.5 text-gray-900 border-0 rounded-md shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
-                                value={selectPriceId}
-                                onChange={(e) => setSelectPriceId(e.target.value)}
-                                required
-                            >
-                                {selectPriceOption.map((option) => (
-                                    <option key={option.name} value={option.value}>
-                                        {option.label}
-                                    </option>
-                                ))}
-                            </select>
-                        </div>
-                        <div className="col-span-1">
-                            <label
-                                htmlFor="selectedOption"
-                                className="block text-sm font-semibold leading-6 text-gray-900"
-                            >
-                                Mini Service:
-                            </label>
-                            <select
-                                className="block w-full px-4 py-2.5 text-gray-900 border-0 rounded-md shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
-                                value={selectMiniServiceId}
-                                onChange={(e) => setSelectMiniServiceId(e.target.value)}
-                                required
-                            >
-                                <option selected value="0">
-                                    Select an option
-                                </option>
-                                {selectMiniServiceOption.map((option) => {
-                                    return (
-                                        <option key={option.name} value={option.value}>
-                                            {option.label}
-                                        </option>
-                                    );
-                                })}
-                            </select>
-                        </div>
-                        <div className="col-span-1">
-                            <label
-                                htmlFor="selectedOption"
-                                className="block text-sm font-semibold leading-6 text-gray-900"
-                            >
-                                Quantity:
-                            </label>
-                            <input
-                                type="number"
-                                {...methods.register('quantity', { required: true })}
-                                required
-                                className="block w-full rounded-md border-0 px-4 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
-                            />
-                        </div>
-
-                        <div className="col-span-3">
-                            <label
-                                htmlFor="description"
-                                className="block text-sm font-semibold leading-6 text-gray-900"
-                            >
-                                Note:
-                            </label>
-                            <div className="">
-                                <textarea
-                                    {...methods.register('description', { required: true })}
-                                    rows={4}
-                                    id="description"
-                                    className="block w-full px-4 rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
-                                    required
-                                />
+        <div className="flex items-start justify-center min-h-screen py-10">
+            <div className="flex flex-col w-full max-w-4xl gap-10">
+                <button onClick={() => navigate('/service')} className="back-button">
+                    <FaArrowLeft />
+                </button>
+                <div className="p-4 bg-white border border-green-300 border-solid rounded-md shadow-xl">
+                    <h2 className="mb-2 font-bold">Your Cart</h2>
+                    <div>
+                        {cart.data?.cartDetails?.length === 0 && (
+                            <div className="flex items-center justify-center p-3 bg-white rounded-md">
+                                <p className="text-lg font-semibold">Your cart is empty</p>
                             </div>
-                        </div>
+                        )}
+                        {cart.data?.cartDetails?.map((item) => (
+                            <div className="flex items-center justify-between p-3 bg-white rounded-md">
+                                <div className="flex items-center gap-3">
+                                    <img
+                                        className="object-cover w-20 h-20 rounded-md"
+                                        src={item?.birdService?.imageURL}
+                                        alt="service"
+                                    />
+                                    <div className="flex flex-col">
+                                        <h3 className="text-lg font-semibold">{item?.birdService?.birdServiceName}</h3>
+                                        <div>
+                                            <p className="text-sm text-gray-500">
+                                                {
+                                                    item?.birdService?.prices.find((x) => x.id === item?.priceId)
+                                                        ?.priceName
+                                                }
+                                            </p>
+                                            {Boolean(item?.miniService) && (
+                                                <>
+                                                    <p className="text-sm text-gray-500">
+                                                        Mini service: {item?.miniService?.miniServiceName}
+                                                    </p>
+                                                </>
+                                            )}
+                                        </div>
+                                        e
+                                    </div>
+                                </div>
+                                <div className="flex items-center gap-3">
+                                    <p className="text-lg font-semibold">
+                                        <input
+                                            type="number"
+                                            value={item?.quantity}
+                                            className="w-16"
+                                            onChange={(e) => {
+                                                console.log(e.target.value);
+                                                const price = item?.birdService?.prices.find(
+                                                    (x) => x.id === item?.priceId
+                                                );
 
-                        <div className="w-full col-span-3 border-t border-gray-400 border-solid" />
-                        <div className="flex flex-col items-end justify-end col-span-3 gap-10 mt-4">
-                            <p className="flex justify-between w-full max-w-xs text-xl font-bold text-black rounded-lg">
-                                <span>Total</span>
-                                <span>{formatCurrency(totalPrice)}</span>
-                            </p>
-                            <button
-                                type="submit"
-                                className="px-3 py-2 text-sm font-semibold text-white bg-green-600 rounded-md shadow-sm w-fit hover:bg-green-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-green-600"
-                            >
-                                Submit
-                            </button>
-                        </div>
-                    </form>
+                                                const miniServicePrice = item?.miniService?.price || 0;
+                                                const serviceStartDate = new Date(item?.serviceStartDate);
+                                                const serviceEndDate = new Date(item?.serviceEndDate);
+                                                const days = differenceInDays(serviceEndDate, serviceStartDate);
+                                                const totalPrice =
+                                                    ((price?.priceAmount || 0) + miniServicePrice) *
+                                                    Number(e.target.value) *
+                                                    days;
+
+                                                handleUpdateQuantity.mutate({
+                                                    id: item?.id,
+                                                    quantity: Number(e.target.value),
+                                                    serviceStartDate: item?.serviceStartDate,
+                                                    serviceEndDate: item?.serviceEndDate,
+                                                    description: item?.description,
+                                                    birdServiceId: item?.birdService?.id,
+                                                    miniServiceId: item?.miniService?.id,
+
+                                                    price: totalPrice,
+                                                    priceId: item?.priceId,
+                                                });
+                                            }}
+                                        />
+                                    </p>
+                                    x
+                                    <p className="text-lg font-semibold">
+                                        {formatCurrency(
+                                            item?.birdService?.prices.find((x) => x.id === item?.priceId)?.priceAmount +
+                                                (item?.miniService?.price || 0)
+                                        )}
+                                    </p>
+                                    <p className="text-lg font-semibold">{formatCurrency(item?.price)}</p>
+                                    <div>
+                                        <button
+                                            className="text-red-500"
+                                            onClick={() => {
+                                                const confirm = window.confirm('Are you sure to delete this item?');
+                                                if (confirm) deleteCartItem.mutate(item?.id);
+                                            }}
+                                        >
+                                            <FaTrash />
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        ))}
+                    </div>
                 </div>
             </div>
-        </FormProvider>
+        </div>
     );
 };
 

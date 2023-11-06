@@ -68,7 +68,8 @@ const BookingHotel = () => {
         }
     );
 
-    const { itemId } = useParams();
+    const { itemId, ...res } = useParams();
+
     const navigate = useNavigate();
     const [selectPriceId, setSelectPriceId] = useState(null);
 
@@ -91,15 +92,19 @@ const BookingHotel = () => {
             refetchOnReconnect: false,
             refetchOnWindowFocus: false,
             onSuccess: (data) => {
-                methods.setValue('birdServiceId', data.id);
-                setSelectPriceId(data.prices[0].id);
+                setTimeout(() => {
+                    methods.setValue('birdServiceId', data.id);
+                    setSelectPriceId(data.prices[0].id);
+                }, 1000);
             },
         }
     );
     useEffect(() => {
         if (services !== null) {
             methods.setValue('serviceStartDate', format(new Date(), 'yyyy-MM-dd'));
-            methods.setValue('serviceEndDate', format(new Date(), 'yyyy-MM-dd'));
+            const nextDay = new Date();
+            nextDay.setDate(nextDay.getDate() + 1);
+            methods.setValue('serviceEndDate', format(nextDay, 'yyyy-MM-dd'));
 
             methods.setValue('customerId', user.id);
         }
@@ -158,12 +163,12 @@ const BookingHotel = () => {
             if (selectMiniService) {
                 methods.setValue('miniServiceId', selectMiniService.id);
 
-                total = total + selectMiniService.price;
+                total = total + selectMiniService.price * Number(quantity) * days;
             }
         } else {
             methods.setValue('miniServiceId', 0);
         }
-
+        methods.setValue('priceId', selectPriceId);
         methods.setValue('price', total);
     }, [services, watchServiceStartDate, watchServiceEndDate, selectPriceId, selectMiniServiceId, quantity]);
 
