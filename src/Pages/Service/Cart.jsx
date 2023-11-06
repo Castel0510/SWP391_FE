@@ -15,7 +15,6 @@ import { useMutation, useQuery } from 'react-query';
 import * as Yup from 'yup';
 import FormError from '../../Components/FormError/FormError';
 import axios from 'axios';
-import { getUser } from '../../Store/userSlice';
 
 const validationSchema = Yup.object().shape({
     birdServiceId: Yup.string().required('Service ID is required'),
@@ -30,7 +29,7 @@ const validationSchema = Yup.object().shape({
     cartId: Yup.number().required('Cart ID is required'),
 });
 
-const BookingHotel = () => {
+const Cart = () => {
     const methods = useForm(
         {
             defaultValues: {
@@ -51,18 +50,19 @@ const BookingHotel = () => {
     const user = useSelector(getUserInfoInLocalStorage);
 
     const cart = useQuery(
-        ['cart-32132'],
+        ['cart'],
         async () => {
             const user = getUser();
 
             const res = await axios.get(
-                `https://apis20231023230305.azurewebsites.net/api/Cart/GetByUserId?id=${user?.Id}`
+                `https://apis20231023230305.azurewebsites.net/api/Cart/GetByUserId?id=${user?.id}`
             );
 
             return res.data.result;
         },
         {
             onSuccess: (data) => {
+                console.log(data);
                 methods.setValue('cartId', data.id);
             },
         }
@@ -71,7 +71,6 @@ const BookingHotel = () => {
     const { itemId } = useParams();
     const navigate = useNavigate();
     const [selectPriceId, setSelectPriceId] = useState(null);
-
     const [selectMiniServiceId, setSelectMiniServiceId] = useState(null);
     const { data: services } = useQuery(
         ['services', itemId],
@@ -194,10 +193,10 @@ const BookingHotel = () => {
         createBookingMutation.mutate(data, {
             onSuccess: (data) => {
                 toast.success('Booking Successful');
-                console.log(data);
-                setTimeout(() => {
-                    navigate('/order-cart');
-                }, 1000);
+
+                // setTimeout(() => {
+                //     navigateTo('/payment', { state: { dataToSend } });
+                // }, 3000);
             },
         });
     };
@@ -399,4 +398,4 @@ const BookingHotel = () => {
     );
 };
 
-export default BookingHotel;
+export default Cart;

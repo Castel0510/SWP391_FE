@@ -31,8 +31,7 @@ const EditServicePage = () => {
                 Yup.object().shape({
                     serviceType: Yup.string().required('serviceType is required'),
                     priceName: Yup.string().required('priceName Price is required'),
-                    birdSize: Yup.string().required('birdSize Price is required'),
-                    birdType: Yup.string().required('birdType Price is required'),
+                    birdTypeId: Yup.string().required('birdType Price is required'),
                     priceAmount: Yup.string().required('priceAmount Price is required'),
                     priceType: Yup.string().required('priceType Price is required'),
                 })
@@ -101,12 +100,48 @@ const EditServicePage = () => {
                 formMethods.setValue('birdServiceName', data.birdServiceName);
                 formMethods.setValue('description', data.description);
                 formMethods.setValue('imageURL', data.imageURL);
-                formMethods.setValue('VideoURL', data.videoURL);
+                formMethods.setValue('videoURL', data.videoURL);
                 formMethods.setValue('location', data.location);
-                formMethods.setValue('serviceCategoryId', data.serviceCategoryId);
+                setTimeout(() => {
+                    formMethods.setValue('serviceCategoryId', data.serviceCategory.id);
+                }, 2000);
+
+                formMethods.setValue('serviceCategorySelectId', data.serviceCategory.serviceType);
                 formMethods.setValue('providerId', data.providerId);
                 formMethods.setValue('prices', data.prices);
+
                 formMethods.setValue('miniServices', data.miniServices);
+            },
+        }
+    );
+
+    const deletePriceMutation = useMutation(
+        async (id) => {
+            const response = await axios.delete(
+                'https://apis20231023230305.azurewebsites.net/api/Price/DeletePrice?id=' + id
+            );
+
+            return response;
+        },
+        {
+            onSuccess: (data) => {
+                serviceQuery.refetch();
+            },
+            onError: (error) => {},
+        }
+    );
+
+    const deleteMiniServiceMutation = useMutation(
+        async (id) => {
+            const response = await axios.delete(
+                'https://apis20231023230305.azurewebsites.net/api/MiniService/Delete?id=' + id
+            );
+
+            return response;
+        },
+        {
+            onSuccess: (data) => {
+                serviceQuery.refetch();
             },
         }
     );
@@ -132,10 +167,23 @@ const EditServicePage = () => {
             initialData: [],
             refetchOnReconnect: false,
             refetchOnWindowFocus: false,
-            onSuccess: (data) => {
-                if (data.length === 0) return;
-                formMethods.setValue('serviceCategoryId', data[0].id);
-            },
+        }
+    );
+
+    const birdType = useQuery(
+        ['birdType'],
+        async () => {
+            const res = await axios.get(
+                'https://apis20231023230305.azurewebsites.net/api/BirdType/Get?pageIndex=0&pageSize=999'
+            );
+
+            return res.data.result.items.map((item) => ({
+                label: `${item.birdName} ( ${birdSizeOptions.find((size) => size.value === item.birdSize).label} )`,
+                value: item.id,
+            }));
+        },
+        {
+            initialData: [],
         }
     );
 
@@ -173,7 +221,6 @@ const EditServicePage = () => {
 
     const editService = useMutation(
         async (data) => {
-            console.log(data);
             const response = await axios.put(
                 'https://apis20231023230305.azurewebsites.net/api/BirdService/Update?id=' + id,
                 {
@@ -182,12 +229,12 @@ const EditServicePage = () => {
                     serviceCategoryId: Number(data.serviceCategoryId),
                     prices: data.prices.map((item) => ({
                         serviceType: Number(item.serviceType),
-                        birdSize: Number(item.birdSize),
-                        birdType: Number(item.birdType),
+
+                        birdTypeId: Number(item.birdTypeId),
                         priceAmount: Number(item.priceAmount),
                         priceType: 0,
                         priceName: item.priceName,
-                        id: item.id,
+                        id: item.id ? Number(item.id) : 0,
                     })),
                     miniServices:
                         data.miniServices.length > 0
@@ -322,7 +369,7 @@ const EditServicePage = () => {
                                     htmlFor="serviceType"
                                     className="block text-sm font-semibold leading-6 text-gray-800"
                                 >
-                                    Service Category
+                                    Type Name
                                 </label>
                                 <select
                                     {...formMethods.register(`serviceCategorySelectId`)}
@@ -342,7 +389,7 @@ const EditServicePage = () => {
                                     htmlFor="serviceType"
                                     className="block text-sm font-semibold leading-6 text-gray-800"
                                 >
-                                    Type Name
+                                    Service Category
                                 </label>
                                 <select
                                     {...formMethods.register(`serviceCategoryId`)}
@@ -451,27 +498,7 @@ const EditServicePage = () => {
 
                                             <FormError name={`prices.${index}.priceName`} />
                                         </div>
-
-                                        <div className="flex flex-col col-span-1">
-                                            <label
-                                                htmlFor="birdSize"
-                                                className="block text-sm font-semibold leading-6 text-gray-800"
-                                            >
-                                                Select Size
-                                            </label>
-                                            <select
-                                                {...formMethods.register(`prices.${index}.birdSize`)}
-                                                className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
-                                            >
-                                                {birdSizeOptions.map(({ value, label }, index) => (
-                                                    <option key={index} value={Number(value)}>
-                                                        {label}
-                                                    </option>
-                                                ))}
-                                            </select>
-                                            <FormError name={`prices.${index}.birdSize`} />
-                                        </div>
-                                        <div className="flex flex-col col-span-1">
+                                        <div className="flex flex-col col-span-2">
                                             <label
                                                 htmlFor="birdType"
                                                 className="block text-sm font-semibold leading-6 text-gray-800"
@@ -479,16 +506,16 @@ const EditServicePage = () => {
                                                 Select Type
                                             </label>
                                             <select
-                                                {...formMethods.register(`prices.${index}.birdType`)}
+                                                {...formMethods.register(`prices.${index}.birdTypeId`)}
                                                 className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
                                             >
-                                                {birdTypeOptions.map(({ value, label }, index) => (
+                                                {birdType.data.map(({ value, label }, index) => (
                                                     <option key={index} value={Number(value)}>
                                                         {label}
                                                     </option>
                                                 ))}
                                             </select>
-                                            <FormError name={`prices.${index}.birdType`} />
+                                            <FormError name={`prices.${index}.birdTypeId`} />
                                         </div>
 
                                         <div className="flex flex-col col-span-1">
@@ -510,9 +537,7 @@ const EditServicePage = () => {
                                         <div className="flex flex-col col-span-1 py-4">
                                             <div
                                                 onClick={() => {
-                                                    const price = formMethods.getValues('prices');
-                                                    price.splice(index, 1);
-                                                    formMethods.setValue('prices', price);
+                                                    deletePriceMutation.mutate(item.id);
                                                 }}
                                             >
                                                 <TrashIcon className="w-5 h-5 text-red-600 cursor-pointer fill-white" />
@@ -532,7 +557,7 @@ const EditServicePage = () => {
                                         <button
                                             type="button"
                                             onClick={() => {
-                                                formMethods.setValue('miniServices', []);
+                                                deleteMiniServiceMutation.mutate(miniServices[0].id);
                                             }}
                                         >
                                             <TrashIcon className="w-5 h-5 text-red-600 cursor-pointer fill-white" />

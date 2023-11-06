@@ -286,7 +286,7 @@ const CreateServicePage = () => {
                                     htmlFor="serviceType"
                                     className="block text-sm font-semibold leading-6 text-gray-800"
                                 >
-                                    Service Category
+                                    Type Name
                                 </label>
                                 <select
                                     {...formMethods.register(`serviceCategorySelectId`)}
@@ -306,7 +306,7 @@ const CreateServicePage = () => {
                                     htmlFor="serviceType"
                                     className="block text-sm font-semibold leading-6 text-gray-800"
                                 >
-                                    Type Name
+                                    Service Category
                                 </label>
                                 <select
                                     {...formMethods.register(`serviceCategoryId`)}

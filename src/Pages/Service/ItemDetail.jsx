@@ -8,6 +8,7 @@ import { useSelector } from 'react-redux';
 import { getUser, getUserInfoInLocalStorage } from '../../Store/userSlice';
 import CommentsComponent from './CommentComponent';
 import _get from 'lodash/get';
+import { useQuery } from 'react-query';
 import { Rating, RoundedStar } from '@smastrom/react-rating';
 import { birdSizeOptions, birdTypeOptions } from '../../models/bird';
 import { formatCurrency, formatNumberFixed } from '../../Utils/string.helper';
@@ -60,6 +61,23 @@ const ItemDetailPage = () => {
 
         fetchData();
     }, [selectedItem]);
+
+    const birdType = useQuery(
+        ['birdType'],
+        async () => {
+            const res = await axios.get(
+                'https://apis20231023230305.azurewebsites.net/api/BirdType/Get?pageIndex=0&pageSize=999'
+            );
+
+            return res.data.result.items.map((item) => ({
+                label: `${item.birdName} ( ${birdSizeOptions.find((size) => size.value === item.birdSize).label} )`,
+                value: item.id,
+            }));
+        },
+        {
+            initialData: [],
+        }
+    );
 
     const handleBookNow = () => {
         if (!userID) {
@@ -169,10 +187,6 @@ const ItemDetailPage = () => {
                                     <div className="font-semibold ">Price</div>
                                     <div className="flex flex-col gap-4 leading-6">
                                         {selectedItem.prices.map((item) => {
-                                            const birdType = birdTypeOptions.find(
-                                                (option) => option.value === item?.birdType
-                                            );
-
                                             const birdSize = birdSizeOptions.find(
                                                 (option) => option.value === item?.birdSize
                                             );
@@ -180,7 +194,7 @@ const ItemDetailPage = () => {
                                             return (
                                                 <div className="flex flex-col gap-2">
                                                     <div className="flex items-center justify-between max-w-xs font-mediu">
-                                                        <div>{birdType?.label}</div>
+                                                        <div>{item?.priceName}</div>
                                                         <div>{birdSize?.label}</div>
                                                     </div>
                                                     <div className="text-xl font-semibold">

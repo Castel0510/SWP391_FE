@@ -36,6 +36,7 @@ import EditServicePage from '../Pages/Provider/EditServicePage/EditServicePage';
 import ProviderOrderStatusDetail from '../Pages/Provider/ProviderOrderStatusDetail/ProviderOrderStatusDetail';
 import WalletPage from '../Pages/WalletPage/WalletPage';
 import PaymentManagementPage from '../Pages/AdminPage/PaymentManagementPage';
+import Cart from '../Pages/Service/Cart';
 
 export const routes = [
     {
@@ -65,6 +66,11 @@ export const routes = [
     {
         path: '/wallet',
         page: WalletPage,
+        isShowHeaderFooter: true,
+    },
+    {
+        path: '/order-cart',
+        page: Cart,
         isShowHeaderFooter: true,
     },
     {
@@ -165,6 +171,7 @@ export const routes = [
         page: ProviderOrderStatus,
         isShowSidebarProvider: true,
     },
+
     {
         path: '/provider-payment',
         page: WalletPage,

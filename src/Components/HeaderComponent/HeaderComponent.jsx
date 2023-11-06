@@ -8,6 +8,7 @@ import { getUser } from '../../Store/userSlice';
 import { useQuery } from 'react-query';
 import axios from 'axios';
 import { formatCurrency } from '../../Utils/string.helper';
+import { ShoppingCartIcon } from '@heroicons/react/24/solid';
 
 const HeaderComponent = () => {
     const [scrolled, setScrolled] = useState(false);
@@ -20,6 +21,21 @@ const HeaderComponent = () => {
             setScrolled(false);
         }
     };
+
+    const cart = useQuery(
+        ['cart', user?.Id],
+        async () => {
+            const res = await axios.get(
+                `https://apis20231023230305.azurewebsites.net/api/Cart/GetByUserId?id=${user?.Id}`
+            );
+
+            return res.data.result;
+        },
+        {
+            enabled: user?.Id !== null,
+            refetchInterval: 3000,
+        }
+    );
 
     useEffect(() => {
         setUser(getUser());
@@ -114,6 +130,13 @@ const HeaderComponent = () => {
                             </NavLink>
                         ) : (
                             <div className="flex items-center gap-2">
+                                <Link to="/order-cart" className=" relative mr-4">
+                                    <div className=" absolute left-3 bottom-3 w-6 h-6 text-white text-xs bg-red-500 flex items-center justify-center rounded-full">
+                                        {Boolean(cart.data) &&
+                                            cart.data?.cartDetails.reduce((a, b) => a + b.quantity, 0)}
+                                    </div>
+                                    <ShoppingCartIcon className="w-6 h-6 text-green-600" />
+                                </Link>
                                 <div>
                                     {Boolean(userWallet.data) && (
                                         <div className="px-8 py-4 text-white bg-green-600 rounded-lg" to="/wallet">
