@@ -38,6 +38,7 @@ import WalletPage from '../Pages/WalletPage/WalletPage';
 import PaymentManagementPage from '../Pages/AdminPage/PaymentManagementPage';
 import Cart from '../Pages/Service/Cart';
 import BirdTypeManagementPage from '../Pages/AdminPage/BirdTypeManagementPage';
+import ServiceCategoryManagementPage from '../Pages/AdminPage/ServiceCategoryManagementPage';
 
 export const routes = [
     {
@@ -208,6 +209,11 @@ export const routes = [
     {
         path: '/admin-bird-type-management',
         page: BirdTypeManagementPage,
+        isShowAdmin: true,
+    },
+    {
+        path: '/admin-service-category-management',
+        page: ServiceCategoryManagementPage,
         isShowAdmin: true,
     },
     {

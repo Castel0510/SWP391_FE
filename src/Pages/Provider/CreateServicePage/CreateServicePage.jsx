@@ -58,7 +58,6 @@ const CreateServicePage = () => {
         },
         resolver: yupResolver(validationSchema),
     });
-    console.log('validationSchema', formMethods.formState.errors);
 
     const prices = formMethods.watch('prices');
     const miniServices = formMethods.watch('miniServices');

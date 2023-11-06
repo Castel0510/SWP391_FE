@@ -1,28 +1,24 @@
-import React, { useEffect, useState } from 'react';
-import { MagnifyingGlassIcon, ChevronUpDownIcon, EyeIcon } from '@heroicons/react/24/outline';
-import { PencilIcon, UserPlusIcon } from '@heroicons/react/24/solid';
-import Pagination from '@mui/material/Pagination';
+import { ChevronUpDownIcon, EyeIcon, MagnifyingGlassIcon } from '@heroicons/react/24/outline';
 import {
     Card,
-    CardHeader,
-    Input,
-    Typography,
-    Button,
     CardBody,
+    CardHeader,
     Chip,
-    CardFooter,
+    IconButton,
+    Input,
+    Tab,
     Tabs,
     TabsHeader,
-    Tab,
-    Avatar,
-    IconButton,
     Tooltip,
+    Typography,
 } from '@material-tailwind/react';
-import { Link } from 'react-router-dom';
+import Pagination from '@mui/material/Pagination';
 import axios from 'axios';
-import { useQuery } from 'react-query';
-import { formatCurrency } from '../../../Utils/string.helper';
 import moment from 'moment';
+import React, { useEffect, useState } from 'react';
+import { useQuery } from 'react-query';
+import { Link } from 'react-router-dom';
+import { formatCurrency } from '../../../Utils/string.helper';
 
 const ProviderOrderStatus = () => {
     const [isLoading, setIsLoading] = useState(false);
