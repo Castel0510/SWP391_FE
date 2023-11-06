@@ -18,7 +18,7 @@ import ProviderSecurity from '../Pages/Provider/ProviderSecurity';
 import CustomerChangePasswordPage from '../Pages/CustomerChangePasswordPage';
 
 import ItemDetailPageProvider from '../Pages/ItemDetailPage/ItemDetailPage';
-import DashboardPage from '../Pages/AdminPage/DashboardPage';
+import DashboardPageAdmin from '../Pages/AdminPage/DashboardPage';
 import AccountManagementPage from '../Pages/AdminPage/AccountManagementPage';
 import ProviderManagementPage from '../Pages/AdminPage/ProviderManagementPage';
 import ReportPage from '../Pages/AdminPage/ReportPage';
@@ -39,6 +39,7 @@ import PaymentManagementPage from '../Pages/AdminPage/PaymentManagementPage';
 import Cart from '../Pages/Service/Cart';
 import BirdTypeManagementPage from '../Pages/AdminPage/BirdTypeManagementPage';
 import ServiceCategoryManagementPage from '../Pages/AdminPage/ServiceCategoryManagementPage';
+import DashboardPageProvider from '../Pages/AdminPage/DashboardPageProvider';
 
 export const routes = [
     {
@@ -145,7 +146,7 @@ export const routes = [
     },
     {
         path: '/provider-dashboard',
-        page: ProviderPage,
+        page: DashboardPageProvider,
         isShowSidebarProvider: true,
     },
     {
@@ -198,7 +199,7 @@ export const routes = [
     // admin
     {
         path: '/admin-dashboard',
-        page: DashboardPage,
+        page: DashboardPageAdmin,
         isShowAdmin: true,
     },
     {

@@ -9,8 +9,10 @@ import {
     getProviderInMonth,
     getUserInMonth,
 } from '../../../Store/dashboardSlice';
-import { MdOutlineAccountCircle } from 'react-icons/md';
+import { IconContext } from 'react-icons';
+import { MdOutlineAccountCircle, MdOutlineHomeRepairService } from 'react-icons/md';
 import { BiStore } from 'react-icons/bi';
+import { GrServices } from 'react-icons/gr';
 import { LiaMoneyBillAltSolid } from 'react-icons/lia';
 import { AiOutlineUserAdd } from 'react-icons/ai';
 import ChartBasicArea from '../../../Components/Chart/ChartBasicArea';
@@ -39,7 +41,7 @@ const DataCard = ({ title, icon, count, countInMonth, colorClassName }) => (
     </div>
 );
 
-const DashboardPageProvider = () => {
+const DashboardPage = () => {
     const [dataDashboard, setDataDashboard] = useState({
         customer: '',
         customerInMonth: '',
@@ -89,21 +91,6 @@ const DashboardPageProvider = () => {
         fetchData();
     }, []);
 
-    const userQuery = useQuery(
-        ['user'],
-        async () => {
-            const res = await axios.get(
-                'https://apis20231023230305.azurewebsites.net/api/User/GetAllUser?pageIndex=0&pageSize=999999'
-            );
-
-            const data = groupCountValueByDate(res.data.result.items, 'createdAt');
-            return data;
-        },
-        {
-            initialData: {},
-        }
-    );
-
     const customerQuery = useQuery(
         ['customer'],
         async () => {
@@ -144,14 +131,6 @@ const DashboardPageProvider = () => {
         <div className="bg-gray-50/50">
             <div className="grid mt-12 gap-y-10 gap-x-6 md:grid-cols-2 xl:grid-cols-4">
                 <DataCard
-                    title="USER"
-                    icon={<AiOutlineUserAdd className="w-7 h-7" />}
-                    count={dataDashboard.userInMonth}
-                    countInMonth={dataDashboard.userInMonth}
-                    colorClassName={'from-orange-600 to-orange-400'}
-                />
-
-                <DataCard
                     title="Customer"
                     icon={<MdOutlineAccountCircle className="w-7 h-7" />}
                     count={dataDashboard.customer}
@@ -160,8 +139,12 @@ const DashboardPageProvider = () => {
                 />
 
                 <DataCard
-                    title="Provider"
-                    icon={<BiStore className="w-7 h-7" />}
+                    title="Service"
+                    icon={
+                        <IconContext.Provider value={{ color: 'white', className: 'global-class-name' }}>
+                            <MdOutlineHomeRepairService className="!text-white fill-white w-7 h-7" />
+                        </IconContext.Provider>
+                    }
                     count={dataDashboard.provider}
                     countInMonth={dataDashboard.providerInMonth}
                     colorClassName={'from-pink-600 to-pink-400'}
@@ -174,17 +157,7 @@ const DashboardPageProvider = () => {
                     countInMonth={dataDashboard.orderInMonth}
                     colorClassName={'from-green-600 to-green-400'}
                 />
-                <div className="col-span-2">
-                    <ChartBasicArea
-                        colors={['#ffa726']}
-                        title={'User'}
-                        unit={'User'}
-                        values={Object.keys(userQuery.data).map((key) => ({
-                            name: key,
-                            data: userQuery.data[key],
-                        }))}
-                    />
-                </div>
+
                 <div className="col-span-2">
                     <ChartBasicArea
                         colors={['#1e88e5']}
@@ -196,17 +169,7 @@ const DashboardPageProvider = () => {
                         }))}
                     />
                 </div>
-                <div className="col-span-2">
-                    <ChartBasicArea
-                        colors={['#d81b60']}
-                        title={'Provider'}
-                        unit={'Provider'}
-                        values={Object.keys(providerQuery.data).map((key) => ({
-                            name: key,
-                            data: providerQuery.data[key],
-                        }))}
-                    />
-                </div>
+
                 <div className="col-span-2">
                     <ChartBasicArea
                         colors={['#43a047']}
@@ -223,4 +186,4 @@ const DashboardPageProvider = () => {
     );
 };
 
-export default DashboardPageProvider;
+export default DashboardPage;
