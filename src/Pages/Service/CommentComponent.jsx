@@ -11,7 +11,7 @@ import _get from 'lodash/get';
 
 const CommentsComponent = ({ serviceFeedbacks = [], serviceId, userId, onChange }) => {
     const [comments, setComments] = useState([]);
-    const [newComment, setNewComment] = useState([]);
+    const [newComment, setNewComment] = useState('');
     const [rating, setRating] = useState(5);
     // const [user, setUser] = useState('');
     // const userID = user ? user.Id : null;

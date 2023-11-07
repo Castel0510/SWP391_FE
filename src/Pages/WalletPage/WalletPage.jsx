@@ -281,7 +281,7 @@ const WalletPage = () => {
                         </button>
                     </div>
                 </div>
-                <div className="mt-8">
+                <div className="flex flex-col gap-4 mt-8">
                     {transactionHistory.data.map((item, index) => (
                         <div
                             className="flex items-center justify-between px-4 py-2 border border-b border-green-300 border-solid rounded-lg shadow-xl"

@@ -50,19 +50,12 @@ const OrderHistoryPage = () => {
         ['order-ne', page, pageSize, selectedTab, searchValue, proId],
         async () => {
             const response = await axios.get(
-                `https://apis20231023230305.azurewebsites.net/api/BirdServiceBooking/GetAllBooking?pageIndex=0&pageSize=1000`
+                `https://apis20231023230305.azurewebsites.net/api/BirdServiceBooking/GetByCustomerId?id=${proId}`
             );
 
-            const list = await Promise.all(
-                response.data.result.items
-                    .filter((item) => {
-                        return item.customerId === proId;
-                    })
-
-                    .map(async (item) => {
-                        return item;
-                    })
-            );
+            const list = response.data.result.map((item) => {
+                return item;
+            });
 
             const filterList = list.filter((item) => {
                 return item.bookingStatus === selectedTab;
@@ -157,7 +150,7 @@ const OrderHistoryPage = () => {
         },
     ];
 
-    const TABLE_HEAD = ['Id', 'Customer', 'Date order', 'Date complete', 'Total price', 'Status', ''];
+    const TABLE_HEAD = ['Id', 'Customer', 'Total price', 'Status', ''];
 
     const handleTabChange = (value) => {
         setSelectedTab(value);
@@ -292,24 +285,6 @@ const OrderHistoryPage = () => {
                                               </Typography>
                                           </td> */}
 
-                                                <td className={classes}>
-                                                    <Typography
-                                                        variant="small"
-                                                        color="blue-gray"
-                                                        className="font-normal"
-                                                    >
-                                                        {serviceEndDate}
-                                                    </Typography>
-                                                </td>
-                                                <td className={classes}>
-                                                    <Typography
-                                                        variant="small"
-                                                        color="blue-gray"
-                                                        className="font-normal"
-                                                    >
-                                                        {serviceStartDate}
-                                                    </Typography>
-                                                </td>
                                                 <td className={classes}>
                                                     <Typography
                                                         variant="small"

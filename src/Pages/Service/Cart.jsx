@@ -17,27 +17,33 @@ import * as Yup from 'yup';
 import FormError from '../../Components/FormError/FormError';
 import axios from 'axios';
 import moment from 'moment';
+import { ShoppingBagIcon } from '@heroicons/react/24/solid';
 
 const Cart = () => {
     const user = useSelector(getUserInfoInLocalStorage);
 
-    const cart = useQuery(
-        ['cart-checkout'],
-        async () => {
-            const user = getUser();
+    const cart = useQuery(['cart-checkout'], async () => {
+        const user = getUser();
 
-            const res = await axios.get(
-                `https://apis20231023230305.azurewebsites.net/api/Cart/GetByUserId?id=${user?.Id}`
-            );
+        const res = await axios.get(`https://apis20231023230305.azurewebsites.net/api/Cart/GetByUserId?id=${user?.Id}`);
+        console.log(res.data.result);
 
-            return res.data.result;
-        },
-        {
-            onSuccess: (data) => {
-                console.log(data);
-            },
-        }
-    );
+        const providers = {};
+        //group by provider
+        cart.data?.cartDetails?.forEach((item) => {
+            if (!providers[item?.birdService?.providerId]) {
+                providers[item?.birdService?.providerId] = [];
+            }
+        });
+
+        user.data?.cartDetails?.forEach((item) => {
+            providers[item?.birdService?.providerId].push(item);
+        });
+
+        console.log(providers);
+
+        return res.data.result;
+    });
 
     const deleteCartItem = useMutation(
         async (id) => {
@@ -72,6 +78,72 @@ const Cart = () => {
     const { itemId } = useParams();
     const navigate = useNavigate();
 
+    const createCartMutation = useMutation(
+        async (data) => {
+            const ca = await axios.get(
+                `https://apis20231023230305.azurewebsites.net/api/Customer/GetById?id=${data.customerId}`
+            );
+            const res = await axios.post(
+                'https://apis20231023230305.azurewebsites.net/api/BirdServiceBooking/CreateBooking',
+                {
+                    ...data,
+                    customerId: ca.data.result.id,
+                }
+            );
+            return data;
+        },
+        {
+            onSuccess: (data) => {
+                console.log(data);
+            },
+        }
+    );
+
+    const handleSubmit = async () => {
+        const confirm = window.confirm('Are you sure to checkout?');
+        if (confirm) {
+            const providers = {};
+            //group by provider
+            cart.data?.cartDetails?.forEach((item) => {
+                if (!providers[item?.birdService?.providerId]) {
+                    providers[item?.birdService?.providerId] = [];
+                }
+            });
+
+            cart.data?.cartDetails?.forEach((item) => {
+                providers[item?.birdService?.providerId].push(item);
+            });
+
+            await Promise.all(
+                Object.keys(providers).map((key) => {
+                    const provider = providers[key];
+                    const user = getUser();
+
+                    const bookingDetails = provider.map((item) => {
+                        return {
+                            serviceStartDate: item?.serviceStartDate,
+                            serviceEndDate: item?.serviceEndDate,
+                            description: item?.description,
+                            birdServiceId: item?.birdService?.id,
+                            miniServiceId: item?.miniService?.id || 0,
+                            price: item?.price,
+                            quantity: item?.quantity,
+                            priceId: item?.priceId,
+                        };
+                    });
+
+                    return createCartMutation.mutateAsync({
+                        bookingDetails,
+                        customerId: Number(user?.Id),
+                        providerId: Number(key),
+                    });
+                })
+            );
+
+            toast.success('Checkout successfully');
+        }
+    };
+
     return (
         <div className="flex items-start justify-center min-h-screen py-10">
             <div className="flex flex-col w-full max-w-4xl gap-10">
@@ -101,9 +173,8 @@ const Cart = () => {
                                                 {
                                                     item?.birdService?.prices.find((x) => x.id === item?.priceId)
                                                         ?.priceName
-                                                }{' '}
-                                                {(item?.birdService?.serviceCategory?.serviceType === 1 ||
-                                                    item?.birdService?.serviceCategory?.serviceType === 2) && (
+                                                }
+                                                {item?.birdService?.serviceCategory?.serviceType === 0 && (
                                                     <div className="text-xs font-normal">
                                                         {moment(item?.serviceStartDate).format('DD/MM/YYYY')} -{' '}
                                                         {moment(item?.serviceEndDate).format('DD/MM/YYYY')}
@@ -126,9 +197,8 @@ const Cart = () => {
                                         <input
                                             type="number"
                                             value={item?.quantity}
-                                            className="w-16"
+                                            className="w-24"
                                             onChange={(e) => {
-                                                console.log(e.target.value);
                                                 const price = item?.birdService?.prices.find(
                                                     (x) => x.id === item?.priceId
                                                 );
@@ -180,6 +250,15 @@ const Cart = () => {
                             </div>
                         ))}
                     </div>
+                </div>
+                <div className="flex justify-end">
+                    <button
+                        onClick={() => handleSubmit()}
+                        className="flex items-center gap-2 px-8 py-3 text-white duration-300 bg-green-500 rounded-md hover:bg-green-600"
+                    >
+                        <ShoppingBagIcon className="w-4 h-4" />
+                        <span>Checkout</span>
+                    </button>
                 </div>
             </div>
         </div>
