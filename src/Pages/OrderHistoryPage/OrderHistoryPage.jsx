@@ -143,9 +143,13 @@ const OrderHistoryPage = () => {
     const handleMakePaymentMutation = useMutation(
         (id) => axios.put(`https://apis20231023230305.azurewebsites.net/api/BirdServiceBooking/PayBooking?id=${id}`),
         {
-            onSuccess: () => {
+            onSuccess: (data) => {
                 orderQuery.refetch();
-                toast.success('Make payment successfully!');
+                if (data.data?.status === 'BadRequest') {
+                    toast.error(data.data?.message);
+                } else {
+                    toast.success('Update status success');
+                }
             },
             onError: (data) => {
                 console.log(data);

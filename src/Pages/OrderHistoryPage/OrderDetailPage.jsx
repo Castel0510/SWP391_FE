@@ -1,22 +1,16 @@
-import clsx from 'clsx';
-import { differenceInDays } from 'date-fns';
-import React, { useState } from 'react';
-import { FaArrowLeft, FaTrash } from 'react-icons/fa';
-import { useMutation, useQuery } from 'react-query';
-import { useSelector } from 'react-redux';
-import { useNavigate, useParams } from 'react-router-dom';
-import { toast } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
-import { getUser, getUserInfoInLocalStorage } from '../../Store/userSlice';
-import { formatCurrency } from '../../Utils/string.helper';
-import { ShoppingBagIcon } from '@heroicons/react/24/solid';
 import axios from 'axios';
+import clsx from 'clsx';
 import moment from 'moment';
-import card from '@material-tailwind/react/theme/components/card';
+import React from 'react';
+import { FaArrowLeft } from 'react-icons/fa';
+import { useMutation, useQuery } from 'react-query';
+import { useParams } from 'react-router-dom';
+import 'react-toastify/dist/ReactToastify.css';
+import { formatCurrency } from '../../Utils/string.helper';
+import { toast } from 'react-toastify';
 
 const OrderDetailPage = () => {
     const { orderId } = useParams();
-    const navigate = useNavigate();
 
     const cart = useQuery(
         ['order', orderId],
@@ -43,7 +37,7 @@ const OrderDetailPage = () => {
             value: 1,
         },
         {
-            label: 'CheckedIn',
+            label: 'Checked In',
 
             value: 2,
         },
@@ -76,6 +70,7 @@ const OrderDetailPage = () => {
             status: 2,
         },
     ];
+
     return (
         <div className={`order-detail`}>
             <div className="max-w-5xl min-h-screen mx-auto my-12 mb-4">
@@ -162,13 +157,12 @@ const OrderDetailPage = () => {
                                                             {moment(item?.serviceEndDate).format('DD/MM/YYYY')}
                                                         </div>
                                                     )}
-                                                    {item?.birdService?.serviceCategory?.serviceType === 0 && (
-                                                        <div className="text-xs font-normal">
-                                                            Expected Date:{' '}
-                                                            {moment(item?.actualEndDate).format('DD/MM/YYYY')} -{' '}
-                                                            {moment(item?.actualEndDate).format('DD/MM/YYYY')}
-                                                        </div>
-                                                    )}
+
+                                                    <div className="text-xs font-normal">
+                                                        Actual Date:{' '}
+                                                        {moment(item?.actualStartDate).format('DD/MM/YYYY')} -{' '}
+                                                        {moment(item?.actualEndDate).format('DD/MM/YYYY')}
+                                                    </div>
                                                 </p>
                                                 <div className="text-sm ">
                                                     <div className="font-medium text-green-500 ">
