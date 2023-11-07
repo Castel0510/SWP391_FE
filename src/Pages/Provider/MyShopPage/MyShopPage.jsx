@@ -60,35 +60,37 @@ const MyShopPage = () => {
                     {serviceQuery.data.map((item, index) => (
                         <div
                             key={index}
-                            className="flex-1 max-w-sm bg-white border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700"
+                            className="flex-1 max-w-sm bg-white border border-green-300 border-solid shadow rounded-xl dark:bg-gray-800 dark:border-gray-700"
                         >
-                            <div className="w-full">
+                            <div className="w-full border-b border-green-300 border-solid">
                                 <img
                                     className="rounded-t-lg w-full h-[240px] object-cover"
                                     src={item.imageURL}
                                     alt=""
                                 />
                             </div>
-                            <div className="p-5 ">
+                            <div className="flex flex-col justify-between p-5 ">
                                 <div>
-                                    <h5 className="mb-2 text-2xl font-bold tracking-tight text-gray-900 dark:text-white line-clamp-1">
-                                        {item.birdServiceName}
-                                    </h5>
+                                    <div>
+                                        <h5 className="mb-2 text-2xl font-bold tracking-tight text-gray-900 dark:text-white line-clamp-1">
+                                            {item.birdServiceName}
+                                        </h5>
+                                    </div>
+                                    <p className="h-10 mb-3 font-normal leading-5 text-gray-700 dark:text-gray-400 line-clamp-2">
+                                        {item.description}
+                                    </p>
                                 </div>
-                                <p className="mb-3 font-normal leading-5 text-gray-700 dark:text-gray-400 line-clamp-2">
-                                    {item.description}
-                                </p>
 
-                                <div className="flex justify-end">
+                                <div className="flex justify-end gap-2 h-fit">
                                     <Link
                                         to={{ pathname: `/editService/${item.id}` }}
                                         state={{ item }}
-                                        className="inline-flex items-center px-10 py-2 mb-10 mr-4 text-sm font-medium text-center text-white bg-blue-700 rounded-lg hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
+                                        className="inline-flex items-center px-10 py-2 text-sm font-medium text-center text-white bg-blue-700 rounded-lg hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
                                     >
                                         Edit
                                     </Link>
                                     <div
-                                        className="inline-flex items-center px-8 py-2 mb-10 text-sm font-medium text-center text-white bg-red-700 rounded-lg cursor-pointer hover:bg-red-800 focus:ring-4 focus:outline-none focus:ring-red-300 dark:bg-red-600 dark:hover:bg-red-700 dark:focus:ring-red-800"
+                                        className="inline-flex items-center px-8 py-2 text-sm font-medium text-center text-white bg-red-700 rounded-lg cursor-pointer hover:bg-red-800 focus:ring-4 focus:outline-none focus:ring-red-300 dark:bg-red-600 dark:hover:bg-red-700 dark:focus:ring-red-800"
                                         onClick={() => handleDelete(item.id)}
                                     >
                                         Delete

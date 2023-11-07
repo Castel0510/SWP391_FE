@@ -40,6 +40,8 @@ import Cart from '../Pages/Service/Cart';
 import BirdTypeManagementPage from '../Pages/AdminPage/BirdTypeManagementPage';
 import ServiceCategoryManagementPage from '../Pages/AdminPage/ServiceCategoryManagementPage';
 import DashboardPageProvider from '../Pages/AdminPage/DashboardPageProvider';
+import ProviderList from '../Pages/ProviderList/ProviderList';
+import ProviderDetail from '../Pages/ProviderDetail/ProviderDetail';
 
 export const routes = [
     {
@@ -84,6 +86,16 @@ export const routes = [
     {
         path: '/service/*',
         page: ServicePage,
+        isShowHeaderFooter: true,
+    },
+    {
+        path: '/list-provider',
+        page: ProviderList,
+        isShowHeaderFooter: true,
+    },
+    {
+        path: '/provider-service-detail/:id',
+        page: ProviderDetail,
         isShowHeaderFooter: true,
     },
     {

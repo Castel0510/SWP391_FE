@@ -36,32 +36,12 @@ const ServicePage = () => {
     const [totalPage, setTotalPage] = useState(1);
     const [serviceLocations, setServiceLocations] = useState([]);
 
-    // const [selectedCategory, setSelectedCategory] = useState(null);
-    // const [selectedFilters, setSelectedFilters] = useState({
-    //     addresses: [],
-    //     priceSort: '',
-    //     rating: 0,
-    // });
-
-    // const handleCategoryChange = (category) => {
-    //     setSelectedCategory(category);
-    // };
-
-    // const handleFilterChange = (filters) => {
-    //     setSelectedFilters(filters);
-    // };
-
-    // const onItemClick = (item) => {
-    //     console.log(`Item clicked: ${item.birdServiceName}`);
-    // };
     const serviceQuery = useQuery(
         ['service', page, pageSize, categoryIds, searchQuery, `order-${selectedOrder}`, serviceLocations],
         async () => {
             const res = await axios.get('https://apis20231023230305.azurewebsites.net/api/BirdService/GetAllService');
 
-            setTotalPage(Math.ceil(res.data.result.length / pageSize));
-
-            return res.data?.result
+            const format = res.data?.result
 
                 .filter((item) => {
                     if (categoryIds?.length === 0) {
@@ -96,8 +76,9 @@ const ServicePage = () => {
                     }
 
                     return serviceLocations?.includes(item?.location);
-                })
-                .slice((page - 1) * pageSize, page * pageSize);
+                });
+            setTotalPage(Math.ceil(format.length / pageSize));
+            return format.slice((page - 1) * pageSize, page * pageSize);
         },
         {
             initialData: [],

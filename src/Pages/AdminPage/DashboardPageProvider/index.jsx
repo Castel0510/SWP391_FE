@@ -10,7 +10,7 @@ import {
     getUserInMonth,
 } from '../../../Store/dashboardSlice';
 import { IconContext } from 'react-icons';
-import { MdOutlineAccountCircle, MdOutlineHomeRepairService } from 'react-icons/md';
+import { MdOutlineAccountCircle, MdOutlineHomeRepairService, MdOutlineAttachMoney } from 'react-icons/md';
 import { BiStore } from 'react-icons/bi';
 import { GrServices } from 'react-icons/gr';
 import { LiaMoneyBillAltSolid } from 'react-icons/lia';
@@ -18,7 +18,8 @@ import { AiOutlineUserAdd } from 'react-icons/ai';
 import ChartBasicArea from '../../../Components/Chart/ChartBasicArea';
 import { useQuery } from 'react-query';
 import axios from 'axios';
-import { groupCountValueByDate } from '../../../Utils/report.helper';
+import { groupCountValueByDate, groupSumValueByDate } from '../../../Utils/report.helper';
+import { formatCurrency } from '../../../Utils/string.helper';
 
 const DataCard = ({ title, icon, count, countInMonth, colorClassName }) => (
     <div className="relative flex flex-col text-gray-700 bg-white shadow-md bg-clip-border rounded-xl">
@@ -53,76 +54,120 @@ const DashboardPageProvider = () => {
     });
 
     const dispatch = useDispatch();
+    const [user, setUser] = React.useState(null);
 
     useEffect(() => {
-        const fetchData = async () => {
-            try {
-                const [
-                    customerData,
-                    customerInMonthData,
-                    orderData,
-                    orderInMonthData,
-                    providerData,
-                    providerInMonthData,
-                    userInMonthData,
-                ] = await Promise.all([
-                    dispatch(getCustomer()),
-                    dispatch(getCustomerInMonth()),
-                    dispatch(getOrder()),
-                    dispatch(getOrderInMonth()),
-                    dispatch(getProvider()),
-                    dispatch(getProviderInMonth()),
-                    dispatch(getUserInMonth()),
-                ]);
+        const user = JSON.parse(localStorage.getItem('userInfo'));
 
-                setDataDashboard((prevData) => ({
-                    ...prevData,
-                    customer: customerData.payload?.data?.result,
-                    customerInMonth: customerInMonthData.payload?.data?.result,
-                    order: orderData.payload?.data?.result,
-                    orderInMonth: orderInMonthData.payload?.data?.result,
-                    provider: providerData.payload?.data?.result,
-                    providerInMonth: providerInMonthData.payload?.data?.result,
-                    userInMonth: userInMonthData.payload?.data?.result,
-                }));
-            } catch (error) {}
-        };
-
-        fetchData();
+        setUser(user);
     }, []);
 
-    const customerQuery = useQuery(
-        ['customer'],
+    const getServiceCreated = useQuery(
+        ['serviceCreated', user],
         async () => {
             const res = await axios.get(
-                'https://apis20231023230305.azurewebsites.net/api/Customer/Get?pageIndex=0&pageSize=999999'
+                `https://apis20231023230305.azurewebsites.net/api/Provider/GetServiceCreated?id=${user.id}`
             );
 
-            return groupCountValueByDate(res.data.result.items, 'createdAt');
+            return res.data.result;
         },
-        { initialData: {} }
+        { initialData: 0, enabled: Boolean(user) }
     );
 
-    const providerQuery = useQuery(
-        ['provider'],
+    const getServiceCreatedInMonth = useQuery(
+        ['serviceCreatedInMonth', user],
         async () => {
             const res = await axios.get(
-                'https://apis20231023230305.azurewebsites.net/api/Provider/Get?pageIndex=0&pageSize=999999'
+                `https://apis20231023230305.azurewebsites.net/api/Provider/GetServiceCreatedInMonth?id=${user.id}`
             );
 
-            return groupCountValueByDate(res.data.result.items, 'createdAt');
+            return res.data.result;
         },
-        { initialData: {} }
+        { initialData: 0, enabled: Boolean(user) }
+    );
+
+    const getPrice = useQuery(
+        ['price', user],
+        async () => {
+            const res = await axios.get(
+                `https://apis20231023230305.azurewebsites.net/api/Provider/GetPrice?id=${user.id}`
+            );
+
+            return res.data.result;
+        },
+        { initialData: 0, enabled: Boolean(user) }
+    );
+
+    const getPriceInMonth = useQuery(
+        ['priceInMonth', user],
+        async () => {
+            const res = await axios.get(
+                `https://apis20231023230305.azurewebsites.net/api/Provider/GetPriceInMonth?id=${user.id}`
+            );
+
+            return res.data.result;
+        },
+        { initialData: 0, enabled: Boolean(user) }
+    );
+
+    const getBooking = useQuery(
+        ['booking', user],
+        async () => {
+            const res = await axios.get(
+                `https://apis20231023230305.azurewebsites.net/api/Provider/GetBooking?id=${user.id}`
+            );
+
+            return res.data.result;
+        },
+        { initialData: 0, enabled: Boolean(user) }
+    );
+
+    const getBookingInMonth = useQuery(
+        ['bookingInMonth', user],
+        async () => {
+            const res = await axios.get(
+                `https://apis20231023230305.azurewebsites.net/api/Provider/GetBookingInMonth?id=${user.id}`
+            );
+
+            return res.data.result;
+        },
+        { initialData: 0, enabled: Boolean(user) }
+    );
+
+    const customerQuery = useQuery(
+        ['customer', user],
+        async () => {
+            const res = await axios.get(
+                `https://apis20231023230305.azurewebsites.net/api/BirdServiceBooking/GetByProviderId?id=${user.id}`
+            );
+
+            return groupCountValueByDate(res.data.result, 'createAt');
+        },
+        { initialData: {}, enabled: Boolean(user) }
     );
 
     const orderQuery = useQuery(
-        ['order'],
+        ['order', user],
         async () => {
             const res = await axios.get(
-                'https://apis20231023230305.azurewebsites.net/api/BirdServiceBooking/GetAllBooking?pageIndex=0&pageSize=999999'
+                `https://apis20231023230305.azurewebsites.net/api/BirdServiceBooking/GetByProviderId?id=${user.id}`
             );
+            const chartData = res.data.result.map((item) => {
+                const total = item.bookingDetails.reduce((acc, cur) => {
+                    return acc + cur.price;
+                }, 0);
 
-            return groupCountValueByDate(res.data.result.items, 'createAt');
+                return {
+                    ...item,
+                    total,
+                };
+            });
+
+            console.log(chartData);
+
+            console.log(groupSumValueByDate(chartData, 'createAt', 'total'));
+
+            return groupSumValueByDate(chartData, 'createAt', 'total');
         },
         { initialData: {} }
     );
@@ -131,38 +176,38 @@ const DashboardPageProvider = () => {
         <div className="bg-gray-50/50">
             <div className="grid mt-12 gap-y-10 gap-x-6 md:grid-cols-2 xl:grid-cols-4">
                 <DataCard
-                    title="Customer"
-                    icon={<MdOutlineAccountCircle className="w-7 h-7" />}
-                    count={dataDashboard.customer}
-                    countInMonth={dataDashboard.customerInMonth}
+                    title="Revenue"
+                    icon={<MdOutlineAttachMoney className="w-7 h-7" />}
+                    count={formatCurrency(getPrice.data)}
+                    countInMonth={formatCurrency(getPriceInMonth.data)}
                     colorClassName={'from-blue-600 to-blue-400'}
                 />
 
                 <DataCard
-                    title="Service"
+                    title="Service Created"
                     icon={
                         <IconContext.Provider value={{ color: 'white', className: 'global-class-name' }}>
                             <MdOutlineHomeRepairService className="!text-white fill-white w-7 h-7" />
                         </IconContext.Provider>
                     }
-                    count={dataDashboard.provider}
-                    countInMonth={dataDashboard.providerInMonth}
+                    count={getServiceCreated.data}
+                    countInMonth={getServiceCreatedInMonth.data}
                     colorClassName={'from-pink-600 to-pink-400'}
                 />
 
                 <DataCard
-                    title="Order"
+                    title="Booking"
                     icon={<LiaMoneyBillAltSolid className="w-7 h-7" />}
-                    count={dataDashboard.order}
-                    countInMonth={dataDashboard.orderInMonth}
+                    count={getBooking.data}
+                    countInMonth={getBookingInMonth.data}
                     colorClassName={'from-green-600 to-green-400'}
                 />
 
                 <div className="col-span-2">
                     <ChartBasicArea
                         colors={['#1e88e5']}
-                        title={'Customer'}
-                        unit={'Customer'}
+                        title={'Service Created'}
+                        unit={'Services'}
                         values={Object.keys(customerQuery.data).map((key) => ({
                             name: key,
                             data: customerQuery.data[key],
@@ -174,10 +219,10 @@ const DashboardPageProvider = () => {
                     <ChartBasicArea
                         colors={['#43a047']}
                         title={'Order'}
-                        unit={'Order'}
+                        unit={'VNĐ'}
                         values={Object.keys(orderQuery.data).map((key) => ({
                             name: key,
-                            data: orderQuery.data[key],
+                            data: formatCurrency(orderQuery.data[key]),
                         }))}
                     />
                 </div>

@@ -13,3 +13,16 @@ export const groupCountValueByDate = (data, groupKey) => {
     });
     return result;
 };
+
+export const groupSumValueByDate = (data, groupKey, sumKey) => {
+    const result = {};
+    data.forEach((item) => {
+        const date = moment(_get(item, groupKey)).format('YYYY-MM-DD');
+        if (result[date]) {
+            result[date] += _get(item, sumKey);
+        } else {
+            result[date] = _get(item, sumKey);
+        }
+    });
+    return result;
+};

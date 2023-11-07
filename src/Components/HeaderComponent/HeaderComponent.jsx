@@ -55,6 +55,10 @@ const HeaderComponent = () => {
             path: '/service',
             display: 'Service',
         },
+        {
+            path: '/list-provider',
+            display: 'Provider',
+        },
     ];
 
     const customerMenu = [
@@ -65,6 +69,10 @@ const HeaderComponent = () => {
         {
             path: '/service',
             display: 'Service',
+        },
+        {
+            path: '/list-provider',
+            display: 'Provider',
         },
     ];
 
@@ -130,8 +138,8 @@ const HeaderComponent = () => {
                             </NavLink>
                         ) : (
                             <div className="flex items-center gap-2">
-                                <Link to="/order-cart" className=" relative mr-4">
-                                    <div className=" absolute left-3 bottom-3 w-6 h-6 text-white text-xs bg-red-500 flex items-center justify-center rounded-full">
+                                <Link to="/order-cart" className="relative mr-4 ">
+                                    <div className="absolute flex items-center justify-center w-6 h-6 text-xs text-white bg-red-500 rounded-full left-3 bottom-3">
                                         {Boolean(cart.data) &&
                                             cart.data?.cartDetails.reduce((a, b) => a + b.quantity, 0)}
                                     </div>
