@@ -18,13 +18,14 @@ import {
     IconButton,
     Tooltip,
 } from '@material-tailwind/react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import { useQuery, useMutation } from 'react-query';
 import { useSelector } from 'react-redux';
 import { getUser } from '../../Store/userSlice';
 import { formatCurrency } from '../../Utils/string.helper';
-import { Money } from 'akar-icons';
+import { Money, EyeOpen, TrashBin } from 'akar-icons';
+import { toast } from 'react-toastify';
 const OrderHistoryPage = () => {
     const [isLoading, setIsLoading] = useState(false);
     const [error, setError] = useState(null);
@@ -37,6 +38,7 @@ const OrderHistoryPage = () => {
     const dataUser = useSelector((state) => state.user);
     const [searchValue, setSearchValue] = useState('');
     const [user, setUser] = useState(null);
+    const router = useNavigate();
 
     useEffect(() => {
         setUser(getUser());
@@ -74,10 +76,6 @@ const OrderHistoryPage = () => {
             initialData: [],
         }
     );
-
-    console.log('orderQuery: ', orderQuery.data);
-
-    // console.log("check: ", table);
 
     useEffect(() => {
         if (isLoading) {
@@ -117,36 +115,17 @@ const OrderHistoryPage = () => {
             value: 'waiting',
             status: 0,
         },
-        {
-            label: 'Confirm',
-            value: 'confirm',
-            status: 1,
-        },
-        {
-            label: 'Refuse',
-            value: 'refuse',
-            status: 2,
-        },
+
         {
             label: 'Already paid',
             value: 'already paid',
-            status: 3,
-        },
-        {
-            label: 'On going',
-            value: 'onGoing',
-            status: 4,
+            status: 1,
         },
 
         {
-            label: 'Done',
-            value: 'done',
-            status: 5,
-        },
-        {
             label: 'Cancel',
             value: 'cancel',
-            status: 6,
+            status: 2,
         },
     ];
 
@@ -165,12 +144,26 @@ const OrderHistoryPage = () => {
         (id) => axios.put(`https://apis20231023230305.azurewebsites.net/api/BirdServiceBooking/PayBooking?id=${id}`),
         {
             onSuccess: () => {
-                service.refetch();
+                orderQuery.refetch();
                 toast.success('Make payment successfully!');
             },
             onError: (data) => {
                 console.log(data);
                 toast.error('Make payment failed!');
+            },
+        }
+    );
+
+    const handleCancelMutation = useMutation(
+        (id) => axios.put(`https://apis20231023230305.azurewebsites.net/api/BirdServiceBooking/CancelBooking?id=${id}`),
+        {
+            onSuccess: () => {
+                orderQuery.refetch();
+                toast.success('Cancel successfully!');
+            },
+            onError: (data) => {
+                console.log(data);
+                toast.error('Cancel failed!');
             },
         }
     );
@@ -229,7 +222,10 @@ const OrderHistoryPage = () => {
                             </thead>
                             <tbody>
                                 {orderQuery.data.map(
-                                    ({ id, bookingStatus, serviceEndDate, serviceStartDate, totalPrice }, index) => {
+                                    (
+                                        { id, bookingStatus, serviceEndDate, serviceStartDate, bookingDetails },
+                                        index
+                                    ) => {
                                         const isLast = index === table.length - 1;
                                         const classes = isLast ? 'p-4' : 'p-4 border-b border-blue-gray-50';
 
@@ -241,6 +237,9 @@ const OrderHistoryPage = () => {
                                         else if (bookingStatus === 4) chipColor = 'blue';
                                         else if (bookingStatus === 5) chipColor = 'green';
                                         else if (bookingStatus === 6) chipColor = 'red';
+                                        const totalPrice = bookingDetails.reduce((total, item) => {
+                                            return total + item.price;
+                                        }, 0);
 
                                         return (
                                             <tr key={id}>
@@ -307,16 +306,50 @@ const OrderHistoryPage = () => {
                                                     </div>
                                                 </td>
 
-                                                <td className={classes}>
-                                                    {bookingStatus === 1 && (
+                                                <td className="flex items-center gap-2 w-[100px]">
+                                                    <Tooltip content="View detail">
+                                                        <IconButton variant="text">
+                                                            <button
+                                                                onClick={() => {
+                                                                    router(`/order-detail/${id}`);
+                                                                }}
+                                                            >
+                                                                <EyeOpen className="w-4 h-4" />
+                                                            </button>
+                                                        </IconButton>
+                                                    </Tooltip>
+
+                                                    {bookingStatus === 0 && (
                                                         <Tooltip content="Make payment">
                                                             <IconButton variant="text">
                                                                 <button
                                                                     onClick={() => {
+                                                                        const isConfirm = window.confirm(
+                                                                            'Are you sure to make payment?'
+                                                                        );
+                                                                        if (!isConfirm) return;
                                                                         handleMakePaymentMutation.mutate(id);
                                                                     }}
                                                                 >
                                                                     <Money className="w-4 h-4" />
+                                                                </button>
+                                                            </IconButton>
+                                                        </Tooltip>
+                                                    )}
+                                                    {bookingStatus === 0 && (
+                                                        <Tooltip content="Make payment">
+                                                            <IconButton variant="text" className="text-red-500">
+                                                                <button
+                                                                    onClick={() => {
+                                                                        const isConfirm = window.confirm(
+                                                                            'Are you sure to cancel this order?'
+                                                                        );
+                                                                        if (!isConfirm) return;
+
+                                                                        handleCancelMutation.mutate(id);
+                                                                    }}
+                                                                >
+                                                                    <TrashBin className="w-4 h-4" />
                                                                 </button>
                                                             </IconButton>
                                                         </Tooltip>

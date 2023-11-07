@@ -39,12 +39,12 @@ const ProviderOrderStatus = () => {
         ['order', page, pageSize, selectedTab, searchValue],
         async () => {
             const response = await axios.get(
-                'https://apis20231023230305.azurewebsites.net/api/BirdServiceBooking/GetAllBooking?pageIndex=0&pageSize=1000'
+                `https://apis20231023230305.azurewebsites.net/api/BirdServiceBooking/GetByProviderId?id=${proId}`
                 // `https://apis20231023230305.azurewebsites.net/api/BirdServiceBooking/GetByProviderId?id=${proId}&pageIndex=0&pageSize=1000`
             );
 
             const list = await Promise.all(
-                response.data.result.items
+                response.data.result
 
                     .filter((item) => item.providerId === proId)
                     .sort((a, b) => {
@@ -119,40 +119,21 @@ const ProviderOrderStatus = () => {
             value: 'waiting',
             status: 0,
         },
-        {
-            label: 'Confirm',
-            value: 'confirm',
-            status: 1,
-        },
-        {
-            label: 'Refuse',
-            value: 'refuse',
-            status: 2,
-        },
+
         {
             label: 'Already paid',
             value: 'already paid',
-            status: 3,
-        },
-        {
-            label: 'On going',
-            value: 'onGoing',
-            status: 4,
+            status: 1,
         },
 
-        {
-            label: 'Done',
-            value: 'done',
-            status: 5,
-        },
         {
             label: 'Cancel',
             value: 'cancel',
-            status: 6,
+            status: 2,
         },
     ];
 
-    const TABLE_HEAD = ['Id', 'Customer', 'Date order', 'Date complete', 'Total price', 'Status', ''];
+    const TABLE_HEAD = ['Id', 'Customer', 'Total price', 'Status', ''];
 
     const handleTabChange = (value) => {
         setSelectedTab(value);
@@ -225,7 +206,7 @@ const ProviderOrderStatus = () => {
                         <tbody>
                             {orderQuery.data.map(
                                 (
-                                    { id, bookingStatus, customer, serviceEndDate, serviceStartDate, totalPrice },
+                                    { id, bookingStatus, customer, serviceEndDate, serviceStartDate, bookingDetails },
                                     index
                                 ) => {
                                     const isLast = index === table.length - 1;
@@ -239,7 +220,9 @@ const ProviderOrderStatus = () => {
                                     else if (bookingStatus === 4) chipColor = 'blue';
                                     else if (bookingStatus === 5) chipColor = 'green';
                                     else if (bookingStatus === 6) chipColor = 'red';
-
+                                    const totalPrice = bookingDetails.reduce((total, item) => {
+                                        return total + item.price;
+                                    }, 0);
                                     return (
                                         <tr key={id}>
                                             <td className={classes}>
@@ -283,16 +266,6 @@ const ProviderOrderStatus = () => {
                                                 </Typography>
                                             </td> */}
 
-                                            <td className={classes}>
-                                                <Typography variant="small" color="blue-gray" className="font-normal">
-                                                    {moment(serviceStartDate).format('DD/MM/YYYY')}
-                                                </Typography>
-                                            </td>
-                                            <td className={classes}>
-                                                <Typography variant="small" color="blue-gray" className="font-normal">
-                                                    {moment(serviceEndDate).format('DD/MM/YYYY')}
-                                                </Typography>
-                                            </td>
                                             <td className={classes}>
                                                 <Typography variant="small" color="blue-gray" className="font-normal">
                                                     {formatCurrency(totalPrice)}

@@ -1,49 +1,54 @@
-import React, { useEffect, useMemo, useState } from 'react';
-import { useParams } from 'react-router-dom';
-import { ToastContainer, toast } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
-import { useNavigate } from 'react-router-dom';
-import { format, differenceInDays, addDays } from 'date-fns';
+import clsx from 'clsx';
+import { differenceInDays } from 'date-fns';
+import React, { useState } from 'react';
 import { FaArrowLeft, FaTrash } from 'react-icons/fa';
-import { useDispatch, useSelector } from 'react-redux';
-import { getUserInfoInLocalStorage, getUser } from '../../Store/userSlice';
-import { fetchServices } from '../../Store/serviceSlice';
-import { yupResolver } from '@hookform/resolvers/yup';
-import { formatCurrency } from '../../Utils/string.helper';
-import { FormProvider, useForm } from 'react-hook-form';
 import { useMutation, useQuery } from 'react-query';
-import * as Yup from 'yup';
+import { useSelector } from 'react-redux';
+import { useNavigate, useParams } from 'react-router-dom';
+import { toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+import { getUser, getUserInfoInLocalStorage } from '../../Store/userSlice';
+import { formatCurrency } from '../../Utils/string.helper';
 
-import FormError from '../../Components/FormError/FormError';
+import { ShoppingBagIcon } from '@heroicons/react/24/solid';
 import axios from 'axios';
 import moment from 'moment';
-import { ShoppingBagIcon } from '@heroicons/react/24/solid';
 
 const Cart = () => {
     const user = useSelector(getUserInfoInLocalStorage);
+    const [providers, setProviders] = useState([]);
+    const [selectCardIds, setSelectCardIds] = useState([]);
 
-    const cart = useQuery(['cart-checkout'], async () => {
-        const user = getUser();
+    const cart = useQuery(
+        ['cart-checkout'],
+        async () => {
+            const user = getUser();
 
-        const res = await axios.get(`https://apis20231023230305.azurewebsites.net/api/Cart/GetByUserId?id=${user?.Id}`);
-        console.log(res.data.result);
+            const res = await axios.get(
+                `https://apis20231023230305.azurewebsites.net/api/Cart/GetByUserId?id=${user?.Id}`
+            );
 
-        const providers = {};
-        //group by provider
-        cart.data?.cartDetails?.forEach((item) => {
-            if (!providers[item?.birdService?.providerId]) {
-                providers[item?.birdService?.providerId] = [];
-            }
-        });
+            const providers = {};
+            setProviders([]);
+            //group by provider
+            res.data.result.cartDetails?.forEach((item) => {
+                if (!providers[item?.birdService?.providerId]) {
+                    providers[item?.birdService?.providerId] = [];
 
-        user.data?.cartDetails?.forEach((item) => {
-            providers[item?.birdService?.providerId].push(item);
-        });
+                    setProviders((prev) => [...prev, item?.birdService?.provider]);
+                }
+            });
 
-        console.log(providers);
+            res.data.result.cartDetails?.forEach((item) => {
+                providers[item?.birdService?.providerId].push(item);
+            });
 
-        return res.data.result;
-    });
+            return providers;
+        },
+        {
+            initialData: {},
+        }
+    );
 
     const deleteCartItem = useMutation(
         async (id) => {
@@ -54,7 +59,6 @@ const Cart = () => {
         {
             onSuccess: (data) => {
                 cart.refetch();
-                toast.success('Delete cart item successfully');
             },
         }
     );
@@ -93,26 +97,40 @@ const Cart = () => {
             return data;
         },
         {
-            onSuccess: (data) => {
-                console.log(data);
+            onSuccess: async (data) => {
+                await Promise.all(
+                    selectCardIds.map(async (id) => {
+                        const res = await deleteCartItem.mutateAsync(id);
+                    })
+                );
+
+                cart.refetch();
             },
         }
     );
 
     const handleSubmit = async () => {
+        if (selectCardIds.length === 0) return toast.error('Please select at least one item');
         const confirm = window.confirm('Are you sure to checkout?');
         if (confirm) {
+            const myCart = Object.keys(cart.data).reduce((acc, key) => {
+                return [...acc, ...cart.data[key]];
+            }, []);
+
             const providers = {};
+
             //group by provider
-            cart.data?.cartDetails?.forEach((item) => {
+            myCart.forEach((item) => {
                 if (!providers[item?.birdService?.providerId]) {
                     providers[item?.birdService?.providerId] = [];
                 }
             });
 
-            cart.data?.cartDetails?.forEach((item) => {
-                providers[item?.birdService?.providerId].push(item);
-            });
+            myCart
+                ?.filter((item) => selectCardIds.includes(item?.id))
+                .forEach((item) => {
+                    providers[item?.birdService?.providerId].push(item);
+                });
 
             await Promise.all(
                 Object.keys(providers).map((key) => {
@@ -141,8 +159,11 @@ const Cart = () => {
             );
 
             toast.success('Checkout successfully');
+            navigate('/order');
         }
     };
+
+    if (cart.isLoading) return <div>Loading...</div>;
 
     return (
         <div className="flex items-start justify-center min-h-screen py-10">
@@ -158,6 +179,143 @@ const Cart = () => {
                                 <p className="text-lg font-semibold">Your cart is empty</p>
                             </div>
                         )}
+                        {providers?.map((provider) => (
+                            <div className="mb-4">
+                                <div className="flex items-center gap-2">
+                                    <span>Provider:</span>
+                                    <p className="text-lg font-semibold">{provider?.providerName}</p>
+                                </div>
+                                <div>
+                                    {cart.data[provider?.id]?.map((item) => (
+                                        <div
+                                            key={item?.id}
+                                            className="flex items-center justify-between p-3 bg-white rounded-md"
+                                        >
+                                            <div className="flex items-center gap-3">
+                                                <div
+                                                    onClick={() => {
+                                                        const newSelectCardIds = [...selectCardIds];
+                                                        if (newSelectCardIds.includes(item?.id)) {
+                                                            newSelectCardIds.splice(
+                                                                newSelectCardIds.indexOf(item?.id),
+                                                                1
+                                                            );
+                                                        } else {
+                                                            newSelectCardIds.push(item?.id);
+                                                        }
+                                                        setSelectCardIds(newSelectCardIds);
+                                                    }}
+                                                >
+                                                    <div
+                                                        className={clsx(
+                                                            'w-5 h-5 border border-black border-solid duration-300 ',
+                                                            {
+                                                                'bg-green-500': selectCardIds.includes(item?.id),
+                                                            }
+                                                        )}
+                                                    ></div>
+                                                </div>
+                                                <img
+                                                    className="object-cover w-20 h-20 rounded-md"
+                                                    src={item?.birdService?.imageURL}
+                                                    alt="service"
+                                                />
+                                                <div className="flex flex-col">
+                                                    <h3 className="text-lg font-semibold">
+                                                        {item?.birdService?.birdServiceName}
+                                                    </h3>
+                                                    <div>
+                                                        <p className="text-sm text-gray-500">
+                                                            {
+                                                                item?.birdService?.prices.find(
+                                                                    (x) => x.id === item?.priceId
+                                                                )?.priceName
+                                                            }
+                                                            {item?.birdService?.serviceCategory?.serviceType === 0 && (
+                                                                <div className="text-xs font-normal">
+                                                                    {moment(item?.serviceStartDate).format(
+                                                                        'DD/MM/YYYY'
+                                                                    )}{' '}
+                                                                    -{' '}
+                                                                    {moment(item?.serviceEndDate).format('DD/MM/YYYY')}
+                                                                </div>
+                                                            )}
+                                                        </p>
+                                                        {Boolean(item?.miniService) && (
+                                                            <>
+                                                                <p className="text-sm text-gray-500">
+                                                                    Mini service: {item?.miniService?.miniServiceName}
+                                                                </p>
+                                                            </>
+                                                        )}
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div className="flex items-center gap-3">
+                                                <p className="text-lg font-semibold">
+                                                    <input
+                                                        type="number"
+                                                        value={item?.quantity}
+                                                        className="w-24"
+                                                        onChange={(e) => {
+                                                            const price = item?.birdService?.prices.find(
+                                                                (x) => x.id === item?.priceId
+                                                            );
+
+                                                            const miniServicePrice = item?.miniService?.price || 0;
+                                                            const serviceStartDate = new Date(item?.serviceStartDate);
+                                                            const serviceEndDate = new Date(item?.serviceEndDate);
+                                                            const days = differenceInDays(
+                                                                serviceEndDate,
+                                                                serviceStartDate
+                                                            );
+                                                            const totalPrice =
+                                                                ((price?.priceAmount || 0) + miniServicePrice) *
+                                                                Number(e.target.value) *
+                                                                days;
+
+                                                            handleUpdateQuantity.mutate({
+                                                                id: item?.id,
+                                                                quantity: Number(e.target.value),
+                                                                serviceStartDate: item?.serviceStartDate,
+                                                                serviceEndDate: item?.serviceEndDate,
+                                                                description: item?.description,
+                                                                birdServiceId: item?.birdService?.id,
+                                                                miniServiceId: item?.miniService?.id,
+
+                                                                price: totalPrice,
+                                                                priceId: item?.priceId,
+                                                            });
+                                                        }}
+                                                    />
+                                                </p>
+                                                x
+                                                <p className="text-lg font-semibold">
+                                                    {formatCurrency(
+                                                        item?.birdService?.prices.find((x) => x.id === item?.priceId)
+                                                            ?.priceAmount + (item?.miniService?.price || 0)
+                                                    )}
+                                                </p>
+                                                <p className="text-lg font-semibold">{formatCurrency(item?.price)}</p>
+                                                <div>
+                                                    <button
+                                                        className="text-red-500"
+                                                        onClick={() => {
+                                                            const confirm = window.confirm(
+                                                                'Are you sure to delete this item?'
+                                                            );
+                                                            if (confirm) deleteCartItem.mutate(item?.id);
+                                                        }}
+                                                    >
+                                                        <FaTrash />
+                                                    </button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    ))}
+                                </div>
+                            </div>
+                        ))}
                         {cart.data?.cartDetails?.map((item) => (
                             <div className="flex items-center justify-between p-3 bg-white rounded-md">
                                 <div className="flex items-center gap-3">
@@ -189,7 +347,7 @@ const Cart = () => {
                                                 </>
                                             )}
                                         </div>
-                                        e
+                                        z
                                     </div>
                                 </div>
                                 <div className="flex items-center gap-3">
