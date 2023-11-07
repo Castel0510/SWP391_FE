@@ -178,7 +178,7 @@ const BookingHotel = () => {
         });
     });
 
-    const onSubmit = (data) => {
+    const onSubmit = (data, isRedirect = true) => {
         if (services?.serviceCategory?.serviceType === 0) {
             if (
                 data.serviceStartDate !== null &&
@@ -201,7 +201,7 @@ const BookingHotel = () => {
                 toast.success('Booking Successful');
                 console.log(data);
                 setTimeout(() => {
-                    navigate('/order-cart');
+                    isRedirect ? navigate('/order-cart') : navigate('/service');
                 }, 1000);
             },
         });
@@ -263,7 +263,8 @@ const BookingHotel = () => {
                             className="block w-full rounded-md border-0 px-4 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
                         />
                     </div> */}
-                        {services?.serviceCategory?.serviceType === 0 && (
+                        {(services?.serviceCategory?.serviceType === 1 ||
+                            services?.serviceCategory?.serviceType === 2) && (
                             <>
                                 <div className="col-span-1">
                                     <label
@@ -390,12 +391,21 @@ const BookingHotel = () => {
                                 <span>Total</span>
                                 <span>{formatCurrency(totalPrice)}</span>
                             </p>
-                            <button
-                                type="submit"
-                                className="px-3 py-2 text-sm font-semibold text-white bg-green-600 rounded-md shadow-sm w-fit hover:bg-green-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-green-600"
-                            >
-                                Submit
-                            </button>
+                            <div className="flex gap-2">
+                                <button
+                                    type="button"
+                                    onClick={() => onSubmit(methods.getValues(), false)}
+                                    className="px-3 py-2 text-sm font-semibold text-white bg-green-600 rounded-md shadow-sm w-fit hover:bg-green-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-green-600"
+                                >
+                                    Add to Cart
+                                </button>
+                                <button
+                                    type="submit"
+                                    className="px-3 py-2 text-sm font-semibold text-white bg-green-600 rounded-md shadow-sm w-fit hover:bg-green-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-green-600"
+                                >
+                                    Check Out
+                                </button>
+                            </div>
                         </div>
                     </form>
                 </div>

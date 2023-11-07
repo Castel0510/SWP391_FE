@@ -16,6 +16,7 @@ import * as Yup from 'yup';
 
 import FormError from '../../Components/FormError/FormError';
 import axios from 'axios';
+import moment from 'moment';
 
 const Cart = () => {
     const user = useSelector(getUserInfoInLocalStorage);
@@ -100,7 +101,14 @@ const Cart = () => {
                                                 {
                                                     item?.birdService?.prices.find((x) => x.id === item?.priceId)
                                                         ?.priceName
-                                                }
+                                                }{' '}
+                                                {(item?.birdService?.serviceCategory?.serviceType === 1 ||
+                                                    item?.birdService?.serviceCategory?.serviceType === 2) && (
+                                                    <div className="text-xs font-normal">
+                                                        {moment(item?.serviceStartDate).format('DD/MM/YYYY')} -{' '}
+                                                        {moment(item?.serviceEndDate).format('DD/MM/YYYY')}
+                                                    </div>
+                                                )}
                                             </p>
                                             {Boolean(item?.miniService) && (
                                                 <>
