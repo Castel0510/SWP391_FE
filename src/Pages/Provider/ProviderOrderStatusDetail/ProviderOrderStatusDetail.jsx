@@ -1,290 +1,278 @@
-
-import React, { useState } from 'react'
-import { useLocation } from 'react-router';
-import {
-    Card,
-    CardBody,
-    Typography,
-
-} from "@material-tailwind/react";
+import axios from 'axios';
+import clsx from 'clsx';
+import moment from 'moment';
+import React from 'react';
+import { FaArrowLeft } from 'react-icons/fa';
+import { useQuery, useMutation } from 'react-query';
+import { useParams } from 'react-router-dom';
+import 'react-toastify/dist/ReactToastify.css';
+import { formatCurrency } from '../../../Utils/string.helper';
 import { toast } from 'react-toastify';
-import Modal from 'react-modal';
 
 const ProviderOrderStatusDetail = () => {
+    const { id } = useParams();
 
-    const location = useLocation();
-    const filteredRows = location.state?.filteredRows;
+    const cart = useQuery(
+        ['order', id],
+        async () => {
+            const res = await axios.get(
+                `https://apis20231023230305.azurewebsites.net/api/BirdServiceBooking/GetBookingInfoById?id=${id}`
+            );
 
+            return res.data.result;
+        },
+        {
+            initialData: {},
+        }
+    );
 
-    const TABLE_HEAD = ["Service title", "Category", "Service", "Price", "Amount", "Total price"];
+    const workingStatus = [
+        {
+            label: 'Waiting',
+            value: 0,
+        },
 
-    const TABLE_ROWS = filteredRows && filteredRows?.map(item => item)
-    console.log("check", TABLE_ROWS.Amount);
+        {
+            label: 'Confirmed',
+            value: 1,
+        },
+        {
+            label: 'Checked In',
 
-    const [isModalOpen, setIsModalOpen] = useState(false);
-    const handleButtonClick = () => {
-        setIsModalOpen(true);
-    };
-    const handleAccept = () => {
-        setIsModalOpen(false);
-        // Show toastify success
-        toast.success('Action completed!', {
-            position: toast.POSITION.TOP_RIGHT,
-        });
-    };
-    const handleCancel = () => {
-        setIsModalOpen(false);
-    };
+            value: 2,
+        },
+        {
+            label: 'CheckedOut',
+            value: 3,
+        },
+        {
+            label: 'Cancel',
+            value: 4,
+        },
+    ];
 
+    const orderStatus = [
+        {
+            label: 'Waiting',
+            value: 'waiting',
+            status: 0,
+        },
 
-    if (!filteredRows) {
-        return <div>Item not founds</div>;
-    }
+        {
+            label: 'Already paid',
+            value: 'already paid',
+            status: 1,
+        },
+
+        {
+            label: 'Cancel',
+            value: 'cancel',
+            status: 2,
+        },
+    ];
+    const handleChangeStatus = useMutation(
+        async ({ status, orderDetailId }) => {
+            return await axios.put(
+                `https://apis20231023230305.azurewebsites.net/api/BookingDetail/UpdateBookingDetailWorkingStatus?id=${orderDetailId}&status=${status}`
+            );
+        },
+        {
+            onSuccess: (data) => {
+                if (data.data?.status === 'BadRequest') {
+                    toast.error(data.data?.message);
+                } else {
+                    toast.success('Update status success');
+                }
+                cart.refetch();
+            },
+
+            onError: () => {
+                toast.error('Update status failed');
+            },
+        }
+    );
 
     return (
-        <>
-            {filteredRows.map(item => (
-                <>
-                    <div className=' text-2xl'>
-                        Order detail #{item.id} - <span className='font-bold'>{item.status}</span>
-                    </div>
-                    <div className='flex justify-center gap-7 mb-10'>
-                        <Card className="mt-6 w-[450px] p-6 shadow-xl">
-                            <CardBody>
-                                <Typography variant="h6" color="blue-gray" className="mb-10">
-                                    Customer information
-                                </Typography>
-                                <Typography variant="h6" color="blue-gray" className="mb-2">
-                                    Customer Name: <span className='font-normal'>{item.customer}</span>
-                                </Typography>
-                                <Typography variant="h6" color="blue-gray" className="mb-2">
-                                    Email: <span className='font-normal'>{item.email}</span>
-                                </Typography>
-                                <Typography variant="h6" color="blue-gray" className="mb-2">
-                                    Phone: <span className='font-normal'>{item.phone}</span>
-                                </Typography>
-                            </CardBody>
-                        </Card>
-                        <Card className="mt-6 w-[450px] p-6 shadow-xl">
-                            <CardBody>
-                                <Typography variant="h6" color="blue-gray" className="mb-10">
-                                    Time
-                                </Typography>
-                                <Typography variant="h6" color="blue-gray" className="mb-2">
-                                    Date order: <span className='font-normal'>{item.dateOrder}</span>
-                                </Typography>
-                                <Typography variant="h6" color="blue-gray" className="mb-2">
-                                    Date complete: <span className='font-normal'>{item.dateComplete}</span>
-                                </Typography>
-                            </CardBody>
-                        </Card>
-                        <Card className="mt-6 w-[450px] p-6 shadow-xl">
-                            <CardBody>
-                                <Typography variant="h6" color="blue-gray" className="mb-10">
-                                    Payment
-                                </Typography>
-                                <Typography variant="h6" color="blue-gray" className="mb-2">
-                                    Status: <span className='font-normal'>Not payment</span>
-                                </Typography>
-
-                            </CardBody>
-                        </Card>
-                    </div>
-                    <div className=''>
-                        <Card className='mx-4'>
-                            <div className="flex flex-col">
-                                <div className="overflow-x-auto sm:-mx-6 lg:-mx-8">
-                                    <div className="inline-block min-w-full py-2 sm:px-6 lg:px-8">
-                                        <div className="overflow-hidden">
-                                            <table className="min-w-full text-left text-sm font-light">
-                                                <thead className="border-b font-bold border-blue-gray-900">
-                                                    <tr>
-                                                        <th scope="col" className="px-6 py-4">Service title</th>
-                                                        <th scope="col" className="px-6 py-4">Category</th>
-                                                        <th scope="col" className="px-6 py-4">Service</th>
-                                                        <th scope="col" className="px-6 py-4">Price</th>
-                                                        <th scope="col" className="px-6 py-4">Amount</th>
-                                                        <th scope="col" className="px-6 py-4">Total price</th>
-                                                    </tr>
-                                                </thead>
-                                                <tbody>
-                                                    <tr className="border-b">
-                                                        <td className="whitespace-nowrap px-6 py-4">{item.serviceTitle}</td>
-                                                        <td className="whitespace-nowrap px-6 py-4">{item.category}</td>
-                                                        <td className="whitespace-nowrap px-6 py-4">{item.service}</td>
-                                                        <td className="whitespace-nowrap px-8 py-4">{item.price}$</td>
-                                                        <td className="whitespace-nowrap px-10 py-4">{item.amount}</td>
-                                                        <td className="whitespace-nowrap px-10 py-4">{item.totalPrice}$</td>
-                                                    </tr>
-                                                </tbody>
-                                            </table>
-                                        </div>
-                                    </div>
-                                </div>
+        <div className={`order-detail`}>
+            <div className="max-w-5xl min-h-screen mx-auto my-12 mb-4">
+                <button onClick={() => window.history.back()} className="back-button">
+                    <FaArrowLeft />
+                </button>
+                <div className="flex flex-col gap-4">
+                    <div className="grid grid-cols-2 gap-4">
+                        <div className="p-4 mt-4 border border-green-300 border-solid rounded-lg">
+                            <div className="mb-2 text-2xl font-semibold">Customer</div>
+                            <div className="w-16 h-16">
+                                <img
+                                    src={cart.data?.customer?.user?.avatarURL}
+                                    className="object-cover w-full h-full"
+                                />
                             </div>
-                        </Card>
-                    </div>
-                    <div className='flex justify-end mx-4 my-8 '>
-                        {item.status === 'Waiting' && (
-                            <>
-                                <button
-                                    className="middle none center mr-4 rounded-lg bg-green-500 py-3 px-6 font-sans text-xs font-bold uppercase text-white shadow-md shadow-green-500/20 transition-all hover:shadow-lg hover:shadow-green-500/40 focus:opacity-[0.85] focus:shadow-none active:opacity-[0.85] active:shadow-none disabled:pointer-events-none disabled:opacity-50 disabled:shadow-none"
-                                    data-ripple-light="true"
-                                    onClick={handleButtonClick}
-                                >
-                                    Accept
-                                </button>
-                                <button
-                                    class="middle none center mr-4 rounded-lg bg-red-500 py-3 px-6 font-sans text-xs font-bold uppercase text-white shadow-md shadow-red-500/20 transition-all hover:shadow-lg hover:shadow-red-500/40 focus:opacity-[0.85] focus:shadow-none active:opacity-[0.85] active:shadow-none disabled:pointer-events-none disabled:opacity-50 disabled:shadow-none"
-                                    data-ripple-light="true"
-                                >
-                                    Cancel
-                                </button>
-                            </>
-                        )}
-                        {item.status === 'Confirm' && (
-                            <>
-                                <button
-                                    className="middle none center mr-4 rounded-lg bg-green-500 py-3 px-6 font-sans text-xs font-bold uppercase text-white shadow-md shadow-green-500/20 transition-all hover:shadow-lg hover:shadow-green-500/40 focus:opacity-[0.85] focus:shadow-none active:opacity-[0.85] active:shadow-none disabled:pointer-events-none disabled:opacity-50 disabled:shadow-none"
-                                    data-ripple-light="true"
-                                    onClick={handleButtonClick}
-                                >
-                                    Next
-                                </button>
-                                <button
-                                    class="middle none center mr-4 rounded-lg bg-red-500 py-3 px-6 font-sans text-xs font-bold uppercase text-white shadow-md shadow-red-500/20 transition-all hover:shadow-lg hover:shadow-red-500/40 focus:opacity-[0.85] focus:shadow-none active:opacity-[0.85] active:shadow-none disabled:pointer-events-none disabled:opacity-50 disabled:shadow-none"
-                                    data-ripple-light="true"
-                                >
-                                    Cancel
-                                </button>
-                            </>
-                        )}
-                        {(item.status === 'On going' || item.status === 'Waiting for payment') && (
-                            <>
-                                <button
-                                    className="middle none center mr-4 rounded-lg bg-green-500 py-3 px-6 font-sans text-xs font-bold uppercase text-white shadow-md shadow-green-500/20 transition-all hover:shadow-lg hover:shadow-green-500/40 focus:opacity-[0.85] focus:shadow-none active:opacity-[0.85] active:shadow-none disabled:pointer-events-none disabled:opacity-50 disabled:shadow-none"
-                                    data-ripple-light="true"
-                                    onClick={handleButtonClick}
-                                >
-                                    Done
-                                </button>
-                                <button
-                                    class="middle none center mr-4 rounded-lg bg-red-500 py-3 px-6 font-sans text-xs font-bold uppercase text-white shadow-md shadow-red-500/20 transition-all hover:shadow-lg hover:shadow-red-500/40 focus:opacity-[0.85] focus:shadow-none active:opacity-[0.85] active:shadow-none disabled:pointer-events-none disabled:opacity-50 disabled:shadow-none"
-                                    data-ripple-light="true"
-                                >
-                                    Cancel
-                                </button>
-                            </>
-                        )}
-
-                    </div>
-                    <Modal
-                        isOpen={isModalOpen}
-                        onClose={() => setIsModalOpen(false)}
-                        className="modal-content"
-                    >
-                        <div className="text-center">
-                            <div
-                                className="justify-center items-center flex overflow-x-hidden overflow-y-auto fixed inset-0 z-50 outline-none focus:outline-none"
-                            >
-                                <div className="relative w-auto my-6 mx-auto max-w-3xl">
-                                    {/*content*/}
-                                    <div className="border-0 rounded-lg shadow-lg relative flex flex-col w-full bg-white outline-none focus:outline-none">
-                                        {/*header*/}
-                                        <div className="flex items-start justify-between p-5 border-b border-solid border-blueGray-200 rounded-t">
-                                            <h3 className="text-3xl font-semibold">
-                                                {item.status === 'Waiting' && (
-                                                    <h3 className="text-3xl font-semibold">
-                                                        Accept order
-                                                    </h3>
-                                                )}
-                                                {item.status === 'Confirm' && (
-                                                    <h3 className="text-3xl font-semibold">
-                                                        Doing order
-                                                    </h3>
-                                                )}
-                                                {item.status === 'On going' && (
-                                                    <h3 className="text-3xl font-semibold">
-                                                        Done order
-                                                    </h3>
-                                                )}
-                                                {item.status === 'Waiting for payment' && (
-                                                    <h3 className="text-3xl font-semibold">
-                                                        Done order
-                                                    </h3>
-                                                )}
-                                                {item.status === 'Refuse' && (
-                                                    <h3 className="text-3xl font-semibold">
-                                                        Refuse order
-                                                    </h3>
-                                                )}
-                                            </h3>
-                                            <button
-                                                className="p-1 ml-auto bg-transparent border-0 text-black opacity-5 float-right text-3xl leading-none font-semibold outline-none focus:outline-none"
-                                                onClick={() => setIsModalOpen(false)}
-                                            >
-                                                <span className="bg-transparent text-black opacity-5 h-6 w-6 text-2xl block outline-none focus:outline-none">
-                                                    ×
-                                                </span>
-                                            </button>
-                                        </div>
-                                        {/*body*/}
-                                        <div className="relative p-6 flex-auto">
-                                            <p className="my-4 text-blueGray-500 text-lg leading-relaxed">
-                                                {item.status === 'Waiting' && (
-                                                    <h3>
-                                                        Accept order #{item.id}?
-                                                    </h3>
-                                                )}
-                                                {item.status === 'Confirm' && (
-                                                    <h3>
-                                                        Doing order #{item.id}?
-                                                    </h3>
-                                                )}
-                                                {item.status === 'On going' && (
-                                                    <h3>
-                                                        Done order #{item.id}?
-                                                    </h3>
-                                                )}
-                                                {item.status === 'Waiting for payment' && (
-                                                    <h3>
-                                                        Done order #{item.id}?
-                                                    </h3>
-                                                )}
-                                                {item.status === 'Refuse' && (
-                                                    <h3>
-                                                        Refuse order #{item.id}?
-                                                    </h3>
-                                                )}
-                                            </p>
-                                        </div>
-                                        {/*footer*/}
-                                        <div className="flex items-center justify-end p-6 border-t border-solid border-blueGray-200 rounded-b">
-                                            <button
-                                                className="middle none center w-[120px] mr-6 rounded-lg bg-green-500 py-3 px-6 font-sans text-xs font-bold uppercase text-white shadow-md shadow-green-500/20 transition-all hover:shadow-lg hover:shadow-green-500/40 focus:opacity-[0.85] focus:shadow-none active:opacity-[0.85] active:shadow-none disabled:pointer-events-none disabled:opacity-50 disabled:shadow-none"
-                                                onClick={handleAccept} // Add click event handler
-                                            >
-                                                Accept
-                                            </button>
-                                            <button
-                                                className="middle none center w-[120px] rounded-lg bg-red-500 py-3 px-6 font-sans text-xs font-bold uppercase text-white shadow-md shadow-red-500/20 transition-all hover:shadow-lg hover:shadow-red-500/40 focus:opacity-[0.85] focus:shadow-none active:opacity-[0.85] active:shadow-none disabled:pointer-events-none disabled:opacity-50 disabled:shadow-none"
-                                                onClick={handleCancel} // Add click event handler
-                                            >
-                                                Cancel
-                                            </button>
-                                        </div>
-                                    </div>
-                                </div>
+                            <div className="grid grid-cols-2 gap-2">
+                                <div className="font-semibold">Name</div>
+                                <div>{cart.data?.customer?.user?.fullname}</div>
+                                <div className="font-semibold">Email</div>
+                                <div>{cart.data?.customer?.user?.email}</div>
+                                <div className="font-semibold">Phone</div>
+                                <div>{cart.data?.customer?.user?.phoneNumber}</div>
                             </div>
-                            <div className="opacity-25 fixed inset-0 z-40 bg-black"></div>
-
                         </div>
-                    </Modal>
+                        <div className="p-4 mt-4 border border-green-300 border-solid rounded-lg">
+                            <div className="mb-2 text-2xl font-semibold">Provider</div>
+                            <div className="w-16 h-16">
+                                <img
+                                    src={cart.data?.provider?.user?.avatarURL}
+                                    className="object-cover w-full h-full"
+                                />
+                            </div>
+                            <div className="grid grid-cols-2 gap-2">
+                                <div className="font-semibold">Name</div>
+                                <div>{cart.data?.provider?.user?.fullname}</div>
+                                <div className="font-semibold">Email</div>
+                                <div>{cart.data?.provider?.user?.email}</div>
+                                <div className="font-semibold">Phone</div>
+                                <div>{cart.data?.provider?.user?.phoneNumber}</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div>
+                        <div className="mb-4 text-2xl font-semibold">
+                            Order Detail - {moment(cart.createAt).format('DD/MM/YYYY')} -{' '}
+                            <span
+                                className={clsx('', {
+                                    'text-yellow-500': cart.data?.bookingStatus === 0,
+                                    'text-green-500': cart.data?.bookingStatus === 1,
+                                    'text-red-500': cart.data?.bookingStatus === 2,
+                                })}
+                            >
+                                {orderStatus.find((x) => x.status === cart?.data.bookingStatus)?.label}
+                            </span>
+                        </div>
 
-                </>
-            ))}
-        </>
-    )
-}
+                        <div className="flex flex-col gap-4">
+                            {cart.data?.bookingDetails?.map((item) => (
+                                <div
+                                    key={item?.id}
+                                    className="flex items-center justify-between p-3 bg-white border border-green-300 border-solid rounded-md"
+                                >
+                                    <div className="flex items-center gap-3">
+                                        <img
+                                            className="object-cover w-20 h-20 rounded-md"
+                                            src={item?.birdService?.imageURL}
+                                            alt="service"
+                                        />
+                                        <div className="flex flex-col">
+                                            <h3 className="text-lg font-semibold">
+                                                {item?.birdService?.birdServiceName}
+                                            </h3>
+                                            <div>
+                                                <p className="text-sm text-gray-500">
+                                                    {
+                                                        item?.birdService?.prices.find((x) => x.id === item?.priceId)
+                                                            ?.priceName
+                                                    }
+                                                    {item?.birdService?.serviceCategory?.serviceType === 0 && (
+                                                        <div className="text-xs font-normal">
+                                                            Expected Date:{' '}
+                                                            {moment(item?.serviceStartDate).format('DD/MM/YYYY')} -{' '}
+                                                            {moment(item?.serviceEndDate).format('DD/MM/YYYY')}
+                                                        </div>
+                                                    )}
 
-export default ProviderOrderStatusDetail
+                                                    <div className="text-xs font-normal">
+                                                        Actual Date:{' '}
+                                                        <div className="flex items-center gap-2">
+                                                            <div>Actual Start Date:</div>
+                                                            <div>
+                                                                {moment(item?.actualStartDate).format(
+                                                                    'DD/MM/YYYY hh:mm'
+                                                                )}
+                                                            </div>
+                                                        </div>
+                                                        <div className="flex items-center gap-2">
+                                                            <div>Actual End Date:</div>
+                                                            <div>
+                                                                {moment(item?.actualEndDate).format('DD/MM/YYYY hh:mm')}
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </p>
+                                                <div className="my-2 text-sm">
+                                                    <div className="font-medium text-green-500 ">
+                                                        Working Status:{' '}
+                                                        {
+                                                            workingStatus.find((x) => x.value === item?.workingStatus)
+                                                                ?.label
+                                                        }
+                                                    </div>
+                                                    <div className="flex items-center gap-4">
+                                                        {item?.workingStatus <= 1 && (
+                                                            <>
+                                                                <button
+                                                                    type="button"
+                                                                    onClick={() => {
+                                                                        handleChangeStatus.mutate({
+                                                                            orderDetailId: item?.id,
+                                                                            status: 2,
+                                                                        });
+                                                                    }}
+                                                                    className="px-4 py-2 text-xs text-white bg-green-600 rounded-sm cursor-pointer"
+                                                                >
+                                                                    Check In
+                                                                </button>
+                                                            </>
+                                                        )}
+                                                        {item?.workingStatus >= 2 && item?.workingStatus < 3 && (
+                                                            <button
+                                                                type="button"
+                                                                onClick={() => {
+                                                                    handleChangeStatus.mutate({
+                                                                        orderDetailId: item?.id,
+                                                                        status: 3,
+                                                                    });
+                                                                }}
+                                                                className="px-4 py-2 text-xs text-white bg-blue-600 rounded-sm cursor-pointer"
+                                                            >
+                                                                Check Out
+                                                            </button>
+                                                        )}
+                                                    </div>
+                                                </div>
+                                                {Boolean(item?.miniService) && (
+                                                    <>
+                                                        <p className="text-sm text-gray-500">
+                                                            Mini service: {item?.miniService?.miniServiceName}
+                                                        </p>
+                                                    </>
+                                                )}
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div className="flex items-center gap-3">
+                                        <p className="text-lg font-semibold">
+                                            <input type="number" value={item?.quantity} className="w-24" readOnly />
+                                        </p>
+                                        x<p className="text-lg font-semibold">{item?.price / item?.quantity}</p>
+                                        <p className="text-lg font-semibold">{formatCurrency(item?.price)}</p>
+                                    </div>
+                                </div>
+                            ))}
+                        </div>
+                    </div>
+                    <div className="flex items-center justify-end gap-4 pr-2">
+                        <div className="text-gray-600">Total</div>
+                        <div className="text-xl font-bold">
+                            {formatCurrency(
+                                cart.data?.bookingDetails?.reduce((acc, item) => {
+                                    return acc + item?.price;
+                                }, 0)
+                            )}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    );
+};
+
+export default ProviderOrderStatusDetail;

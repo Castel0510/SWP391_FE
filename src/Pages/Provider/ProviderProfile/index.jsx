@@ -44,11 +44,11 @@ const ProviderProfile = () => {
           </div>
         </div>
         <div className='flex gap-1 justify-center items-center'>
-          <LiaSuitcaseRollingSolid className='text-xl text-emerald-700' />
+          {/* <LiaSuitcaseRollingSolid className='text-xl text-emerald-700' />
           <p className='text-center'>
             <span className='text-emerald-700 font-bold text-center text-2xl'>45 </span>
             orders
-          </p>
+          </p> */}
         </div>
 
       </div>
