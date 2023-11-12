@@ -20,7 +20,7 @@ const CTAUploadImage = ({ description, onUpload, defaultValue }) => {
         const res = await axios.post(url, formData, {
             headers: {
                 Authorization:
-                    'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjQwNzdkN2ZlLTI4MGUtZWRiYi1kYzVkLWJjNTY0ZmQ1ZTQ2YyIsInR5cGUiOiJBVVRIIiwiZXhwaXJlZEF0IjoxNzAxOTAxNDk3NzA2LCJpYXQiOjE2OTkzMDk0OTd9.KUI2QvbC2mKcOC8Up5iOJQ3Pqs4p_BDS0CEx-RihA1A',
+                    'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjQwNzdkN2ZlLTI4MGUtZWRiYi1kYzVkLWJjNTY0ZmQ1ZTQ2YyIsInR5cGUiOiJBVVRIIiwiZXhwaXJlZEF0IjoxNzAyMzYyODEwMTQwLCJpYXQiOjE2OTk3NzA4MTB9.PTjntrXQ7JEMqSXcseSG8pzDDukTcGEPMvPOuJJPDVg',
                 'Content-Type': 'multipart/form-data',
             },
         });

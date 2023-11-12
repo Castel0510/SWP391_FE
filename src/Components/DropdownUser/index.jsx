@@ -3,6 +3,8 @@ import avatar_tmp from '../../Assets/Images/bird_hero.png';
 import { NavLink, Link, useNavigate } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
 import { logoutUser, getUserInfoInLocalStorage } from '../../Store/userSlice';
+import { useQuery } from 'react-query';
+import axios from 'axios';
 
 const DropdownUser = (props) => {
     const { id, role, resetUser } = props;
@@ -57,6 +59,26 @@ const DropdownUser = (props) => {
     useEffect(() => {
         setUser(getUserInfoInLocalStorage());
     }, []);
+
+    const providerQuery = useQuery(
+        ['user', 'provider', user],
+        async () => {
+            const user = getUserInfoInLocalStorage();
+
+            const getUser = await axios.get(
+                `https://apis20231023230305.azurewebsites.net/api/Provider/GetByProviderId?id=${user?.id}`
+            );
+
+            return getUser;
+        },
+        {
+            enabled: !!user,
+            refetchInterval: 3000,
+            onSuccess: (data) => {
+                setUser(data.data.result);
+            },
+        }
+    );
 
     return (
         <div className="relative inline-block text-left">

@@ -37,6 +37,7 @@ const ProviderDetail = () => {
     const [categoryIds, setCategoryIds] = useState([]);
     const [serviceLocations, setServiceLocations] = useState([]);
     const [newComment, setNewComment] = useState('');
+    const [rating, setRating] = useState(5);
     useEffect(() => {
         setUser(getUser());
     }, [dataUser]);
@@ -75,6 +76,7 @@ const ProviderDetail = () => {
                 commentContent: content,
                 customerId: res.data.result.id,
                 providerId: Number(id),
+                rating: rating,
             });
         },
         {
@@ -205,6 +207,14 @@ const ProviderDetail = () => {
                                             <div className="flex justify-between">
                                                 <div className="text-lg font-bold">
                                                     {comment?.customer?.customerName}
+                                                </div>{' '}
+                                                <div>
+                                                    <Rating
+                                                        className="w-32 h-8"
+                                                        value={comment.rating}
+                                                        onChange={() => {}}
+                                                        readOnly
+                                                    />
                                                 </div>
                                             </div>
                                             <div>{comment?.commentContent}</div>
@@ -212,6 +222,7 @@ const ProviderDetail = () => {
                                     ))}
                                 </div>
                                 <div className="flex flex-col items-start gap-4 mt-4 mb-4">Leave a comment</div>
+                                <Rating className="w-32 h-8 mb-2" value={rating} onChange={setRating} />
                                 <div className="text-lg">
                                     <textarea
                                         placeholder="Add a comment..."
