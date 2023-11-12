@@ -111,6 +111,7 @@ const HeaderComponent = () => {
         },
         {
             enabled: user?.Id !== null,
+            refetchInterval: 3000,
         }
     );
 
