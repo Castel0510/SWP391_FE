@@ -33,6 +33,10 @@ const DropdownUser = (props) => {
             path: '/order',
             display: 'Order history',
         },
+        {
+            path: '/report',
+            display: 'Report',
+        },
     ];
 
     const providerDropdownList = [
