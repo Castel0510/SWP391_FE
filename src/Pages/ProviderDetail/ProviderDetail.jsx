@@ -51,6 +51,7 @@ const ProviderDetail = () => {
         {
             refetchOnReconnect: false,
             refetchOnWindowFocus: false,
+            refetchInterval: 3000,
         }
     );
     const reviewQuery = useQuery(
