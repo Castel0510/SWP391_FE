@@ -17,7 +17,7 @@ const BirdTypeManagementPage = () => {
     const [pageSize, setPageSize] = useState(10);
     const [totalPage, setTotalPage] = useState(1);
     const [search, setSearch] = useState('');
-    const [isCreateModal, setIsCreateModal] = useState(true);
+    const [isCreateModal, setIsCreateModal] = useState(false);
     const [isUpdateModal, setIsUpdateModal] = useState(false);
     const [updateBirdType, setUpdateBirdType] = useState({});
 
