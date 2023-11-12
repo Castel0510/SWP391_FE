@@ -239,7 +239,7 @@ const ProviderDetail = () => {
                                     </button>
                                 </div>
                             </Tab.Panel>
-                            <Tab.Panel className="flex">
+                            <Tab.Panel className="flex gap-5">
                                 <div className="flex flex-col w-64 gap-4 rounded-lg shrink-0">
                                     <div className="">
                                         <div>
@@ -247,9 +247,13 @@ const ProviderDetail = () => {
                                             <div className="flex flex-col gap-2 mt-4">
                                                 {plans.map((plan) => (
                                                     <div
-                                                        className={clsx(' font-medium duration-300', {
-                                                            'text-green-600 !font-bold': categoryIds.includes(plan.id),
-                                                        })}
+                                                        className={clsx(
+                                                            'font-medium duration-300 px-2 py-2 border border-dashed border-green-300',
+                                                            {
+                                                                'bg-green-600  text-white !font-bold':
+                                                                    categoryIds.includes(plan.id),
+                                                            }
+                                                        )}
                                                         key={plan.id}
                                                         value={plan}
                                                         onClick={() => {
@@ -312,11 +316,13 @@ const ProviderDetail = () => {
                                             <div className="flex flex-col gap-2 mt-4">
                                                 {locationOptions.map((serviceLocation) => (
                                                     <div
-                                                        className={clsx(' font-medium duration-300', {
-                                                            'text-green-600 !font-bold': serviceLocations.includes(
-                                                                serviceLocation.value
-                                                            ),
-                                                        })}
+                                                        className={clsx(
+                                                            ' font-medium duration-300 px-2 py-2 border border-dashed border-green-300',
+                                                            {
+                                                                'bg-green-600  text-white !font-bold':
+                                                                    serviceLocations.includes(serviceLocation.value),
+                                                            }
+                                                        )}
                                                         key={serviceLocation.value}
                                                         onClick={() => {
                                                             const newServiceLocations = [...serviceLocations];
