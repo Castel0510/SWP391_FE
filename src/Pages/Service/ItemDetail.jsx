@@ -234,7 +234,10 @@ const ItemDetailPage = () => {
                         </div>
                     </div>
                     <div className="mt-16">
-                        <YouTube videoId={selectedItem.videoURL} iframeClassName="w-full h-[700px]" />
+                        <video className="w-full h-[700px]" height="0" controls>
+                            <source src={selectedItem.videoURL} type="video/mp4" />
+                        </video>
+                        {/* <YouTube videoId={selectedItem.videoURL} iframeClassName="w-full h-[700px]" /> */}
                     </div>
                 </div>
             ) : (
