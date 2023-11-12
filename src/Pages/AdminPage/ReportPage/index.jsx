@@ -24,7 +24,7 @@ const ReportPage = () => {
             setTotalPage(Math.ceil(reports.length / pageSize));
             return reports
                 .filter((x) => x.reportName.toLowerCase().includes(search.toLowerCase()))
-                .slice(page * pageSize, (page + 1) * pageSize);
+                .slice((page - 1) * pageSize, page * pageSize);
         },
         {
             initialData: [],

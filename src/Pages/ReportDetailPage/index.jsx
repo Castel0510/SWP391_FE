@@ -44,33 +44,6 @@ const ReportDetailPage = () => {
         },
     ];
 
-    const updateStatusOptions = [
-        {
-            label: 'Confirm',
-            value: 2,
-        },
-        {
-            label: 'Decline',
-            value: 3,
-        },
-    ];
-
-    const reportStatusMutation = useMutation(
-        async (data) => {
-            const res = await axios.put(
-                `https://apis20231023230305.azurewebsites.net/api/Report/Update?id=${id}`,
-                data
-            );
-            return res.data.result;
-        },
-        {
-            onSuccess: () => {
-                toast.success('Update status successfully');
-                reportQuery.refetch();
-            },
-        }
-    );
-
     const updateStatusMutation = useMutation(
         async (data) => {
             const res = await axios.put(
@@ -105,9 +78,9 @@ const ReportDetailPage = () => {
                         <div className="flex flex-col max-w-xl p-4 border border-green-300 border-solid rounded-lg">
                             <div className={clsx('text-lg font-bold')}>Report Information</div>
                             <div className="grid grid-cols-2 gap-2">
-                                <div className="text-sm font-medium">Report Name</div>
+                                <div className="text-sm font-bold">Report Name</div>
                                 <div className="text-sm font-medium">{reportQuery.data?.reportName}</div>
-                                <div className="text-sm font-medium ">Report Status</div>
+                                <div className="text-sm font-bold ">Report Status</div>
                                 <div
                                     className={clsx('text-sm font-medium', {
                                         'text-yellow-700': reportQuery.data?.reportStatus === 0,
@@ -118,13 +91,15 @@ const ReportDetailPage = () => {
                                 >
                                     {reportStatusOptions.find((x) => x.value === reportQuery.data?.reportStatus)?.label}
                                 </div>
-                                <div className="col-span-2 text-sm font-medium">Report Description</div>
-                                <div className="col-span-2 text-sm font-medium">{reportQuery.data?.content}</div>
+                                <div className="col-span-2 text-sm font-bold">Report Description</div>
+                                <div className="col-span-2 p-2 text-sm font-medium border border-green-300 border-solid">
+                                    {reportQuery.data?.content}
+                                </div>
                                 {reportQuery.data?.reportStatus === 2 ||
                                     (reportQuery.data?.reportStatus === 3 && (
                                         <>
-                                            <div className="col-span-2 text-sm font-medium">Admin answer</div>
-                                            <div className="col-span-2 text-sm font-medium">
+                                            <div className="col-span-2 text-sm font-bold">Admin answer</div>
+                                            <div className="col-span-2 p-2 text-sm font-medium border border-green-300 border-solid">
                                                 {reportQuery.data?.adminAnswer}
                                             </div>
                                         </>
