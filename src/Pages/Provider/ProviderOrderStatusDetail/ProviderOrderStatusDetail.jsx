@@ -183,17 +183,23 @@ const ProviderOrderStatusDetail = () => {
                                                         Actual Date:{' '}
                                                         <div className="flex items-center gap-2">
                                                             <div>Actual Start Date:</div>
-                                                            <div>
-                                                                {moment(item?.actualStartDate).format(
-                                                                    'DD/MM/YYYY hh:mm'
-                                                                )}
-                                                            </div>
+                                                            {item?.actualStartDate && (
+                                                                <div>
+                                                                    {moment(item?.actualStartDate).format(
+                                                                        'DD/MM/YYYY hh:mm'
+                                                                    )}
+                                                                </div>
+                                                            )}
                                                         </div>
                                                         <div className="flex items-center gap-2">
                                                             <div>Actual End Date:</div>
-                                                            <div>
-                                                                {moment(item?.actualEndDate).format('DD/MM/YYYY hh:mm')}
-                                                            </div>
+                                                            {item?.actualEndDate && (
+                                                                <div>
+                                                                    {moment(item?.actualEndDate).format(
+                                                                        'DD/MM/YYYY hh:mm'
+                                                                    )}
+                                                                </div>
+                                                            )}
                                                         </div>
                                                     </div>
                                                 </p>
