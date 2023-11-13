@@ -68,6 +68,7 @@ const DropdownUser = (props) => {
         ['user', 'provider', user],
         async () => {
             const user = getUserInfoInLocalStorage();
+            console.log(user);
 
             const getUser = await axios.get(
                 `https://apis20231023230305.azurewebsites.net/api/Provider/GetByProviderId?id=${user?.id}`
