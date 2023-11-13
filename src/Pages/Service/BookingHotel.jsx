@@ -225,7 +225,7 @@ const BookingHotel = () => {
     return (
         <FormProvider {...methods}>
             <div className="flex items-start justify-center min-h-screen py-10">
-                <div className="flex flex-col w-full max-w-4xl gap-10">
+                <div className="flex flex-col w-full max-w-6xl gap-10">
                     <button onClick={() => window.history.back()} className="back-button">
                         <FaArrowLeft />
                     </button>
