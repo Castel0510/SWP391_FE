@@ -21,10 +21,10 @@ const DropdownUser = (props) => {
             path: '/profile',
             display: 'View profile',
         },
-        {
-            path: '/change-password-customer',
-            display: 'Change password',
-        },
+        // {
+        //     path: '/change-password-customer',
+        //     display: 'Change password',
+        // },
         {
             path: '/wallet',
             display: 'Wallet',

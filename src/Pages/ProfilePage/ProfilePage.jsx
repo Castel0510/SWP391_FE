@@ -48,6 +48,7 @@ const ProfilePage = () => {
                 formMethods.reset({
                     ...data,
                 });
+                formMethods.setValue('user.dob', data.user.dob.split('T')[0]);
             },
         }
     );

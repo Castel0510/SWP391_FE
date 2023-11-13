@@ -20,7 +20,7 @@ const CTAUploadVideo = ({ description, onUpload, defaultValue }) => {
         const res = await axios.post(url, formData, {
             headers: {
                 Authorization:
-                    'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjQwNzdkN2ZlLTI4MGUtZWRiYi1kYzVkLWJjNTY0ZmQ1ZTQ2YyIsInR5cGUiOiJBVVRIIiwiZXhwaXJlZEF0IjoxNzAyMzYyODEwMTQwLCJpYXQiOjE2OTk3NzA4MTB9.PTjntrXQ7JEMqSXcseSG8pzDDukTcGEPMvPOuJJPDVg',
+                    'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjQwNzdkN2ZlLTI4MGUtZWRiYi1kYzVkLWJjNTY0ZmQ1ZTQ2YyIsInR5cGUiOiJBVVRIIiwiZXhwaXJlZEF0IjoxNzAyNDk3OTYzNjUwLCJpYXQiOjE2OTk5MDU5NjN9.ulJqbOa-fL-yrYMxwK8gTN6D46M0m6lmtpFRvcTmLAM',
                 'Content-Type': 'multipart/form-data',
             },
         });
