@@ -102,7 +102,9 @@ const BookingHotel = () => {
     );
     useEffect(() => {
         if (services !== null) {
-            methods.setValue('serviceStartDate', format(new Date(), 'yyyy-MM-dd'));
+            const yesterday = new Date();
+            yesterday.setDate(yesterday.getDate() - 1);
+            methods.setValue('serviceStartDate', format(yesterday, 'yyyy-MM-dd'));
             const nextDay = new Date();
             nextDay.setDate(nextDay.getDate() + 1);
             methods.setValue('serviceEndDate', format(nextDay, 'yyyy-MM-dd'));

@@ -163,7 +163,11 @@ const ProviderOrderStatus = () => {
                                         key={value}
                                         value={value}
                                         className="w-fit"
-                                        onClick={() => handleTabChange(status)}
+                                        onClick={() => {
+                                            handleTabChange(status);
+                                            setPage(1);
+                                            setTotalPage(0);
+                                        }}
                                     >
                                         &nbsp;&nbsp;{label}&nbsp;&nbsp;
                                     </Tab>
