@@ -43,6 +43,16 @@ export const getUserInfoInLocalStorage = () => {
     return user;
 };
 
+export const getUserLoginInLocalStorage = () => {
+    let user = localStorage.getItem('userLogin');
+    if (user) {
+        user = JSON.parse(user);
+    } else {
+        user = null;
+    }
+    return user;
+};
+
 export const loginUser = createAsyncThunk('user/loginUser', async (userCredentials) => {
     const response = await axios.post(`${LINK_API}/api/User/Login`, userCredentials);
     if (response.data.status === 'BadRequest') {

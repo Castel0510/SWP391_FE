@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import avatar_tmp from '../../Assets/Images/bird_hero.png';
 import { NavLink, Link, useNavigate } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
-import { logoutUser, getUserInfoInLocalStorage } from '../../Store/userSlice';
+import { logoutUser, getUserInfoInLocalStorage, getUserLoginInLocalStorage } from '../../Store/userSlice';
 import { useQuery } from 'react-query';
 import axios from 'axios';
 
@@ -61,19 +61,19 @@ const DropdownUser = (props) => {
     };
 
     useEffect(() => {
-        setUser(getUserInfoInLocalStorage());
+        setUser(getUserLoginInLocalStorage());
     }, []);
 
     const providerQuery = useQuery(
         ['user', 'provider', user],
         async () => {
-            const user = getUserInfoInLocalStorage();
-            console.log(user);
+            const user = getUserLoginInLocalStorage();
+            console.log(">>>>", user);
 
             const getUser = await axios.get(
-                `https://apis20231023230305.azurewebsites.net/api/Provider/GetByProviderId?id=${user?.id}`
+                `https://apis20231023230305.azurewebsites.net/api/User/Info?id=${user?.Id}`
             );
-
+            console.log("getuser: ", getUser);
             return getUser;
         },
         {
@@ -84,7 +84,7 @@ const DropdownUser = (props) => {
             },
         }
     );
-
+    console.log(user);
     return (
         <div className="relative inline-block text-left">
             <div>
@@ -99,18 +99,18 @@ const DropdownUser = (props) => {
                     <div className="w-8 h-8 p-1 border border-black border-solid rounded-full">
                         <img
                             src={
-                                user?.user?.avatarURL && user?.user?.avatarURL !== 'string'
-                                    ? user.user?.avatarURL
-                                    : user?.user?.image && user?.user?.image !== 'string'
-                                    ? user?.user?.image
-                                    : avatar_tmp
+                                user?.avatarURL && user?.avatarURL !== 'string'
+                                    ? user.avatarURL
+                                    : user?.image && user?.image !== 'string'
+                                        ? user?.image
+                                        : avatar_tmp
                             }
                             alt="User Avatar"
                             className="w-full h-full rounded-full"
                         />
                     </div>
 
-                    <p className="px-1">{user?.providerName || user?.user?.fullname || user?.fullname}</p>
+                    <p className="px-1">{user?.fullname}</p>
 
                     <svg
                         className="w-5 h-5 -mr-1 text-gray-400"

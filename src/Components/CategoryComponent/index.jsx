@@ -61,7 +61,6 @@ const CategoryComponent = () => {
                             <span className='card-title'>
                                 {capitalizeFirstLetter(item.name)}
                             </span>
-                            <p>{item.description}</p>
                         </Link>
                     ))}
                 </div>
