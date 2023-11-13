@@ -16,6 +16,7 @@ import * as Yup from 'yup';
 import FormError from '../../Components/FormError/FormError';
 import axios from 'axios';
 import { getUser } from '../../Store/userSlice';
+import { birdSizeOptions } from '../../models/bird';
 
 const validationSchema = Yup.object().shape({
     birdServiceId: Yup.string().required('Service ID is required'),
@@ -115,7 +116,9 @@ const BookingHotel = () => {
             return services.prices.map((priceItem) => {
                 return {
                     name: priceItem.priceName,
-                    label: `${priceItem.priceName} (${formatCurrency(priceItem.priceAmount)})`,
+                    label: `${priceItem.priceName} (${formatCurrency(priceItem.priceAmount)}) (${
+                        priceItem?.birdType?.birdName
+                    } - ${birdSizeOptions.find((item) => item.value === priceItem?.birdType?.birdSize)?.label})`,
                     value: priceItem.id,
                 };
             });
@@ -193,6 +196,11 @@ const BookingHotel = () => {
                 toast.error('Check-out date must be after check-in date');
                 return;
             }
+        }
+
+        if (data.serviceStartDate < format(new Date(), 'yyyy-MM-dd')) {
+            toast.error('Check-in date must be after today');
+            return;
         }
 
         const isConfirmed = window.confirm(`Are you sure you want to book ${services.birdServiceName}?`);

@@ -68,12 +68,11 @@ const DropdownUser = (props) => {
         ['user', 'provider', user],
         async () => {
             const user = getUserLoginInLocalStorage();
-            console.log(">>>>", user);
 
             const getUser = await axios.get(
                 `https://apis20231023230305.azurewebsites.net/api/User/Info?id=${user?.Id}`
             );
-            console.log("getuser: ", getUser);
+
             return getUser;
         },
         {
@@ -84,7 +83,7 @@ const DropdownUser = (props) => {
             },
         }
     );
-    console.log(user);
+
     return (
         <div className="relative inline-block text-left">
             <div>
@@ -102,8 +101,8 @@ const DropdownUser = (props) => {
                                 user?.avatarURL && user?.avatarURL !== 'string'
                                     ? user.avatarURL
                                     : user?.image && user?.image !== 'string'
-                                        ? user?.image
-                                        : avatar_tmp
+                                    ? user?.image
+                                    : avatar_tmp
                             }
                             alt="User Avatar"
                             className="w-full h-full rounded-full"

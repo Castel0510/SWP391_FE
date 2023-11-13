@@ -83,8 +83,10 @@ const WalletPage = () => {
             refetchOnReconnect: false,
             enabled: user?.Id !== null,
             onSuccess: (data) => {
-                paymentInfoForm.setValue('stk', data.bankNumber);
-                paymentInfoForm.setValue('bank', data.bank);
+                if (paymentInfoForm.getValues('stk') === '') {
+                    paymentInfoForm.setValue('stk', data.bankNumber);
+                    paymentInfoForm.setValue('bank', data.bank);
+                }
             },
         }
     );
