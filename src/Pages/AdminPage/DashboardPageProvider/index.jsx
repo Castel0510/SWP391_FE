@@ -163,10 +163,6 @@ const DashboardPageProvider = () => {
                 };
             });
 
-            console.log(chartData);
-
-            console.log(groupSumValueByDate(chartData, 'createAt', 'total'));
-
             return groupSumValueByDate(chartData, 'createAt', 'total');
         },
         { initialData: {} }

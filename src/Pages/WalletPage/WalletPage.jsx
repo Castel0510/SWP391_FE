@@ -41,7 +41,7 @@ const WalletPage = () => {
             );
 
             const finalList = res.data.result.items
-                .filter((item) => item.walletId === data.data.result.id)
+                .filter((item) => item.wallet.id === data.data.result.id)
                 .sort((a, b) => {
                     return a.id < b.id ? 1 : -1;
                 });
@@ -55,6 +55,7 @@ const WalletPage = () => {
             initialData: [],
         }
     );
+
     const paymentInfoForm = useForm({
         defaultValues: {
             id: '',
