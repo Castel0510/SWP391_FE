@@ -95,14 +95,15 @@ const ReportDetailPage = () => {
                                 <div className="col-span-2 p-2 text-sm font-medium border border-green-300 border-solid">
                                     {reportQuery.data?.content}
                                 </div>
-                                {(reportQuery.data?.reportStatus === 2 || reportQuery.data?.reportStatus === 3) && (
-                                    <>
-                                        <div className="col-span-2 text-sm font-bold">Admin answer</div>
-                                        <div className="col-span-2 p-2 text-sm font-medium border border-green-300 border-solid">
-                                            {reportQuery.data?.adminAnswer}
-                                        </div>
-                                    </>
-                                )}
+                                {reportQuery.data?.reportStatus === 2 ||
+                                    (reportQuery.data?.reportStatus === 3 && (
+                                        <>
+                                            <div className="col-span-2 text-sm font-bold">Admin answer</div>
+                                            <div className="col-span-2 p-2 text-sm font-medium border border-green-300 border-solid">
+                                                {reportQuery.data?.adminAnswer}
+                                            </div>
+                                        </>
+                                    ))}
                             </div>
                         </div>
                     </div>

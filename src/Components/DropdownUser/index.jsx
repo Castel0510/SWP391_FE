@@ -67,8 +67,12 @@ const DropdownUser = (props) => {
     const providerQuery = useQuery(
         ['user', 'provider', user],
         async () => {
+<<<<<<< HEAD
             const user = getUserLoginInLocalStorage();
             console.log(">>>>", user);
+=======
+            const user = getUserInfoInLocalStorage();
+>>>>>>> parent of fef3feb (feat: update)
 
             const getUser = await axios.get(
                 `https://apis20231023230305.azurewebsites.net/api/User/Info?id=${user?.Id}`
