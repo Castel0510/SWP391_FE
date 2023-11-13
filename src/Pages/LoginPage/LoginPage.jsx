@@ -127,10 +127,10 @@ const LoginPage = () => {
 
                     <button className="btn-login">{loading ? 'Loading ...' : 'Sign in'}</button>
 
-                    <div className="btn-login btn-login-google">
+                    {/* <div className="btn-login btn-login-google">
                         <FcGoogle />
                         <p>Sign in with Google</p>
-                    </div>
+                    </div> */}
 
                     <p className="text">
                         Don&apos;t have an account?

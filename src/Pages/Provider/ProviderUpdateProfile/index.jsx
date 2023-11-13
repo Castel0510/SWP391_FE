@@ -11,7 +11,7 @@ const ProviderUpdateProfile = (props) => {
     const [fullname, setFullname] = useState(user?.providerName);
     const [email, setEmail] = useState(user?.user?.email);
     const [phoneNumber, setPhoneNumber] = useState(user?.user?.phoneNumber);
-    const [location, setLocation] = useState(user?.destination);
+    // const [location, setLocation] = useState(user?.destination);
     const [about, setAbout] = useState(user?.description);
     const [image, setImage] = useState(user?.user?.avatarURL);
 
@@ -161,7 +161,7 @@ const ProviderUpdateProfile = (props) => {
                                         onChange={(e) => setPhoneNumber(e.target.value)}
                                     />
                                 </div>
-                                <div className="w-full px-3 my-6 md:mb-0">
+                                {/* <div className="w-full px-3 my-6 md:mb-0">
                                     <label
                                         className="block mb-2 text-xs font-bold tracking-wide text-gray-700 uppercase"
                                         htmlFor="grid-location"
@@ -175,7 +175,7 @@ const ProviderUpdateProfile = (props) => {
                                         value={location}
                                         onChange={(e) => setLocation(e.target.value)}
                                     />
-                                </div>
+                                </div> */}
                                 <div className="w-full px-3 my-6 md:mb-0">
                                     <label
                                         className="block mb-2 text-xs font-bold tracking-wide text-gray-700 uppercase"

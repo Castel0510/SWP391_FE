@@ -33,11 +33,11 @@ const SidebarProviderComponent = () => {
             path: '/provider-profile',
             display: 'Profile',
         },
-        {
-            icon: <MdPassword className="w-5 h-5" />,
-            path: '/provider-change-password',
-            display: 'Change password',
-        },
+        // {
+        //     icon: <MdPassword className="w-5 h-5" />,
+        //     path: '/provider-change-password',
+        //     display: 'Change password',
+        // },
     ];
 
     const [activeLink, setActiveLink] = useState('/provider-dashboard');
