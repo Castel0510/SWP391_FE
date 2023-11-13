@@ -198,7 +198,10 @@ const BookingHotel = () => {
             }
         }
 
-        if (data.serviceStartDate < format(new Date(), 'yyyy-MM-dd')) {
+        // after yesterday
+        const yesterday = new Date();
+        yesterday.setDate(yesterday.getDate() - 1);
+        if (new Date(data.serviceStartDate) < yesterday) {
             toast.error('Check-in date must be after today');
             return;
         }
