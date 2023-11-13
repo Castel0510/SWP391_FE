@@ -6,7 +6,7 @@ import clsx from 'clsx';
 import { LuEye } from 'react-icons/lu';
 import { Link } from 'react-router-dom';
 
-import { getUserInfoInLocalStorage } from '../../Store/userSlice';
+import { getUserInfoInLocalStorage, getUser } from '../../Store/userSlice';
 
 const ReportPage = () => {
     const [page, setPage] = React.useState(1);
@@ -22,10 +22,9 @@ const ReportPage = () => {
     const reportQuery = useQuery(
         ['report', search, page, pageSize],
         async () => {
-            const user = getUserInfoInLocalStorage();
-
+            const user = getUser();
             const res = await axios.get(
-                `https://apis20231023230305.azurewebsites.net/api/Report/GetByUserId?id=${user.id}&pageIndex=0&pageSize=99999`
+                `https://apis20231023230305.azurewebsites.net/api/Report/GetByUserId?id=${user.Id}&pageIndex=0&pageSize=99999`
             );
             const reports = res.data.result.items.sort((a, b) => {
                 return a.id < b.id ? 1 : -1;
