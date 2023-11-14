@@ -59,7 +59,7 @@ const CommentsComponent = ({ serviceFeedbacks = [], serviceId, userId, onChange 
             },
         }
     );
-
+        console.log(user);
     return (
         <div className="flex flex-col mt-16">
             <h2 className="text-2xl font-semibold">Comments</h2>
@@ -70,7 +70,7 @@ const CommentsComponent = ({ serviceFeedbacks = [], serviceId, userId, onChange 
                         className="flex flex-col gap-4 p-4 bg-white border-2 border-green-300 border-dashed rounded-lg shadow-lg"
                     >
                         <div className="flex justify-between">
-                            <div className="text-lg font-bold">Anonymous</div>
+                            <div className="text-lg font-bold">{user.customerName}</div>
                             <div>
                                 <Rating className="w-32 h-8" value={comment.rating} onChange={() => {}} readOnly />
                             </div>
@@ -80,7 +80,7 @@ const CommentsComponent = ({ serviceFeedbacks = [], serviceId, userId, onChange 
                 ))}
             </div>
             <div className="flex flex-col items-start gap-4 mt-4 mb-4">
-                Leave a comment as <span className="font-semibold">Anonymous</span>
+                Leave a comment as <span className="font-semibold"></span>
                 <Rating className="w-32 h-8" value={rating} onChange={setRating} />
             </div>
             <div className="text-lg">
