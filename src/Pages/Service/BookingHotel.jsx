@@ -200,14 +200,6 @@ const BookingHotel = () => {
             }
         }
 
-        // after yesterday
-        const yesterday = new Date();
-        yesterday.setDate(yesterday.getDate() - 1);
-        if (new Date(data.serviceStartDate) < yesterday) {
-            toast.error('Check-in date must be after today');
-            return;
-        }
-
         const isConfirmed = window.confirm(`Are you sure you want to book ${services.birdServiceName}?`);
 
         if (!isConfirmed) {
