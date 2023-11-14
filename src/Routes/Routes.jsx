@@ -42,6 +42,9 @@ import ServiceCategoryManagementPage from '../Pages/AdminPage/ServiceCategoryMan
 import DashboardPageProvider from '../Pages/AdminPage/DashboardPageProvider';
 import ProviderList from '../Pages/ProviderList/ProviderList';
 import ProviderDetail from '../Pages/ProviderDetail/ProviderDetail';
+import ReportDetailPage from '../Pages/AdminPage/ReportDetailPage/index';
+import ReportUserPage from '../Pages/ReportPage/index';
+import ReportUserPageDetail from '../Pages/ReportDetailPage/index';
 
 export const routes = [
     {
@@ -101,6 +104,16 @@ export const routes = [
     {
         path: '/change-password-customer',
         page: CustomerChangePasswordPage,
+        isShowHeaderFooter: true,
+    },
+    {
+        path: '/report',
+        page: ReportUserPage,
+        isShowHeaderFooter: true,
+    },
+    {
+        path: '/report-detail/:id',
+        page: ReportUserPageDetail,
         isShowHeaderFooter: true,
     },
     {
@@ -237,6 +250,11 @@ export const routes = [
     {
         path: '/admin-payment-management',
         page: PaymentManagementPage,
+        isShowAdmin: true,
+    },
+    {
+        path: '/admin-report-management/:id',
+        page: ReportDetailPage,
         isShowAdmin: true,
     },
     {

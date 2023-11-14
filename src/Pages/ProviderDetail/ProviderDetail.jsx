@@ -37,6 +37,7 @@ const ProviderDetail = () => {
     const [categoryIds, setCategoryIds] = useState([]);
     const [serviceLocations, setServiceLocations] = useState([]);
     const [newComment, setNewComment] = useState('');
+    const [rating, setRating] = useState(5);
     useEffect(() => {
         setUser(getUser());
     }, [dataUser]);
@@ -50,6 +51,7 @@ const ProviderDetail = () => {
         {
             refetchOnReconnect: false,
             refetchOnWindowFocus: false,
+            refetchInterval: 3000,
         }
     );
     const reviewQuery = useQuery(
@@ -75,6 +77,7 @@ const ProviderDetail = () => {
                 commentContent: content,
                 customerId: res.data.result.id,
                 providerId: Number(id),
+                rating: rating,
             });
         },
         {
@@ -205,6 +208,14 @@ const ProviderDetail = () => {
                                             <div className="flex justify-between">
                                                 <div className="text-lg font-bold">
                                                     {comment?.customer?.customerName}
+                                                </div>{' '}
+                                                <div>
+                                                    <Rating
+                                                        className="w-32 h-8"
+                                                        value={comment.rating}
+                                                        onChange={() => {}}
+                                                        readOnly
+                                                    />
                                                 </div>
                                             </div>
                                             <div>{comment?.commentContent}</div>
@@ -212,6 +223,7 @@ const ProviderDetail = () => {
                                     ))}
                                 </div>
                                 <div className="flex flex-col items-start gap-4 mt-4 mb-4">Leave a comment</div>
+                                <Rating className="w-32 h-8 mb-2" value={rating} onChange={setRating} />
                                 <div className="text-lg">
                                     <textarea
                                         placeholder="Add a comment..."
@@ -228,7 +240,7 @@ const ProviderDetail = () => {
                                     </button>
                                 </div>
                             </Tab.Panel>
-                            <Tab.Panel className="flex">
+                            <Tab.Panel className="flex gap-5">
                                 <div className="flex flex-col w-64 gap-4 rounded-lg shrink-0">
                                     <div className="">
                                         <div>
@@ -236,9 +248,13 @@ const ProviderDetail = () => {
                                             <div className="flex flex-col gap-2 mt-4">
                                                 {plans.map((plan) => (
                                                     <div
-                                                        className={clsx(' font-medium duration-300', {
-                                                            'text-green-600 !font-bold': categoryIds.includes(plan.id),
-                                                        })}
+                                                        className={clsx(
+                                                            'font-medium duration-300 px-2 py-2 border border-dashed border-green-300',
+                                                            {
+                                                                'bg-green-600  text-white !font-bold':
+                                                                    categoryIds.includes(plan.id),
+                                                            }
+                                                        )}
                                                         key={plan.id}
                                                         value={plan}
                                                         onClick={() => {
@@ -301,11 +317,13 @@ const ProviderDetail = () => {
                                             <div className="flex flex-col gap-2 mt-4">
                                                 {locationOptions.map((serviceLocation) => (
                                                     <div
-                                                        className={clsx(' font-medium duration-300', {
-                                                            'text-green-600 !font-bold': serviceLocations.includes(
-                                                                serviceLocation.value
-                                                            ),
-                                                        })}
+                                                        className={clsx(
+                                                            ' font-medium duration-300 px-2 py-2 border border-dashed border-green-300',
+                                                            {
+                                                                'bg-green-600  text-white !font-bold':
+                                                                    serviceLocations.includes(serviceLocation.value),
+                                                            }
+                                                        )}
                                                         key={serviceLocation.value}
                                                         onClick={() => {
                                                             const newServiceLocations = [...serviceLocations];

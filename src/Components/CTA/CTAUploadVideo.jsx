@@ -10,7 +10,7 @@ const { Paragraph } = Typography;
 
 const { Dragger } = Upload;
 
-const CTAUploadImage = ({ description, onUpload, defaultValue }) => {
+const CTAUploadVideo = ({ description, onUpload, defaultValue }) => {
     const [currentUrl, setCurrentUrl] = React.useState('');
 
     const v1UploadFile = async (file) => {
@@ -63,7 +63,15 @@ const CTAUploadImage = ({ description, onUpload, defaultValue }) => {
                 ) : (
                     <div className="p-4">
                         <p className="flex items-center justify-center ant-upload-drag-icon">
-                            {Boolean(currentUrl) ? <img src={currentUrl} /> : <CloudUpload strokeWidth={2} size={36} />}
+                            {Boolean(currentUrl) ? (
+                                <div>
+                                    <video width="320" height="240" controls>
+                                        <source src={currentUrl} type="video/mp4" />
+                                    </video>
+                                </div>
+                            ) : (
+                                <CloudUpload strokeWidth={2} size={36} />
+                            )}
                         </p>
                         <p className="ant-upload-text">Click or drag file to this area to upload</p>
                         <p className="ant-upload-hint">{description}</p>
@@ -74,4 +82,4 @@ const CTAUploadImage = ({ description, onUpload, defaultValue }) => {
     );
 };
 
-export default CTAUploadImage;
+export default CTAUploadVideo;

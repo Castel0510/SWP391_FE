@@ -16,6 +16,25 @@ import { CheckBadgeIcon } from '@heroicons/react/24/outline';
 import { toast } from 'react-toastify';
 
 const DataRow = ({ item, index, onChange }) => {
+    const bankList = [
+        {
+            id: 0,
+            name: 'Vietcombank',
+        },
+        {
+            id: 1,
+            name: 'Techcombank',
+        },
+        {
+            id: 2,
+            name: 'Vietinbank',
+        },
+        {
+            id: 3,
+            name: 'BIDV',
+        },
+    ];
+
     const handleAccept = useMutation(
         async () => {
             return await axios.put(
@@ -71,7 +90,10 @@ const DataRow = ({ item, index, onChange }) => {
             >
                 {item.transactionType === 0 ? 'Deposit' : 'Withdraw'}
             </td>
-            <td className="px-6 py-4 text-gray-900">{formatCurrency(item.amountTransaction)}</td>
+            <td className="px-6 py-4 text-gray-900">{formatCurrency(item.amountTransaction)}</td>{' '}
+            <td className="px-6 py-4 text-gray-900">{bankList.find((bank) => bank.id === item?.wallet?.bank)?.name}</td>
+            <td className="px-6 py-4 text-gray-900">{item?.wallet?.bankNumber}</td>
+            <td className="px-6 py-4 text-gray-900">{item?.wallet?.user?.username}</td>
             <td
                 className={clsx(' text-gray-900 font-bold ', {
                     'text-yellow-700': item.transactionStatus === 0,
@@ -138,8 +160,6 @@ const PaymentManagementPage = () => {
         }
     );
 
-    console.log(totalPage);
-
     return (
         <div className="flex flex-col justify-between h-full">
             <div>
@@ -164,6 +184,15 @@ const PaymentManagementPage = () => {
                                 </th>
                                 <th scope="col" className="px-6 py-3">
                                     Amount
+                                </th>
+                                <th scope="col" className="px-6 py-3">
+                                    Bank Name
+                                </th>
+                                <th scope="col" className="px-6 py-3">
+                                    Bank Number
+                                </th>
+                                <th scope="col" className="px-6 py-3">
+                                    Username
                                 </th>
                                 <th scope="col" className="px-6 py-3">
                                     Status

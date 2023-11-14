@@ -163,7 +163,11 @@ const ProviderOrderStatus = () => {
                                         key={value}
                                         value={value}
                                         className="w-fit"
-                                        onClick={() => handleTabChange(status)}
+                                        onClick={() => {
+                                            handleTabChange(status);
+                                            setPage(1);
+                                            setTotalPage(0);
+                                        }}
                                     >
                                         &nbsp;&nbsp;{label}&nbsp;&nbsp;
                                     </Tab>
@@ -204,59 +208,70 @@ const ProviderOrderStatus = () => {
                             </tr>
                         </thead>
                         <tbody>
-                            {orderQuery.data.map(
-                                (
-                                    { id, bookingStatus, customer, serviceEndDate, serviceStartDate, bookingDetails },
-                                    index
-                                ) => {
-                                    const isLast = index === table.length - 1;
-                                    const classes = isLast ? 'p-4' : 'p-4 border-b border-blue-gray-50';
+                            {orderQuery.data
+                                .sort((a, b) => {
+                                    return a.id - b.id > 0 ? -1 : 1;
+                                })
+                                .map(
+                                    (
+                                        {
+                                            id,
+                                            bookingStatus,
+                                            customer,
+                                            serviceEndDate,
+                                            serviceStartDate,
+                                            bookingDetails,
+                                        },
+                                        index
+                                    ) => {
+                                        const isLast = index === table.length - 1;
+                                        const classes = isLast ? 'p-4' : 'p-4 border-b border-blue-gray-50';
 
-                                    let chipColor = '';
-                                    if (bookingStatus === 0) chipColor = 'yellow';
-                                    else if (bookingStatus === 1) chipColor = 'green';
-                                    else if (bookingStatus === 2) chipColor = 'red';
-                                    else if (bookingStatus === 3) chipColor = 'green';
-                                    else if (bookingStatus === 4) chipColor = 'blue';
-                                    else if (bookingStatus === 5) chipColor = 'green';
-                                    else if (bookingStatus === 6) chipColor = 'red';
-                                    const totalPrice = bookingDetails.reduce((total, item) => {
-                                        return total + item.price;
-                                    }, 0);
-                                    return (
-                                        <tr key={id}>
-                                            <td className={classes}>
-                                                <div className="flex items-center gap-3">
+                                        let chipColor = '';
+                                        if (bookingStatus === 0) chipColor = 'yellow';
+                                        else if (bookingStatus === 1) chipColor = 'green';
+                                        else if (bookingStatus === 2) chipColor = 'red';
+                                        else if (bookingStatus === 3) chipColor = 'green';
+                                        else if (bookingStatus === 4) chipColor = 'blue';
+                                        else if (bookingStatus === 5) chipColor = 'green';
+                                        else if (bookingStatus === 6) chipColor = 'red';
+                                        const totalPrice = bookingDetails.reduce((total, item) => {
+                                            return total + item.price;
+                                        }, 0);
+                                        return (
+                                            <tr key={id}>
+                                                <td className={classes}>
+                                                    <div className="flex items-center gap-3">
+                                                        <div className="flex flex-col">
+                                                            <Typography
+                                                                variant="small"
+                                                                color="blue-gray"
+                                                                className="font-normal"
+                                                            >
+                                                                {id}
+                                                            </Typography>
+                                                        </div>
+                                                    </div>
+                                                </td>
+                                                <td className={classes}>
                                                     <div className="flex flex-col">
                                                         <Typography
                                                             variant="small"
                                                             color="blue-gray"
                                                             className="font-normal"
                                                         >
-                                                            {id}
+                                                            {customer.customerName}
                                                         </Typography>
-                                                    </div>
-                                                </div>
-                                            </td>
-                                            <td className={classes}>
-                                                <div className="flex flex-col">
-                                                    <Typography
-                                                        variant="small"
-                                                        color="blue-gray"
-                                                        className="font-normal"
-                                                    >
-                                                        {customer.customerName}
-                                                    </Typography>
-                                                    {/* <Typography
+                                                        {/* <Typography
                                                         variant="small"
                                                         color="blue-gray"
                                                         className="font-normal opacity-70"
                                                     >
                                                         {email}
                                                     </Typography> */}
-                                                </div>
-                                            </td>
-                                            {/* <td className={classes}>
+                                                    </div>
+                                                </td>
+                                                {/* <td className={classes}>
                                                 <Typography
                                                     variant="small"
                                                     color="blue-gray"
@@ -266,35 +281,41 @@ const ProviderOrderStatus = () => {
                                                 </Typography>
                                             </td> */}
 
-                                            <td className={classes}>
-                                                <Typography variant="small" color="blue-gray" className="font-normal">
-                                                    {formatCurrency(totalPrice)}
-                                                </Typography>
-                                            </td>
-                                            <td className={classes}>
-                                                <div className="w-max">
-                                                    <Chip
-                                                        variant="ghost"
-                                                        size="sm"
-                                                        color={chipColor}
-                                                        value={TABS.find((tab) => tab.status === bookingStatus)?.label}
-                                                    />
-                                                </div>
-                                            </td>
+                                                <td className={classes}>
+                                                    <Typography
+                                                        variant="small"
+                                                        color="blue-gray"
+                                                        className="font-normal"
+                                                    >
+                                                        {formatCurrency(totalPrice)}
+                                                    </Typography>
+                                                </td>
+                                                <td className={classes}>
+                                                    <div className="w-max">
+                                                        <Chip
+                                                            variant="ghost"
+                                                            size="sm"
+                                                            color={chipColor}
+                                                            value={
+                                                                TABS.find((tab) => tab.status === bookingStatus)?.label
+                                                            }
+                                                        />
+                                                    </div>
+                                                </td>
 
-                                            <td className={classes}>
-                                                <Tooltip content="View">
-                                                    <IconButton variant="text">
-                                                        <Link to={'/order-status-detail/' + id}>
-                                                            <EyeIcon className="w-4 h-4" />
-                                                        </Link>
-                                                    </IconButton>
-                                                </Tooltip>
-                                            </td>
-                                        </tr>
-                                    );
-                                }
-                            )}
+                                                <td className={classes}>
+                                                    <Tooltip content="View">
+                                                        <IconButton variant="text">
+                                                            <Link to={'/order-status-detail/' + id}>
+                                                                <EyeIcon className="w-4 h-4" />
+                                                            </Link>
+                                                        </IconButton>
+                                                    </Tooltip>
+                                                </td>
+                                            </tr>
+                                        );
+                                    }
+                                )}
                         </tbody>
                     </table>
                 </CardBody>

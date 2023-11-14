@@ -160,8 +160,12 @@ const OrderDetailPage = () => {
 
                                                     <div className="text-xs font-normal">
                                                         Actual Date:{' '}
-                                                        {moment(item?.actualStartDate).format('DD/MM/YYYY')} -{' '}
-                                                        {moment(item?.actualEndDate).format('DD/MM/YYYY')}
+                                                        {item?.actualStartDate && (
+                                                            <>{moment(item?.actualStartDate).format('DD/MM/YYYY')}</>
+                                                        )}
+                                                        {item?.actualEndDate && (
+                                                            <>- {moment(item?.actualEndDate).format('DD/MM/YYYY')}</>
+                                                        )}
                                                     </div>
                                                 </p>
                                                 <div className="text-sm ">

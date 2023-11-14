@@ -28,11 +28,11 @@
       display: flex;
       .single-card {
         background: white;
-        padding: 3rem 2rem;
+        padding: 3rem 8rem;
         border-radius: 10rem;
         gap: 2rem;
         margin: auto;
-        height: 320px;
+        height: 300px;
         width: 90%;
         max-width: 250px;
         display: flex;
@@ -51,6 +51,8 @@
 
         .card-title {
           font-size: 20px;
+          color: black;
+          margin-left: 5px;
         }
       }
 

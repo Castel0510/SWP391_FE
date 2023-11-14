@@ -16,6 +16,7 @@ import * as Yup from 'yup';
 import FormError from '../../Components/FormError/FormError';
 import axios from 'axios';
 import { getUser } from '../../Store/userSlice';
+import { birdSizeOptions } from '../../models/bird';
 
 const validationSchema = Yup.object().shape({
     birdServiceId: Yup.string().required('Service ID is required'),
@@ -101,7 +102,9 @@ const BookingHotel = () => {
     );
     useEffect(() => {
         if (services !== null) {
-            methods.setValue('serviceStartDate', format(new Date(), 'yyyy-MM-dd'));
+            const yesterday = new Date();
+            yesterday.setDate(yesterday.getDate() - 1);
+            methods.setValue('serviceStartDate', format(yesterday, 'yyyy-MM-dd'));
             const nextDay = new Date();
             nextDay.setDate(nextDay.getDate() + 1);
             methods.setValue('serviceEndDate', format(nextDay, 'yyyy-MM-dd'));
@@ -115,7 +118,9 @@ const BookingHotel = () => {
             return services.prices.map((priceItem) => {
                 return {
                     name: priceItem.priceName,
-                    label: `${priceItem.priceName} (${formatCurrency(priceItem.priceAmount)})`,
+                    label: `${priceItem.priceName} (${formatCurrency(priceItem.priceAmount)}) (${
+                        priceItem?.birdType?.birdName
+                    } - ${birdSizeOptions.find((item) => item.value === priceItem?.birdType?.birdSize)?.label})`,
                     value: priceItem.id,
                 };
             });
@@ -215,7 +220,7 @@ const BookingHotel = () => {
     return (
         <FormProvider {...methods}>
             <div className="flex items-start justify-center min-h-screen py-10">
-                <div className="flex flex-col w-full max-w-4xl gap-10">
+                <div className="flex flex-col w-full max-w-6xl gap-10">
                     <button onClick={() => window.history.back()} className="back-button">
                         <FaArrowLeft />
                     </button>

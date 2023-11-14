@@ -17,7 +17,7 @@ const DataRow = ({ item, index, openModal, handleChangeStatus }) => {
         <tr key={index} className="bg-white border-b hover:bg-emerald-100">
             <th className="px-6 py-4 text-gray-900">{item.providerName}</th>
             <td className="px-6 py-4 text-gray-900">{item.rating}</td>
-            <td className="px-6 py-4 text-gray-900">{item.destination === 'string' ? 'TP.HCM' : item.destination}</td>
+
             <td className="px-6 py-4 text-gray-900">
                 {item.description !== 'string' ? truncateString(item.description, 30) : truncateString('string', 30)}
             </td>
@@ -26,9 +26,6 @@ const DataRow = ({ item, index, openModal, handleChangeStatus }) => {
       </td> */}
             <td className="px-6 py-4 text-gray-900">
                 <div className="flex gap-1">
-                    <button type="button" className="font-medium text-blue-600 hover:underline" title="Detail">
-                        <BiDetail />
-                    </button>
                     {!item.confirmStatus && (
                         <button
                             type="button"
@@ -233,9 +230,7 @@ const ProviderManagementPage = () => {
                                 <th scope="col" className="px-6 py-3">
                                     Rating
                                 </th>
-                                <th scope="col" className="px-6 py-3">
-                                    Location
-                                </th>
+
                                 <th scope="col" className="px-6 py-3">
                                     Description
                                 </th>

@@ -2,7 +2,9 @@ import React, { useState, useEffect } from 'react';
 import avatar_tmp from '../../Assets/Images/bird_hero.png';
 import { NavLink, Link, useNavigate } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
-import { logoutUser, getUserInfoInLocalStorage } from '../../Store/userSlice';
+import { logoutUser, getUserInfoInLocalStorage, getUserLoginInLocalStorage } from '../../Store/userSlice';
+import { useQuery } from 'react-query';
+import axios from 'axios';
 
 const DropdownUser = (props) => {
     const { id, role, resetUser } = props;
@@ -19,10 +21,10 @@ const DropdownUser = (props) => {
             path: '/profile',
             display: 'View profile',
         },
-        {
-            path: '/change-password-customer',
-            display: 'Change password',
-        },
+        // {
+        //     path: '/change-password-customer',
+        //     display: 'Change password',
+        // },
         {
             path: '/wallet',
             display: 'Wallet',
@@ -30,6 +32,10 @@ const DropdownUser = (props) => {
         {
             path: '/order',
             display: 'Order history',
+        },
+        {
+            path: '/report',
+            display: 'Report',
         },
     ];
 
@@ -55,8 +61,28 @@ const DropdownUser = (props) => {
     };
 
     useEffect(() => {
-        setUser(getUserInfoInLocalStorage());
+        setUser(getUserLoginInLocalStorage());
     }, []);
+
+    const providerQuery = useQuery(
+        ['user', 'provider', user],
+        async () => {
+            const user = getUserLoginInLocalStorage();
+
+            const getUser = await axios.get(
+                `https://apis20231023230305.azurewebsites.net/api/User/Info?id=${user?.Id}`
+            );
+
+            return getUser;
+        },
+        {
+            enabled: !!user,
+            refetchInterval: 3000,
+            onSuccess: (data) => {
+                setUser(data.data.result);
+            },
+        }
+    );
 
     return (
         <div className="relative inline-block text-left">
@@ -72,10 +98,10 @@ const DropdownUser = (props) => {
                     <div className="w-8 h-8 p-1 border border-black border-solid rounded-full">
                         <img
                             src={
-                                user?.user?.avatarURL && user?.user?.avatarURL !== 'string'
-                                    ? user.user?.avatarURL
-                                    : user?.user?.image && user?.user?.image !== 'string'
-                                    ? user?.user?.image
+                                user?.avatarURL && user?.avatarURL !== 'string'
+                                    ? user.avatarURL
+                                    : user?.image && user?.image !== 'string'
+                                    ? user?.image
                                     : avatar_tmp
                             }
                             alt="User Avatar"
@@ -83,7 +109,7 @@ const DropdownUser = (props) => {
                         />
                     </div>
 
-                    <p className="px-1">{user?.providerName || user?.user?.fullname || user?.fullname}</p>
+                    <p className="px-1">{user?.fullname}</p>
 
                     <svg
                         className="w-5 h-5 -mr-1 text-gray-400"

@@ -24,6 +24,7 @@ const WalletPage = () => {
     const [page, setPage] = useState(1);
     const [pageSize, setPageSize] = useState(10);
     const [totalPage, setTotalPage] = useState(1);
+    const [isUpdate, setIsUpdate] = useState(false);
 
     useEffect(() => {
         setUser(getUser());
@@ -40,7 +41,7 @@ const WalletPage = () => {
             );
 
             const finalList = res.data.result.items
-                .filter((item) => item.walletId === data.data.result.id)
+                .filter((item) => item.wallet.id === data.data.result.id)
                 .sort((a, b) => {
                     return a.id < b.id ? 1 : -1;
                 });
@@ -55,6 +56,19 @@ const WalletPage = () => {
         }
     );
 
+    const paymentInfoForm = useForm({
+        defaultValues: {
+            id: '',
+            stk: '',
+            bank: 0,
+        },
+        resolver: yupResolver(
+            Yup.object().shape({
+                stk: Yup.string().required('STK is required'),
+                bank: Yup.number().required('Bank is required'),
+            })
+        ),
+    });
     const userWallet = useQuery(
         ['user-Wallet', user?.Id],
         async () => {
@@ -65,7 +79,15 @@ const WalletPage = () => {
             return res.data.result;
         },
         {
+            refetchOnWindowFocus: false,
+            refetchOnReconnect: false,
             enabled: user?.Id !== null,
+            onSuccess: (data) => {
+                if (paymentInfoForm.getValues('stk') === '') {
+                    paymentInfoForm.setValue('stk', data.bankNumber);
+                    paymentInfoForm.setValue('bank', data.bank);
+                }
+            },
         }
     );
 
@@ -92,6 +114,47 @@ const WalletPage = () => {
             })
         ),
     });
+
+    const bankList = [
+        {
+            id: 0,
+            name: 'Vietcombank',
+        },
+        {
+            id: 1,
+            name: 'Techcombank',
+        },
+        {
+            id: 2,
+            name: 'Vietinbank',
+        },
+        {
+            id: 3,
+            name: 'BIDV',
+        },
+    ];
+
+    const updatePaymentInfoMutation = useMutation(
+        async (data) => {
+            const res = await axios.put(
+                `https://apis20231023230305.azurewebsites.net/api/Wallet/Update?id=${userWallet.data.id}&stk=${data.stk}&bank=${data.bank}`
+            );
+            return res;
+        },
+        {
+            onSuccess: (data) => {
+                if (data.data?.status === 'BadRequest') {
+                    toast.error(data.data?.message);
+                } else {
+                    toast.success('Update payment info successfully');
+                    userWallet.refetch();
+                }
+            },
+            onError: (data) => {
+                toast.error('Update payment info failed!');
+            },
+        }
+    );
 
     const transactionMutation = useMutation(
         async (data) => {
@@ -255,6 +318,57 @@ const WalletPage = () => {
                     </Dialog.Panel>
                 </div>
             </Dialog>
+            <Dialog open={isUpdate} onClose={() => setIsUpdate(false)} className="relative z-50">
+                {/* The backdrop, rendered as a fixed sibling to the panel container */}
+                <div className="fixed inset-0 bg-black/30" aria-hidden="true" />
+
+                {/* Full-screen container to center the panel */}
+                <div className="fixed inset-0 flex items-center justify-center w-screen p-4">
+                    {/* The actual dialog panel  */}
+                    <Dialog.Panel className="max-w-sm px-4 py-8 mx-auto bg-white rounded fade-in w-96">
+                        <Dialog.Title className="text-lg font-bold text-center">Update Wallet Info</Dialog.Title>
+                        <FormProvider {...paymentInfoForm}>
+                            <form
+                                className="flex flex-col gap-4 mt-4"
+                                onSubmit={paymentInfoForm.handleSubmit((data) => {
+                                    updatePaymentInfoMutation.mutate(data);
+                                })}
+                            >
+                                <div>
+                                    <input
+                                        name="stk"
+                                        className="w-full px-4 py-2 border border-gray-300 rounded"
+                                        placeholder="XXXX-XXXX-XXXX-XXXX"
+                                        required
+                                        {...paymentInfoForm.register('stk')}
+                                    />
+                                    <FormError name="stk" />
+                                </div>
+                                <div>
+                                    <select
+                                        name="bank"
+                                        className="w-full px-4 py-2 border border-gray-300 rounded"
+                                        placeholder="Bank"
+                                        required
+                                        {...paymentInfoForm.register('bank')}
+                                    >
+                                        {bankList.map((item, index) => (
+                                            <option key={index} value={item.id}>
+                                                {item.name}
+                                            </option>
+                                        ))}
+                                    </select>
+
+                                    <FormError name="stk" />
+                                </div>
+                                <button className="w-full px-4 duration-300 py-3 mt-4 font-bold text-white !bg-green-600 rounded hover:!bg-green-500">
+                                    Update
+                                </button>
+                            </form>
+                        </FormProvider>
+                    </Dialog.Panel>
+                </div>
+            </Dialog>
             <div className="max-w-5xl min-h-screen px-4 py-12 mx-auto">
                 <div className="flex items-center justify-between gap-4">
                     <div>
@@ -265,6 +379,13 @@ const WalletPage = () => {
                         )}
                     </div>
                     <div className="flex items-center gap-4">
+                        <button
+                            onClick={() => setIsUpdate(true)}
+                            className="flex items-center gap-2 px-4 py-2 font-bold text-white bg-green-600 rounded hover:bg-green-700"
+                        >
+                            <BanknotesIcon className="w-5 h-5" />
+                            <span>Update Wallet</span>
+                        </button>
                         <button
                             onClick={() => setIsDeposit(true)}
                             className="flex items-center gap-2 px-4 py-2 font-bold text-white bg-green-600 rounded hover:bg-green-700"

@@ -285,14 +285,6 @@ const AccountManagementPage = () => {
                                     </td>
                                     <td className="px-6 py-4 text-gray-900">
                                         <div className="flex gap-1">
-                                            <button
-                                                type="button"
-                                                className="font-medium text-blue-600 hover:underline"
-                                                title="Detail"
-                                            >
-                                                <BiDetail />
-                                            </button>
-
                                             {item.status === 0 ? (
                                                 <button
                                                     type="button"
