@@ -20,7 +20,7 @@ const CTAUploadFile = ({ description }) => {
         const res = await axios.post(url, formData, {
             headers: {
                 Authorization:
-                    'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjQwNzdkN2ZlLTI4MGUtZWRiYi1kYzVkLWJjNTY0ZmQ1ZTQ2YyIsInR5cGUiOiJBVVRIIiwiZXhwaXJlZEF0IjoxNzAyNDk3OTYzNjUwLCJpYXQiOjE2OTk5MDU5NjN9.ulJqbOa-fL-yrYMxwK8gTN6D46M0m6lmtpFRvcTmLAM',
+                    'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjQwNzdkN2ZlLTI4MGUtZWRiYi1kYzVkLWJjNTY0ZmQ1ZTQ2YyIsInR5cGUiOiJBVVRIIiwiZXhwaXJlZEF0IjoxNzAyNjk5ODY4ODA2LCJpYXQiOjE3MDAxMDc4Njh9.0QBjdi04sYSnvi71a4W5yJY5KfE819EaDOrQeptKMg4',
             },
         });
         return res.data.fileLocation;
